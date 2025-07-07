@@ -11,7 +11,7 @@ function App() {
     setFormData(null);
 
     try {
-      const res = await axios.post('http://127.0.0.1:5000/generate-form', { prompt });
+      const res = await axios.post('http://127.0.0.1:5000/process', { prompt });
       setFormData(res.data);
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
