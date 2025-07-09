@@ -23,14 +23,20 @@ class FieldDefinition:
         self.patterns = patterns; self.fuzzy_keywords = fuzzy_keywords or []
 
 FIELD_DEFINITIONS = [
-    # Refined Fuzzy Keywords to be more specific and avoid ambiguity
     FieldDefinition("FIRST_NAME", "First Name", "text", [[{"LOWER": "first"}, {"LOWER": "name"}]], ["firstname"]),
     FieldDefinition("LAST_NAME", "Last Name", "text", [[{"LOWER": "last"}, {"LOWER": "name"}]], ["lastname", "surname"]),
-    FieldDefinition("FULL_NAME", "Name", "text", [[{"LOWER": "name"}]], ["name"]), # General fallback
+    FieldDefinition("FULL_NAME", "Name", "text", [[{"LOWER": "name"}]], ["name"]),
     FieldDefinition("EMAIL", "Email", "email", [[{"LEMMA": "email"}]], ["email", "emial"]),
     FieldDefinition("PHONE", "Phone Number", "tel", [[{"LEMMA": "phone"}]], ["phone"]),
+    FieldDefinition("PASSWORD", "Password", "password", [[{"LOWER": "password"}]], ["password"]),
     FieldDefinition("COUNTRY", "Country", "select", [[{"LEMMA": "country"}]], ["country"]),
+    FieldDefinition("STATE", "State", "select", [[{"LEMMA": "state"}]], ["state"]),
+    FieldDefinition("AGE", "Age", "number", [[{"LEMMA": "age"}]], ["age"]),
     FieldDefinition("RATING", "Rating", "number", [[{"LEMMA": "rate"}]], ["rating"]),
+    FieldDefinition("SCORE", "Score", "number", [[{"LEMMA": "score"}]], ["score"]),
+    FieldDefinition("COMMENTS", "Comments", "textarea", [[{"LEMMA": "comment"}]], ["comment"]),
+    FieldDefinition("CHECKBOX", "Checkbox", "checkbox", [[{"LEMMA": "checkbox"}]], ["checkbox"]),
+    FieldDefinition("SHORT_ANSWER", "Short Answer", "text", [[{"LOWER": "short"}, {"LEMMA": "answer"}]], ["answer"]),
 ]
 
 # --- 2. The Final Form Generator Engine ---
@@ -47,66 +53,76 @@ class FormGenerator:
         matcher.add("ATTR_DROPDOWN", [[{"LEMMA": "dropdown"}]])
         matcher.add("ATTR_REQUIRED", [[{"LOWER": "required"}]])
         matcher.add("ATTR_RANGE", [[{"LOWER": {"IN": ["from", "between"]}}, {"like_num": True}, {"LOWER": {"IN": ["to", "and"]}}, {"like_num": True}]])
+        matcher.add("LOGIC_NEGATION", [[{"LOWER": {"IN": ["except", "without", "not"]}}]])
+        matcher.add("LOGIC_QUANTIFIER", [[{"like_num": True}, {"POS": "NOUN", "OP": "+"} ]])
         return matcher
 
-    def _extract_entities(self, doc):
-        """A unified pass to find the BEST fields, resolving overlaps."""
-        
-        # 1. Get all raw matches from the matcher
-        matcher_matches = self.matcher(doc)
-        
-        # 2. Convert matches to Span objects and filter them
+    def word_to_num(self, word):
+        num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+        return num_map.get(word.lower(), None)
 
-        spans = []
-        for match_id, start, end in matcher_matches:
-            rule_id = nlp.vocab.strings[match_id]
-            if rule_id in self.field_map:
-                spans.append(Span(doc, start, end, label=rule_id))
-        
-        filtered_spans = filter_spans(spans)
-        
-        entities = [{'id': span.label_, 'start': span.start, 'end': span.end, 'source': 'matcher'} for span in filtered_spans]
-        matched_indices = {i for span in filtered_spans for i in range(span.start, span.end)}
-        
-        # 3. Add Fuzzy hits for typos, only on un-matched tokens
-        for i, token in enumerate(doc):
-            if i in matched_indices or len(token.text) < 3: continue
-            
-            match = process.extractOne(token.lower_, self.fuzzy_map.keys(), score_cutoff=88)
-            if match:
-                keyword, score, _ = match
-                entities.append({'id': self.fuzzy_map[keyword], 'start': i, 'end': i + 1, 'source': f"fuzzy (from '{token.text}')", 'confidence': round(score/100,2)})
-
-        return sorted(entities, key=lambda x: x['start'])
+    def find_target_noun(self, doc, start, end):
+        """Find the noun being referred to by an attribute or logic keyword."""
+        for i in range(end, min(end + 3, len(doc))):
+            if doc[i].pos_ == "NOUN": return doc[i]
+        return None
 
     def find_closest_field(self, fields_with_pos, attr_start_pos):
         if not fields_with_pos: return None
-        closest_field_info = min(fields_with_pos, key=lambda f: abs(f['pos'] - attr_start_pos))
-        return closest_field_info['field']
+        return min(fields_with_pos, key=lambda f: abs(f['pos'] - attr_start_pos))['field']
 
     def process_prompt(self, prompt):
         doc = nlp(prompt)
+        all_matches = self.matcher(doc)
         
-        # Pass 1: Extract the best, non-overlapping fields
-        found_entities = self._extract_entities(doc)
+        # --- Multi-Pass Processing Pipeline ---
+
+        # Pass 1: Handle high-level logic (Negations and Quantifiers)
+        excluded_ids = set()
+        quantities = {}
+        for match_id, start, end in all_matches:
+            rule_id = nlp.vocab.strings[match_id]
+            target_noun = self.find_target_noun(doc, start, end)
+            if not target_noun: continue
+
+            target_match = process.extractOne(target_noun.lemma_, self.fuzzy_map.keys())
+            if not target_match or target_match[1] < 85: continue
+            target_field_id = self.fuzzy_map[target_match[0]]
+
+            if rule_id == "LOGIC_NEGATION":
+                excluded_ids.add(target_field_id)
+            elif rule_id == "LOGIC_QUANTIFIER":
+                num = self.word_to_num(doc[start].text) or int(doc[start].text)
+                quantities[target_field_id] = num
+
+        # Pass 2: Extract base entities, resolving overlaps
+        spans = [Span(doc, s, e, label=nlp.vocab.strings[mid]) for mid, s, e in all_matches if nlp.vocab.strings[mid] in self.field_map]
+        filtered_spans = filter_spans(spans)
         
-        # Pass 2: Create the initial list of fields
+        # Pass 3: Create fields based on entities, quantifiers, and negations
         fields, fields_with_pos, added_ids = [], [], set()
-        for entity in found_entities:
-            field_id = entity['id']
-            if field_id not in added_ids:
-                field_def = self.field_map[field_id]
-                field_obj = {
-                    "label": field_def.label, "type": field_def.type,
-                    "source": entity.get('source', 'unknown'), "confidence": entity.get('confidence', 1.0)
-                }
+        
+        # First, add quantified fields
+        for field_id, num in quantities.items():
+            if field_id in excluded_ids: continue
+            field_def = self.field_map[field_id]
+            for i in range(num):
+                field_obj = {"label": f"{field_def.label} #{i+1}", "type": field_def.type, "source": "quantifier", "confidence": 0.95}
                 fields.append(field_obj)
-                fields_with_pos.append({'field': field_obj, 'pos': entity['start']})
+            added_ids.add(field_id)
+
+        # Then, add remaining non-quantified fields
+        for span in filtered_spans:
+            field_id = span.label_
+            if field_id not in added_ids and field_id not in excluded_ids:
+                field_def = self.field_map[field_id]
+                field_obj = {"label": field_def.label, "type": field_def.type, "source": "matcher", "confidence": 1.0}
+                fields.append(field_obj)
+                fields_with_pos.append({'field': field_obj, 'pos': span.start})
                 added_ids.add(field_id)
 
-        # Pass 3: Find and apply attributes to the closest fields
-        attribute_matches = self.matcher(doc)
-        for match_id, start, end in attribute_matches:
+        # Pass 4: Apply attributes to the closest created fields
+        for match_id, start, end in all_matches:
             rule_id = nlp.vocab.strings[match_id]
             if not rule_id.startswith("ATTR_"): continue
             
@@ -115,12 +131,22 @@ class FormGenerator:
             
             if rule_id == "ATTR_DROPDOWN": target_field['type'] = 'select'
             elif rule_id == "ATTR_REQUIRED": target_field['required'] = True
-            elif rule_id == "ATTR_RANGE" and target_field['type'] == 'number':
+            elif rule_id == "ATTR_RANGE" and target_field.get('type') == 'number':
                 numbers = [int(t.text) for t in doc[start:end] if t.like_num]
                 if len(numbers) == 2:
-                    target_field['min'] = min(numbers)
-                    target_field['max'] = max(numbers)
+                    target_field['min'], target_field['max'] = min(numbers), max(numbers)
+
+        # Pass 5: Handle special cases like 'password confirmation'
+        password_field_index = -1
+        for i, field in enumerate(fields):
+            if field['label'] == 'Password':
+                password_field_index = i
+                break
         
+        if password_field_index != -1 and "confirmation" in prompt.lower():
+            confirm_field = {"label": "Confirm Password", "type": "password", "source": "logic", "confidence": 0.98}
+            fields.insert(password_field_index + 1, confirm_field)
+            
         return fields
 
 form_gen = FormGenerator()

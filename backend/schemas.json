@@ -1,0 +1,26 @@
+{
+  "student_form": {
+    "fields": ["first_name", "last_name", "roll_no", "phone", "email", "address"],
+    "seed": ["student", "registration", "admission"]
+  },
+  "survey": {
+    "fields": ["short_answer", "mcq", "rating"],
+    "seed": ["survey", "questionnaire", "poll", "research"]
+  },
+  "feedback": {
+    "fields": ["course_name", "rating", "comments"],
+    "seed": ["feedback", "review", "course feedback"]
+  },
+  "job_application": {
+    "fields": ["full_name", "email", "phone", "resume", "cover_letter"],
+    "seed": ["job", "application", "resume", "career", "cv"]
+  },
+  "event_registration": {
+    "fields": ["participant_name", "event_name", "email", "date", "time"],
+    "seed": ["event", "register", "signup", "conference", "webinar"]
+  },
+  "bug_report": {
+    "fields": ["reporter_name", "issue_type", "description", "screenshot", "priority"],
+    "seed": ["bug", "error", "issue", "crash", "report"]
+  }
+}

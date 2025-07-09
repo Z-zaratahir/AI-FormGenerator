@@ -3,7 +3,6 @@ import axios from 'axios';
 import './App.css'; 
 
 // --- Reusable FormField Component ---
-// This component now handles text, number, email, file, textarea, select, radio, and checkbox.
 function FormField({ field }) {
   const isConfident = field.confidence > 0.9;
 
@@ -33,24 +32,17 @@ function FormField({ field }) {
           </select>
         );
 
+      // --- FIX: Add rendering logic for 'radio' type ---
       case 'radio': // For Yes/No
         return (
-          <div style={{ marginTop: '8px' }}>
-            <label style={{ marginRight: '15px' }}>
-              <input type="radio" name={inputProps.name} value="yes" /> Yes
+          <div style={{ marginTop: '8px', display: 'flex', gap: '20px' }}>
+            <label>
+              <input type="radio" name={inputProps.name} value="yes" style={{width: 'auto', marginRight: '5px'}} />
+              Yes
             </label>
             <label>
-              <input type="radio" name={inputProps.name} value="no" /> No
-            </label>
-          </div>
-        );
-
-      case 'checkbox':
-        // For a real app, options would come from the prompt
-        return (
-          <div style={{ marginTop: '8px' }}>
-            <label>
-              <input type="checkbox" name={`${inputProps.name}-1`} /> Option A
+              <input type="radio" name={inputProps.name} value="no" style={{width: 'auto', marginRight: '5px'}} />
+              No
             </label>
           </div>
         );
@@ -86,7 +78,7 @@ function FormField({ field }) {
 
 // --- Main App Component ---
 function App() {
-  const [prompt, setPrompt] = useState('Create a form for emial, first name and last name, a required dropdown for country selection, and a rating from 1 to 7.');
+  const [prompt, setPrompt] = useState('a form for yes or no box');
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
