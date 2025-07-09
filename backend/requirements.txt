@@ -1,8 +1,8 @@
 Flask
 flask-cors
 flask-limiter
-openai
 spacy
 emoji
 fuzzywuzzy
 python-Levenshtein
+rapidfuzz

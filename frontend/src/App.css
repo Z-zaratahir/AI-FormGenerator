@@ -1,42 +1,134 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+/* --- Global Styles & Body --- */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: #f4f7f9;
+  color: #333;
   padding: 2rem;
+}
+
+/* --- Main App Container --- */
+.app-container {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px A12px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Header Section --- */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.app-header h1 {
+  color: #2c3e50;
+  margin-top: 0;
+}
+
+.app-header p {
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+/* --- Prompt Input Section --- */
+.prompt-section {
+  margin-bottom: 2rem;
+}
+
+.prompt-section textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #bdc3c7;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.prompt-section button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 1rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.prompt-section button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.prompt-section button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* --- Error & Form Preview Styling --- */
+.error-message {
+  color: #c0392b;
+  background-color: #fbeae5;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e74c3c;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.form-preview {
+  margin-top: 2rem;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.form-preview h2 {
+  border-bottom: 2px solid #ecf0f1;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: #34495e;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* --- Individual Form Field Styling --- */
+.form-field-container {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ecf0f1;
+  border-radius: 6px;
+  transition: box-shadow 0.2s ease;
 }
 
-.card {
-  padding: 2em;
+.form-field-container:focus-within {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-.read-the-docs {
-  color: #888;
+.debug-info {
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-top: 8px;
+}
+
+/* --- Form Submission Button --- */
+.submit-button {
+  margin-top: 1rem;
+  padding: 12px 24px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #27ae60;
 }
