@@ -2,10 +2,7 @@ Flask
 flask-cors
 flask-limiter
 openai
-pip install spacy
-python -m spacy download en_core_web_sm
-pip install emoji
+spacy
+emoji
 fuzzywuzzy
 python-Levenshtein
-
-
