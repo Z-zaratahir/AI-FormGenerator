@@ -40,18 +40,25 @@ FIELD_THRESHOLD = 75
 
 def fuzzy_match_schemas(prompt: str, threshold: int = default_schema_threshold) -> List[str]:
     """
-    Return schemas whose seed keywords match the prompt above threshold, sorted by descending score.
+    Return schemas whose seed keywords match the prompt, ranked by number of matching seeds and then by total score.
     """
     prompt_lc = prompt.lower()
-    scored = []
+    schema_stats = []  # list of (schema, match_count, total_score)
     for schema, seeds in SCHEMA_SEEDS.items():
         if not seeds:
             continue
-        _, score = process.extractOne(prompt_lc, seeds, scorer=fuzz.partial_ratio)
-        if score >= threshold:
-            scored.append((schema, score))
-    scored.sort(key=lambda x: x[1], reverse=True)
-    return [schema for schema, _ in scored]
+        match_count = 0
+        total_score = 0
+        for seed in seeds:
+            _, score = process.extractOne(prompt_lc, [seed], scorer=fuzz.partial_ratio)
+            if score >= threshold:
+                match_count += 1
+                total_score += score
+        if match_count > 0:
+            schema_stats.append((schema, match_count, total_score))
+    # sort by match_count desc, then total_score desc
+    schema_stats.sort(key=lambda x: (x[1], x[2]), reverse=True)
+    return [schema for schema, _, _ in schema_stats]
 
 def build_form_spec(prompt: str) -> Dict[str, Any]:
     """
@@ -96,11 +103,13 @@ def build_form_spec(prompt: str) -> Dict[str, Any]:
 if __name__ == "__main__":
     # Example usage
     test_prompts = [
-        "I want to sign up for the data science bootcamp",
-        "Please submit my resume",
-        "I need to report a bug in the app",
-        "Looking to fill out feedback form",
-        "Join conference registration"
+
+        "Give review for the python course",
+        "Submit feedback for class",
+        "Course rating and comments",
+        "Rate your learning experience",
+        "End-of-semester course feedback",
+
     ]
     for p in test_prompts:
         print(f"Prompt: {p}\nForm Spec: {build_form_spec(p)}\n")

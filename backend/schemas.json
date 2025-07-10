@@ -1,26 +1,151 @@
 {
   "student_form": {
-    "fields": ["first_name", "last_name", "roll_no", "phone", "email", "address"],
-    "seed": ["student", "registration", "admission"]
+    "fields": [
+      "first_name",
+      "last_name",
+      "roll_no",
+      "phone",
+      "email",
+      "address"
+    ],
+    "seed": [
+      "enrolment",
+      "entrance fee",
+      "access",
+      "entree",
+      "pupil",
+      "enrollment",
+      "registration",
+      "educatee",
+      "admission",
+      "student",
+      "admittance"
+    ]
   },
   "survey": {
-    "fields": ["short_answer", "mcq", "rating"],
-    "seed": ["survey", "questionnaire", "poll", "research"]
+    "fields": [
+      "short_answer",
+      "mcq",
+      "rating"
+    ],
+    "seed": [
+      "inquiry",
+      "work",
+      "sketch",
+      "vignette",
+      "poll",
+      "opinion poll",
+      "survey",
+      "question",
+      "research",
+      "questionnaire",
+      "public opinion poll",
+      "study",
+      "enquiry"
+    ]
   },
   "feedback": {
-    "fields": ["course_name", "rating", "comments"],
-    "seed": ["feedback", "review", "course feedback"]
+    "fields": [
+      "course_name",
+      "rating",
+      "comments"
+    ],
+    "seed": [
+      "review",
+      "revaluation",
+      "feedback",
+      "reappraisal",
+      "course feedback"
+    ]
   },
   "job_application": {
-    "fields": ["full_name", "email", "phone", "resume", "cover_letter"],
-    "seed": ["job", "application", "resume", "career", "cv"]
+    "fields": [
+      "full_name",
+      "email",
+      "phone",
+      "resume",
+      "cover_letter"
+    ],
+    "seed": [
+      "vocation",
+      "finish",
+      "business concern",
+      "curriculum vitae",
+      "coating",
+      "business",
+      "study",
+      "cv",
+      "application",
+      "career",
+      "job",
+      "practical application",
+      "concern",
+      "sketch",
+      "vignette",
+      "resume",
+      "calling",
+      "survey",
+      "occupation",
+      "coat"
+    ]
   },
   "event_registration": {
-    "fields": ["participant_name", "event_name", "email", "date", "time"],
-    "seed": ["event", "register", "signup", "conference", "webinar"]
+    "fields": [
+      "participant_name",
+      "event_name",
+      "email",
+      "date",
+      "time"
+    ],
+    "seed": [
+      "group discussion",
+      "example",
+      "effect",
+      "webinar",
+      "outcome",
+      "instance",
+      "signup",
+      "cash register",
+      "event",
+      "league",
+      "case",
+      "conference",
+      "consequence",
+      "register",
+      "registry"
+    ]
   },
   "bug_report": {
-    "fields": ["reporter_name", "issue_type", "description", "screenshot", "priority"],
-    "seed": ["bug", "error", "issue", "crash", "report"]
+    "fields": [
+      "reporter_name",
+      "issue_type",
+      "description",
+      "screenshot",
+      "priority"
+    ],
+    "seed": [
+      "clangour",
+      "theme",
+      "issue",
+      "study",
+      "written report",
+      "bug",
+      "figure",
+      "crash",
+      "report",
+      "error",
+      "subject",
+      "mistake",
+      "hemipterous insect",
+      "fault",
+      "clang",
+      "act",
+      "work",
+      "clangor",
+      "survey",
+      "glitch",
+      "topic",
+      "number"
+    ]
   }
 }
