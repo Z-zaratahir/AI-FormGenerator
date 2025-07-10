@@ -6,3 +6,6 @@ emoji
 fuzzywuzzy
 python-Levenshtein
 rapidfuzz
+nltk
+sentence-transformers
+numpy
