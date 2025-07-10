@@ -1,12 +1,48 @@
 {
   "student_form": {
     "fields": [
-      "first_name",
-      "last_name",
-      "roll_no",
-      "phone",
-      "email",
-      "address"
+      {
+        "name": "first_name",
+        "label": "First Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "alphabetic"
+      },
+      {
+        "name": "last_name",
+        "label": "Last Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "alphabetic"
+      },
+      {
+        "name": "roll_no",
+        "label": "Roll No",
+        "type": "number",
+        "family": "numeric",
+        "validation": "integer"
+      },
+      {
+        "name": "phone",
+        "label": "Phone",
+        "type": "tel",
+        "family": "textual",
+        "validation": "phone_number"
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "type": "email",
+        "family": "textual",
+        "validation": "email_format"
+      },
+      {
+        "name": "address",
+        "label": "Address",
+        "type": "text",
+        "family": "textual",
+        "validation": "none"
+      }
     ],
     "seed": [
       "enrolment",
@@ -24,9 +60,27 @@
   },
   "survey": {
     "fields": [
-      "short_answer",
-      "mcq",
-      "rating"
+      {
+        "name": "short_answer",
+        "label": "Short Answer",
+        "type": "textarea",
+        "family": "textual",
+        "validation": "none"
+      },
+      {
+        "name": "mcq",
+        "label": "Multiple Choice",
+        "type": "select",
+        "family": "choice",
+        "validation": "none"
+      },
+      {
+        "name": "rating",
+        "label": "Rating",
+        "type": "number",
+        "family": "numeric",
+        "validation": "range_1_5"
+      }
     ],
     "seed": [
       "inquiry",
@@ -46,9 +100,27 @@
   },
   "feedback": {
     "fields": [
-      "course_name",
-      "rating",
-      "comments"
+      {
+        "name": "course_name",
+        "label": "Course Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "none"
+      },
+      {
+        "name": "rating",
+        "label": "Rating",
+        "type": "number",
+        "family": "numeric",
+        "validation": "range_1_5"
+      },
+      {
+        "name": "comments",
+        "label": "Comments",
+        "type": "textarea",
+        "family": "textual",
+        "validation": "none"
+      }
     ],
     "seed": [
       "review",
@@ -60,11 +132,42 @@
   },
   "job_application": {
     "fields": [
-      "full_name",
-      "email",
-      "phone",
-      "resume",
-      "cover_letter"
+      {
+        "name": "full_name",
+        "label": "Full Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "alphabetic"
+      },
+      {
+        "name": "email",
+        "label": "Email Address",
+        "type": "email",
+        "family": "textual",
+        "validation": "email_format"
+      },
+      {
+        "name": "phone",
+        "label": "Phone",
+        "type": "tel",
+        "family": "textual",
+        "validation": "phone_number"
+      },
+      {
+        "name": "resume",
+        "label": "Upload Your Resume",
+        "type": "file",
+        "family": "file",
+        "validation": "file_type",
+        "accept": ".pdf,.doc,.docx"
+      },
+      {
+        "name": "cover_letter",
+        "label": "Cover Letter",
+        "type": "textarea",
+        "family": "textual",
+        "validation": "none"
+      }
     ],
     "seed": [
       "vocation",
@@ -91,11 +194,41 @@
   },
   "event_registration": {
     "fields": [
-      "participant_name",
-      "event_name",
-      "email",
-      "date",
-      "time"
+      {
+        "name": "participant_name",
+        "label": "Participant Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "alphabetic"
+      },
+      {
+        "name": "event_name",
+        "label": "Event Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "none"
+      },
+      {
+        "name": "email",
+        "label": "Email",
+        "type": "email",
+        "family": "textual",
+        "validation": "email_format"
+      },
+      {
+        "name": "date",
+        "label": "Date",
+        "type": "date",
+        "family": "temporal",
+        "validation": "none"
+      },
+      {
+        "name": "time",
+        "label": "Time",
+        "type": "time",
+        "family": "temporal",
+        "validation": "none"
+      }
     ],
     "seed": [
       "group discussion",
@@ -117,11 +250,42 @@
   },
   "bug_report": {
     "fields": [
-      "reporter_name",
-      "issue_type",
-      "description",
-      "screenshot",
-      "priority"
+      {
+        "name": "reporter_name",
+        "label": "Reporter Name",
+        "type": "text",
+        "family": "textual",
+        "validation": "alphabetic"
+      },
+      {
+        "name": "issue_type",
+        "label": "Issue Type",
+        "type": "text",
+        "family": "textual",
+        "validation": "none"
+      },
+      {
+        "name": "description",
+        "label": "Description",
+        "type": "textarea",
+        "family": "textual",
+        "validation": "none"
+      },
+      {
+        "name": "screenshot",
+        "label": "Upload Screenshot",
+        "type": "file",
+        "family": "file",
+        "validation": "file_type",
+        "accept": ".png,.jpg,.jpeg"
+      },
+      {
+        "name": "priority",
+        "label": "Priority",
+        "type": "select",
+        "family": "choice",
+        "validation": "none"
+      }
     ],
     "seed": [
       "clangour",
