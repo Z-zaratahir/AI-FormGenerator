@@ -1,120 +1,100 @@
-# form_generator.py
-# Main script for dynamic intent classification using external schemas and fuzzy matching only
+# form_generator_dynamic.py
+# Dynamic schema & field matching with semantic similarity
 
 from typing import List, Dict, Any
 import json
+from sentence_transformers import SentenceTransformer, util
 from fuzzywuzzy import fuzz, process
+import numpy as np
 
-# Load schemas (fields + seed keywords) from external JSON
+# Load schemas (fields + seed keywords + optional descriptions) from external JSON
 with open("schemas.json", "r", encoding="utf-8") as f:
     SCHEMA_DATA: Dict[str, Dict[str, Any]] = json.load(f)
 
-# Extract structures: fields and raw seeds
-SCHEMAS: Dict[str, List[str]] = {
-    name: data["fields"]
-    for name, data in SCHEMA_DATA.items()
-}
-SCHEMA_SEEDS: Dict[str, List[str]] = {
-    name: [s.lower() for s in data.get("seed", [])]
-    for name, data in SCHEMA_DATA.items()
-}
+# Initialize semantic model
+model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Field-to-input-type mapping
-FIELD_TYPES: Dict[str, str] = {
-    "first_name": "text",
-    "last_name": "text",
-    "email": "email",
-    "phone": "tel",
-    "roll_no": "number",
-    "date": "date",
-    "time": "time",
-    "rating": "number",
-    "resume": "file",
-    "cover_letter": "textarea",
-    "address": "text"
-}
+# Precompute embeddings for seeds and schema descriptions
+SCHEMA_EMBS: Dict[str, np.ndarray] = {}
+for name, data in SCHEMA_DATA.items():
+    # combine seeds and optional description
+    text = " ".join(data.get("seed", []))
+    desc = data.get("description", "")
+    if desc:
+        text += " " + desc
+    SCHEMA_EMBS[name] = model.encode(text, convert_to_tensor=True)
+
+# Field-level mapping and embeddings
+FIELDS = list({fld for d in SCHEMA_DATA.values() for fld in d["fields"]})
+FIELD_EMBS = model.encode(FIELDS, convert_to_tensor=True)
+FIELD_TYPES: Dict[str, str] = SCHEMA_DATA.get("_field_types", {})  # optional in JSON
 
 # Matching thresholds
-default_schema_threshold = 80
-FIELD_THRESHOLD = 75
+SEMANTIC_SCHEMA_THRESHOLD = 0.4  # cosine similarity
+SEMANTIC_FIELD_THRESHOLD = 0.35
+FUZZY_FIELD_THRESHOLD = 75
 
-def fuzzy_match_schemas(prompt: str, threshold: int = default_schema_threshold) -> List[str]:
+
+def semantic_match_schemas(prompt: str, top_k: int = 3) -> List[str]:
     """
-    Return schemas whose seed keywords match the prompt, ranked by number of matching seeds and then by total score.
+    Return top-k schemas by cosine similarity between prompt and seed+desc text.
     """
-    prompt_lc = prompt.lower()
-    schema_stats = []  # list of (schema, match_count, total_score)
-    for schema, seeds in SCHEMA_SEEDS.items():
-        if not seeds:
-            continue
-        match_count = 0
-        total_score = 0
-        for seed in seeds:
-            _, score = process.extractOne(prompt_lc, [seed], scorer=fuzz.partial_ratio)
-            if score >= threshold:
-                match_count += 1
-                total_score += score
-        if match_count > 0:
-            schema_stats.append((schema, match_count, total_score))
-    # sort by match_count desc, then total_score desc
-    schema_stats.sort(key=lambda x: (x[1], x[2]), reverse=True)
-    return [schema for schema, _, _ in schema_stats]
+    prompt_emb = model.encode(prompt, convert_to_tensor=True)
+    scores = {name: float(util.cos_sim(prompt_emb, emb)) for name, emb in SCHEMA_EMBS.items()}
+    # filter by threshold
+    matched = [(name, score) for name, score in scores.items() if score >= SEMANTIC_SCHEMA_THRESHOLD]
+    # sort by score desc
+    matched.sort(key=lambda x: x[1], reverse=True)
+    return [name for name, _ in matched[:top_k]]
+
 
 def build_form_spec(prompt: str) -> Dict[str, Any]:
-    """
-    Use fuzzy matching to classify the intent and generate a form specification.
-    Fallback to field-level fuzzy matching if schema detection fails.
-    """
     spec = {"type": "custom", "fields": []}
 
-    schemas = fuzzy_match_schemas(prompt)
+    # 1) semantic schema matching
+    schemas = semantic_match_schemas(prompt)
 
     if schemas:
         primary = schemas[0]
         spec["type"] = primary
-        seen = set()
-        for fld in SCHEMAS.get(primary, []):
-            if fld not in seen:
-                seen.add(fld)
-                fld_type = FIELD_TYPES.get(fld, "text")
-                spec["fields"].append({
-                    "name": fld,
-                    "type": fld_type,
-                    "label": fld.replace("_", " ").title()
-                })
-        return spec
-
-    # Fallback: fuzzy-match individual fields if no schema match
-    all_fields = list({fld for fields in SCHEMAS.values() for fld in fields})
-    seen = set()
-    prompt_lc = prompt.lower()
-    for fld in all_fields:
-        _, score = process.extractOne(prompt_lc, [fld], scorer=fuzz.partial_ratio)
-        if score >= FIELD_THRESHOLD and fld not in seen:
-            seen.add(fld)
-            fld_type = FIELD_TYPES.get(fld, "text")
+        for fld in SCHEMA_DATA[primary]["fields"]:
             spec["fields"].append({
                 "name": fld,
-                "type": fld_type,
+                "type": FIELD_TYPES.get(fld, "text"),
                 "label": fld.replace("_", " ").title()
             })
+        return spec
+
+    # 2) semantic & fuzzy field-level matching
+    prompt_emb = model.encode(prompt, convert_to_tensor=True)
+    cos_sims = util.cos_sim(prompt_emb, FIELD_EMBS)[0].tolist()
+    for idx, fld in enumerate(FIELDS):
+        if cos_sims[idx] >= SEMANTIC_FIELD_THRESHOLD:
+            spec["fields"].append({
+                "name": fld,
+                "type": FIELD_TYPES.get(fld, "text"),
+                "label": fld.replace("_", " ").title()
+            })
+    # fallback fuzzy
+    if not spec["fields"]:
+        for fld in FIELDS:
+            _, score = process.extractOne(prompt.lower(), [fld], scorer=fuzz.partial_ratio)
+            if score >= FUZZY_FIELD_THRESHOLD:
+                spec["fields"].append({
+                    "name": fld,
+                    "type": FIELD_TYPES.get(fld, "text"),
+                    "label": fld.replace("_", " ").title()
+                })
     return spec
 
+
 if __name__ == "__main__":
-    # Example usage
-    test_prompts = [
-
-        "Give review for the python course",
-        "Submit feedback for class",
-        "Course rating and comments",
-        "Rate your learning experience",
-        "End-of-semester course feedback",
-
+    prompts = [
+        "Register me for the enrollment process",
+        "I want to pay entrance fee and sign up",
+        "Give feedback on the course you attended",
+        "Submit address and contact details",
     ]
-    for p in test_prompts:
-        print(f"Prompt: {p}\nForm Spec: {build_form_spec(p)}\n")
-
-# -----------------------------------------
-# Install dependencies via pip:
-# pip install fuzzywuzzy python-Levenshtein
-# -----------------------------------------
+    for p in prompts:
+        spec = build_form_spec(p)
+        print(f"Prompt: {p}\n Spec: {json.dumps(spec, indent=2)}\n")
