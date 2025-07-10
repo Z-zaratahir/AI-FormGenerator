@@ -1,0 +1,1 @@
+for running frontend on PC: C:\genAI\nodejs\node-v20.19.3-win-x64\node-v20.19.3-win-x64\npm.cmd run dev
