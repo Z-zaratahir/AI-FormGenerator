@@ -96,6 +96,7 @@ FORM_TEMPLATES = {
     "support_ticket": ["FULL_NAME", "EMAIL", "ORDER_ID", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
     "bug_report": ["EMAIL", "WEBSITE_URL", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
     "job_application": ["FULL_NAME", "EMAIL", "PHONE", "ADDRESS", "RESUME_UPLOAD", "COVER_LETTER", "PORTFOLIO_LINK", "START_DATE", "SALARY_EXPECTATION"],
+    "internship_application": ["FULL_NAME", "EMAIL", "PHONE", "PORTFOLIO_LINK", "RESUME_UPLOAD", "COVER_LETTER", "START_DATE"],
     "internship": ["FULL_NAME", "EMAIL", "PHONE", "PORTFOLIO_LINK", "RESUME_UPLOAD", "COVER_LETTER", "START_DATE"],
     "employee_onboarding": ["FULL_NAME", "DATE_OF_BIRTH", "ADDRESS", "PHONE", "EMERGENCY_CONTACT"],
     "expense_report": ["FULL_NAME", "EVENT_DATE", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
@@ -168,8 +169,8 @@ class FormGenerator:
         # Attribute Patterns
         matcher.add("ATTR_REQUIRED", [[{"LOWER": "required"}]])
         
-        # Logic Patterns - Negation now includes "don't" and is more robust
-        matcher.add("LOGIC_NEGATION", [[{"LOWER": {"IN": ["except", "without", "not", "don't"]}}]])
+        # Logic Patterns - CORRECTED: Negation now includes "no"
+        matcher.add("LOGIC_NEGATION", [[{"LOWER": {"IN": ["except", "without", "not", "don't", "no"]}}]])
         # Quantifier now allows for adjectives, e.g., "three separate suggestion boxes"
         matcher.add("LOGIC_QUANTIFIER", [[{"like_num": True}, {"OP": "*"}, {"POS": "NOUN"}]])
         matcher.add("LOGIC_ARBITRARY_FIELD", [
@@ -179,7 +180,10 @@ class FormGenerator:
         return matcher
 
     def word_to_num(self, word):
-        num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+        num_map = {
+            "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+            "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10
+        }
         return num_map.get(word.lower(), None)
 
     # Re-engineered negation parser to handle lists with commas and conjunctions
@@ -210,7 +214,6 @@ class FormGenerator:
         all_matches = self.matcher(doc)
         
         # --- Phase 1: Intent Extraction ---
-        # First, understand everything the user wants without creating any fields.
         excluded_ids, quantities, arbitrary_fields, attributes, explicit_ids = set(), {}, [], [], set()
 
         for match_id, start, end in all_matches:
@@ -226,7 +229,6 @@ class FormGenerator:
                 elif rule_id == "LOGIC_QUANTIFIER":
                     num_text = doc[start].text
                     num = self.word_to_num(num_text) or (int(num_text) if num_text.isdigit() else None)
-                    # The noun phrase is the rest of the match
                     target_noun_phrase = doc[start+1:end].text
                     if num:
                         target_match = process.extractOne(target_noun_phrase, self.fuzzy_map.keys())
@@ -245,18 +247,20 @@ class FormGenerator:
                 explicit_ids.add( (rule_id, start) )
         
         # --- Phase 2: Field Generation ---
-        # Now, build the form in a specific order of precedence to resolve conflicts.
-        
         candidate_fields = []
         added_ids = set()
 
-        # Step 1: Fuzzy Template Detection (with lower score cutoff for robustness)
+        # Step 1: More specific Template Detection
         template_field_ids = []
-        template_match = process.extractOne(prompt, self.form_templates.keys(), score_cutoff=75)
-        if template_match:
-            template_field_ids = self.form_templates.get(template_match[0], [])
+        # Sort keys to check for longer, more specific templates first
+        sorted_keys = sorted([k for k in self.form_templates.keys() if not isinstance(self.form_templates[k], str)], key=len, reverse=True)
+        for key in sorted_keys:
+            pattern = r'\b' + re.escape(key).replace('_', r'\s?') + r'\b'
+            if re.search(pattern, prompt.lower()):
+                template_field_ids = self.form_templates.get(key, [])
+                break # Found the most specific match
         
-        # Step 2: Assemble fields from Quantifiers (highest priority)
+        # Step 2: Assemble fields from Quantifiers
         for field_id, data in quantities.items():
             if field_id in excluded_ids: continue
             field_def = self.field_map[field_id]
@@ -264,8 +268,7 @@ class FormGenerator:
                 candidate_fields.append({"id": field_id, "label": f"{field_def.label} #{i+1}", "type": field_def.type, "source": "quantifier", "confidence": 0.95, "pos": data['pos']})
             added_ids.add(field_id)
 
-        # Step 3: Add explicit matches if not handled by quantifier
-        # This gives priority to what the user explicitly typed over the template.
+        # Step 3: Add explicit matches
         for field_id, pos in explicit_ids:
              if field_id not in added_ids:
                 field_def = self.field_map[field_id]
@@ -286,30 +289,32 @@ class FormGenerator:
 
         # --- Phase 3: Filtering & Attribute Application ---
         
-        # Step 6: Apply Negations to the entire generated list
+        # Apply Negations to the entire generated list
         final_fields = [f for f in candidate_fields if f.get('id') not in excluded_ids]
 
-        # Step 7: Apply Attributes to the final list of fields
+        # Apply Attributes to the final list of fields
         for attr in attributes:
             if not final_fields: continue
-            
-            # Find closest field that has a position to apply the attribute
             fields_with_pos = [f for f in final_fields if 'pos' in f]
             if not fields_with_pos: continue
             
-            # Find the field physically closest to the attribute word in the prompt
-            target_field = min(fields_with_pos, key=lambda f: abs(f.get('pos', 1000) - attr['pos']))
+            target_field = min(fields_with_pos, key=lambda f: abs(f['pos'] - attr['pos']))
             
             if attr['rule'] == "ATTR_REQUIRED":
-                target_field['required'] = True
+                # FIX: If the target field was created by a quantifier, apply to all in the group
+                if target_field.get('source') == 'quantifier':
+                    quantifier_id = target_field.get('id')
+                    for field in final_fields:
+                        if field.get('id') == quantifier_id and field.get('source') == 'quantifier':
+                            field['required'] = True
+                else:
+                    target_field['required'] = True
         
         # --- Phase 4: Post-Processing and Cleanup ---
         final_fields = self.post_process_name_fields(final_fields)
         
-        # Clean up the temporary 'pos' key before sending to frontend
         for field in final_fields: field.pop('pos', None)
         
-        # Handle password confirmation logic
         password_field_index = -1
         for i, field in enumerate(final_fields):
             if field.get('id') == 'PASSWORD':
