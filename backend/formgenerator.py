@@ -1,128 +1,147 @@
-# form_generator_dynamic.py
-# Dynamic schema & field matching with semantic similarity, range/email overrides, and enriched schema outputs
-
+# formgenerator.py
 from typing import List, Dict, Any
 import json
 import re
-from sentence_transformers import SentenceTransformer, util
-from fuzzywuzzy import fuzz, process
-import numpy as np
+from fuzzywuzzy import fuzz
 
-# Load schemas (fields include metadata dictionaries) from external JSON
+# Load schemas
 with open("schemas.json", "r", encoding="utf-8") as f:
     SCHEMA_DATA: Dict[str, Dict[str, Any]] = json.load(f)
 
-# Initialize semantic model
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-# Precompute embeddings for seeds and schema descriptions
-SCHEMA_EMBS: Dict[str, np.ndarray] = {}
-for name, data in SCHEMA_DATA.items():
-    text = " ".join(data.get("seed", []))
-    desc = data.get("description", "")
-    if desc:
-        text += " " + desc
-    SCHEMA_EMBS[name] = model.encode(text, convert_to_tensor=True)
-
-# Field-level mapping and embeddings
+# Prepare lists of fields and schemas
 FIELDS: List[str] = [field["name"] for schema in SCHEMA_DATA.values() for field in schema["fields"]]
-FIELD_EMBS = model.encode(FIELDS, convert_to_tensor=True)
+SCHEMA_LIST: List[str] = list(SCHEMA_DATA.keys())
 
-# Build a metadata lookup for fields
-FIELD_META: Dict[str, Dict[str, Any]] = {
-    field["name"]: field for schema in SCHEMA_DATA.values() for field in schema["fields"]
+# Build keyword-based schema mapping from seeds in schemas.json
+SCHEMA_KEYWORDS: Dict[str, List[str]] = {
+    schema_name: [seed.lower() for seed in data.get("seed", [])]
+    for schema_name, data in SCHEMA_DATA.items()
 }
 
-# Map each field to its type (for fallback)
+# Threshold for fuzzy field matching
+FUZZY_FIELD_THRESHOLD = 65
+
+# Metadata lookup for fields
+FIELD_META: Dict[str, Dict[str, Any]] = {
+    field["name"]: field
+    for data in SCHEMA_DATA.values() for field in data["fields"]
+}
 FIELD_TYPES: Dict[str, str] = {name: meta.get("type", "text") for name, meta in FIELD_META.items()}
 
-# Matching thresholds
-SEMANTIC_SCHEMA_THRESHOLD = 0.4   # cosine similarity for schemas
-SEMANTIC_FIELD_THRESHOLD = 0.50   # cosine similarity for general fields
-FUZZY_FIELD_THRESHOLD = 75
-SINGLE_FIELD_THRESHOLD = 0.6     # lowered threshold for single-field override
 
-
-def semantic_match_schemas(prompt: str, top_k: int = 3) -> List[str]:
-    prompt_emb = model.encode(prompt, convert_to_tensor=True)
-    scores = {name: float(util.cos_sim(prompt_emb, emb)) for name, emb in SCHEMA_EMBS.items()}
-    matched = [(name, score) for name, score in scores.items() if score >= SEMANTIC_SCHEMA_THRESHOLD]
-    matched.sort(key=lambda x: x[1], reverse=True)
-    return [name for name, _ in matched[:top_k]]
+def detect_schema(prompt: str) -> str:
+    prompt_lower = prompt.lower()
+    for schema_name in SCHEMA_LIST:
+        if schema_name.replace('_', ' ') in prompt_lower:
+            return schema_name
+    for schema_name, seeds in SCHEMA_KEYWORDS.items():
+        if any(seed in prompt_lower for seed in seeds):
+            return schema_name
+    return ""
 
 
 def build_form_spec(prompt: str) -> Dict[str, Any]:
-    # Detect numeric range pattern (e.g., "1-10", "1 to 10")
-    range_match = re.search(r"(\d+)\s*(?:-|to)\s*(\d+)", prompt)
-    prompt_emb = model.encode(prompt, convert_to_tensor=True)
+    prompt_lower = prompt.lower()
+    override_fields: List[Dict[str, Any]] = []
 
-    # Compute field similarities
-    cos_sims = util.cos_sim(prompt_emb, FIELD_EMBS)[0].tolist()
-    best_idx = int(np.argmax(cos_sims))
-    best_score = cos_sims[best_idx]
-    best_field = FIELDS[best_idx]
+    matched_flags = set()
 
-    # 0) Range override for rating
-    if range_match and best_field == "rating":
-        low, high = map(int, range_match.groups())
-        return {
-            "type": "range",
-            "family": "rating",
-            "min": low,
-            "max": high,
-            "confidence": round(best_score, 2),
-            "label": prompt.strip().capitalize()
-        }
+    # Field-specific overrides with priority check
+    if re.search(r"\b(resume|cv)\b", prompt_lower):
+        matched_flags.add("resume")
+        override_fields.append({
+            "name": "resume",
+            "type": FIELD_META.get("resume", {}).get("type", "file"),
+            "family": FIELD_META.get("resume", {}).get("family", "file"),
+            "validation": FIELD_META.get("resume", {}).get("validation", "file_type"),
+            "accept": FIELD_META.get("resume", {}).get("accept", ".pdf,.doc,.docx"),
+            "confidence": 1.0,
+            "label": FIELD_META.get("resume", {}).get("label", "Upload Resume")
+        })
 
-    # 1) Email override: explicit "email" in prompt
-    if "email" in prompt.lower():
-        # Always return email family as 'email'
-        score = round(float(util.cos_sim(prompt_emb, model.encode("email", convert_to_tensor=True))), 2)
-        return {
-            "type": "email",
-            "family": "email",
+    if "email" in prompt_lower and "email" not in matched_flags:
+        matched_flags.add("email")
+        override_fields.append({
+            "name": "email",
+            "type": FIELD_META.get("email", {}).get("type", "email"),
+            "family": FIELD_META.get("email", {}).get("family", "email"),
             "validation": FIELD_META.get("email", {}).get("validation", "email_format"),
-            "confidence": score,
-            "label": prompt.strip().title()
-        }
+            "confidence": 1.0,
+            "label": FIELD_META.get("email", {}).get("label", "Email")
+        })
 
-    # 2) Single-field override: strong semantic match
-    if best_score >= SINGLE_FIELD_THRESHOLD:
-        meta = FIELD_META[best_field].copy()
-        meta_conf = round(best_score, 2)
-        return {
-            "type": meta.get("type", "text"),
-            "family": meta.get("family", meta.get("type", "text")),
-            "validation": meta.get("validation", "none"),
-            **({"accept": meta.get("accept")} if "accept" in meta else {}),
-            "confidence": meta_conf,
-            "label": meta.get("label", best_field.replace("_", " ").title())
-        }
+    if any(k in prompt_lower for k in ["phone", "mobile"]) and "phone" not in matched_flags:
+        matched_flags.add("phone")
+        override_fields.append({
+            "name": "phone",
+            "type": FIELD_META.get("phone", {}).get("type", "tel"),
+            "family": FIELD_META.get("phone", {}).get("family", "textual"),
+            "validation": FIELD_META.get("phone", {}).get("validation", "phone_number"),
+            "confidence": 1.0,
+            "label": FIELD_META.get("phone", {}).get("label", "Phone")
+        })
 
-    # 3) Semantic schema matching (full form)
-    schemas = semantic_match_schemas(prompt)
-    if schemas:
-        spec: Dict[str, Any] = {"type": schemas[0], "fields": []}
-        for field_meta in SCHEMA_DATA[schemas[0]]["fields"]:
-            name = field_meta["name"]
+    if any(k in prompt_lower for k in ["image", "photo", "picture"]):
+        matched_flags.add("image")
+        override_fields.append({
+            "type": "file", "family": "file",
+            "validation": "file_type", "accept": ".png,.jpg,.jpeg",
+            "confidence": 1.0, "label": "Upload Image"
+        })
+
+    if any(k in prompt_lower for k in ["file", "document", "upload"]) and "resume" not in matched_flags:
+        override_fields.append({
+            "type": "file", "family": "file",
+            "validation": "file_type", "accept": ".pdf,.doc,.docx,.txt",
+            "confidence": 1.0, "label": "Upload File"
+        })
+
+    range_match = re.search(r"(\d+)\s*(?:-|to)\s*(\d+)", prompt)
+    if range_match and "rating" in prompt_lower:
+        low, high = map(int, range_match.groups())
+        override_fields.append({
+            "type": "range", "family": "rating",
+            "min": low, "max": high,
+            "confidence": 1.0,
+            "label": prompt.strip().capitalize()
+        })
+    elif any(k in prompt_lower for k in ["rating", "rate"]):
+        override_fields.append({
+            "name": "rating",
+            "type": FIELD_META.get("rating", {}).get("type", "number"),
+            "family": FIELD_META.get("rating", {}).get("family", "numeric"),
+            "validation": FIELD_META.get("rating", {}).get("validation", "none"),
+            "confidence": 1.0,
+            "label": FIELD_META.get("rating", {}).get("label", "Rating")
+        })
+
+    if override_fields:
+        return {"type": "custom", "fields": override_fields}
+
+    detected = detect_schema(prompt)
+    if detected:
+        spec = {"type": detected, "fields": []}
+        for field in SCHEMA_DATA[detected]["fields"]:
+            name = field["name"]
             meta = FIELD_META.get(name, {})
             enriched = {
                 "name": name,
-                "type": meta.get("type", field_meta.get("type", "text")),
-                "family": meta.get("family", meta.get("type", field_meta.get("type", "text"))),
+                "type": meta.get("type", field.get("type", "text")),
+                "family": meta.get("family", field.get("type", "text")),
                 "validation": meta.get("validation", "none"),
-                "label": meta.get("label", field_meta.get("label", name.replace("_", " ").title()))
+                "label": meta.get("label", field.get("label", name.replace("_", " ").title()))
             }
             if "accept" in meta:
                 enriched["accept"] = meta["accept"]
             spec["fields"].append(enriched)
         return spec
 
-    # 4) Semantic & fuzzy fallback multi-field
     spec = {"type": "custom", "fields": []}
     seen = set()
-    for idx, fld in enumerate(FIELDS):
-        if cos_sims[idx] >= SEMANTIC_FIELD_THRESHOLD and fld not in seen:
+    prompt_words = prompt_lower.split()
+    for fld in FIELDS:
+        fld_lower = fld.lower()
+        if any(word in fld_lower for word in prompt_words) and fld not in seen:
             seen.add(fld)
             meta = FIELD_META.get(fld, {})
             spec["fields"].append({
@@ -130,30 +149,33 @@ def build_form_spec(prompt: str) -> Dict[str, Any]:
                 "type": meta.get("type", FIELD_TYPES.get(fld, "text")),
                 "label": meta.get("label", fld.replace("_", " ").title())
             })
-    if not spec["fields"]:
-        for fld in FIELDS:
-            _, score = process.extractOne(prompt.lower(), [fld], scorer=fuzz.partial_ratio)
-            if score >= FUZZY_FIELD_THRESHOLD and fld not in seen:
-                seen.add(fld)
-                meta = FIELD_META.get(fld, {})
-                spec["fields"].append({
-                    "name": fld,
-                    "type": meta.get("type", FIELD_TYPES.get(fld, "text")),
-                    "label": meta.get("label", fld.replace("_", " ").title())
-                })
+            continue
+        score = fuzz.partial_ratio(prompt_lower, fld_lower)
+        if score >= FUZZY_FIELD_THRESHOLD and fld not in seen:
+            seen.add(fld)
+            meta = FIELD_META.get(fld, {})
+            spec["fields"].append({
+                "name": fld,
+                "type": meta.get("type", FIELD_TYPES.get(fld, "text")),
+                "label": meta.get("label", fld.replace("_", " ").title())
+            })
     return spec
 
 
 if __name__ == "__main__":
     prompts = [
-        "customer email address",
+        ### TEST PROMPTS
+        "I'd like to apply for a job and I want to upload my CV",               
+        "Register for the upcoming webinar",                                            
+        "Submit a suggestion to improve our app",                    
+        "Contact the support team about an issue",                  
+        "Enter your mobile number and email",                                                                
+        "Fill out your student registration form",
         "satisfaction rating 1-10",
         "upload your resume",
-        "write a feedback form for students to fill",
-        "write a form so students can comment and rate between 1-10",
-        "write a form for job vacancy"
+        "customer email address",
     ]
     for p in prompts:
         spec = build_form_spec(p)
         print(f"Prompt: {p}\nSpec: {json.dumps(spec, indent=2)}\n")
-
+        

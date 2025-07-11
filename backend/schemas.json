@@ -1,315 +1,103 @@
 {
   "student_form": {
     "fields": [
-      {
-        "name": "first_name",
-        "label": "First Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "alphabetic"
-      },
-      {
-        "name": "last_name",
-        "label": "Last Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "alphabetic"
-      },
-      {
-        "name": "roll_no",
-        "label": "Roll No",
-        "type": "number",
-        "family": "numeric",
-        "validation": "integer"
-      },
-      {
-        "name": "phone",
-        "label": "Phone",
-        "type": "tel",
-        "family": "textual",
-        "validation": "phone_number"
-      },
-      {
-        "name": "email",
-        "label": "Email",
-        "type": "email",
-        "family": "textual",
-        "validation": "email_format"
-      },
-      {
-        "name": "address",
-        "label": "Address",
-        "type": "text",
-        "family": "textual",
-        "validation": "none"
-      }
+      { "name": "first_name",    "label": "First Name",       "type": "text",     "family": "textual", "validation": "alphabetic" },
+      { "name": "last_name",     "label": "Last Name",        "type": "text",     "family": "textual", "validation": "alphabetic" },
+      { "name": "roll_no",       "label": "Roll Number",      "type": "number",   "family": "numeric", "validation": "alphanumeric" },
+      { "name": "email",         "label": "Email Address",    "type": "email",    "family": "textual", "validation": "email_format" },
+      { "name": "phone",         "label": "Phone Number",     "type": "tel",      "family": "textual", "validation": "phone_number" },
+      { "name": "address",       "label": "Address",          "type": "textarea", "family": "textual", "validation": "none" }
     ],
     "seed": [
-      "enrolment",
-      "entrance fee",
-      "access",
-      "entree",
-      "pupil",
-      "enrollment",
-      "registration",
-      "educatee",
-      "admission",
-      "student",
-      "admittance"
+      "enrolment","registration","admission","student",
+      "pupil","learner","campus","graduate","undergraduate",
+      "year","semester","course","student details"
     ]
   },
+
   "survey": {
     "fields": [
-      {
-        "name": "short_answer",
-        "label": "Short Answer",
-        "type": "textarea",
-        "family": "textual",
-        "validation": "none"
-      },
-      {
-        "name": "mcq",
-        "label": "Multiple Choice",
-        "type": "select",
-        "family": "choice",
-        "validation": "none"
-      },
-      {
-        "name": "rating",
-        "label": "Rating",
-        "type": "number",
-        "family": "numeric",
-        "validation": "range_1_5"
-      }
+      { "name": "short_answer", "label": "Short Answer",    "type": "textarea", "family": "textual", "validation": "none" },
+      { "name": "comments",   "label": "Comments",         "type": "textarea", "family": "textual", "validation": "none" },
+      { "name": "rating",       "label": "Rating",          "type": "number",   "family": "numeric", "validation": "range_1_5" }
     ],
     "seed": [
-      "inquiry",
-      "work",
-      "sketch",
-      "vignette",
-      "poll",
-      "opinion poll",
-      "survey",
-      "question",
-      "research",
-      "questionnaire",
-      "public opinion poll",
-      "study",
-      "enquiry"
+      "survey","questionnaire","poll",
+      "research","study","inquiry","vote","public opinion",
+      "form","response","participant","collect data"
     ]
   },
+
   "feedback": {
     "fields": [
-      {
-        "name": "course_name",
-        "label": "Course Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "none"
-      },
-      {
-        "name": "rating",
-        "label": "Rating",
-        "type": "number",
-        "family": "numeric",
-        "validation": "range_1_5"
-      },
-      {
-        "name": "comments",
-        "label": "Comments",
-        "type": "textarea",
-        "family": "textual",
-        "validation": "none"
-      }
+      { "name": "topic",      "label": "Topic",            "type": "text",     "family": "textual", "validation": "none" },
+      { "name": "comments",   "label": "Comments",         "type": "textarea", "family": "textual", "validation": "none" },
+      { "name": "rating",     "label": "Rating",           "type": "number",   "family": "numeric", "validation": "range_1_5" }
     ],
     "seed": [
-      "review",
-      "revaluation",
-      "feedback",
-      "reappraisal",
-      "course feedback"
+      "feedback","review","comments","reappraisal","suggestion",
+      "thoughts","opinion","experience","evaluate","rate"
     ]
   },
+
+  "suggestion": {
+    "fields": [
+      { "name": "name",         "label": "Your Name",       "type": "text",     "family": "textual", "validation": "alphabetic" },
+      { "name": "email",        "label": "Your Email",      "type": "email",    "family": "textual", "validation": "email_format" },
+      { "name": "suggestion",   "label": "Your Suggestion", "type": "textarea", "family": "textual", "validation": "none" }
+    ],
+    "seed": ["suggestion","idea","recommendation","propose","enhancement","feature request"]
+  },
+
   "job_application": {
     "fields": [
-      {
-        "name": "full_name",
-        "label": "Full Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "alphabetic"
-      },
-      {
-        "name": "email",
-        "label": "Email Address",
-        "type": "email",
-        "family": "textual",
-        "validation": "email_format"
-      },
-      {
-        "name": "phone",
-        "label": "Phone",
-        "type": "tel",
-        "family": "textual",
-        "validation": "phone_number"
-      },
-      {
-        "name": "resume",
-        "label": "Upload Your Resume",
-        "type": "file",
-        "family": "file",
-        "validation": "file_type",
-        "accept": ".pdf,.doc,.docx"
-      },
-      {
-        "name": "cover_letter",
-        "label": "Cover Letter",
-        "type": "textarea",
-        "family": "textual",
-        "validation": "none"
-      }
+      { "name": "full_name",      "label": "Full Name",        "type": "text",    "family": "textual", "validation": "alphabetic" },
+      { "name": "email",          "label": "Email Address",   "type": "email",   "family": "textual", "validation": "email_format" },
+      { "name": "phone",          "label": "Phone Number",    "type": "tel",     "family": "textual", "validation": "phone_number" },
+      { "name": "resume",         "label": "Upload Resume",   "type": "file",    "family": "file",    "validation": "file_type", "accept": ".pdf,.docx" },
+      { "name": "cover_letter",   "label": "Cover Letter",    "type": "textarea","family": "textual","validation": "none" },
+      { "name": "linkedin",       "label": "LinkedIn URL",    "type": "url",     "family": "textual", "validation": "url" }
     ],
-    "seed": [
-      "vocation",
-      "finish",
-      "business concern",
-      "curriculum vitae",
-      "coating",
-      "business",
-      "study",
-      "cv",
-      "application",
-      "career",
-      "job",
-      "practical application",
-      "concern",
-      "sketch",
-      "vignette",
-      "resume",
-      "calling",
-      "survey",
-      "occupation",
-      "coat"
-    ]
+    "seed": ["job","career","application","resume","cv","position","vacancy","hiring","opportunity"]
   },
+
   "event_registration": {
     "fields": [
-      {
-        "name": "participant_name",
-        "label": "Participant Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "alphabetic"
-      },
-      {
-        "name": "event_name",
-        "label": "Event Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "none"
-      },
-      {
-        "name": "email",
-        "label": "Email",
-        "type": "email",
-        "family": "textual",
-        "validation": "email_format"
-      },
-      {
-        "name": "date",
-        "label": "Date",
-        "type": "date",
-        "family": "temporal",
-        "validation": "none"
-      },
-      {
-        "name": "time",
-        "label": "Time",
-        "type": "time",
-        "family": "temporal",
-        "validation": "none"
-      }
+      { "name": "participant_name","label":"Participant Name","type":"text",    "family":"textual","validation":"alphabetic" },
+      { "name": "event_name",      "label":"Event Name",      "type":"text",    "family":"textual","validation":"none" },
+      { "name": "email",           "label":"Email",           "type":"email",   "family":"textual","validation":"email_format" },
+      { "name": "phone",           "label":"Phone Number",    "type":"tel",     "family":"textual","validation":"phone_number" },
+      { "name": "date",            "label":"Event Date",      "type":"date",    "family":"temporal","validation":"none" },
+      { "name": "time",            "label":"Event Time",      "type":"time",    "family":"temporal","validation":"none" }
     ],
-    "seed": [
-      "group discussion",
-      "example",
-      "effect",
-      "webinar",
-      "outcome",
-      "instance",
-      "signup",
-      "cash register",
-      "event",
-      "league",
-      "case",
-      "conference",
-      "consequence",
-      "register",
-      "registry"
-    ]
+    "seed": ["event","register","signup","conference","webinar","meeting","workshop","seminar","ticket"]
   },
+
   "bug_report": {
     "fields": [
-      {
-        "name": "reporter_name",
-        "label": "Reporter Name",
-        "type": "text",
-        "family": "textual",
-        "validation": "alphabetic"
-      },
-      {
-        "name": "issue_type",
-        "label": "Issue Type",
-        "type": "text",
-        "family": "textual",
-        "validation": "none"
-      },
-      {
-        "name": "description",
-        "label": "Description",
-        "type": "textarea",
-        "family": "textual",
-        "validation": "none"
-      },
-      {
-        "name": "screenshot",
-        "label": "Upload Screenshot",
-        "type": "file",
-        "family": "file",
-        "validation": "file_type",
-        "accept": ".png,.jpg,.jpeg"
-      },
-      {
-        "name": "priority",
-        "label": "Priority",
-        "type": "select",
-        "family": "choice",
-        "validation": "none"
-      }
+      { "name":"reporter_name","label":"Reporter Name","type":"text",    "family":"textual","validation":"alphabetic" },
+      { "name":"issue_type",   "label":"Issue Type",   "type":"text",    "family":"textual","validation":"none" },
+      { "name":"description",  "label":"Description",  "type":"textarea","family":"textual","validation":"none" },
+      { "name":"screenshot",    "label":"Upload Screenshot","type":"file","family":"file","validation":"file_type","accept":".png,.jpg" },
+      { "name":"priority",      "label":"Priority",     "type":"select",  "family":"choice", "validation":"none","options":["Low","Medium","High"] }
     ],
-    "seed": [
-      "clangour",
-      "theme",
-      "issue",
-      "study",
-      "written report",
-      "bug",
-      "figure",
-      "crash",
-      "report",
-      "error",
-      "subject",
-      "mistake",
-      "hemipterous insect",
-      "fault",
-      "clang",
-      "act",
-      "work",
-      "clangor",
-      "survey",
-      "glitch",
-      "topic",
-      "number"
-    ]
+    "seed": ["bug","error","crash","issue","fault","glitch","problem","report"]
+  },
+
+  "contact": {
+    "fields": [
+      { "name":"name",     "label":"Name",     "type":"text",     "family":"textual","validation":"alphabetic" },
+      { "name":"email",    "label":"Email",    "type":"email",    "family":"textual","validation":"email_format" },
+      { "name":"subject",  "label":"Subject",  "type":"text",     "family":"textual","validation":"none" },
+      { "name":"message",  "label":"Message",  "type":"textarea","family":"textual","validation":"none" }
+    ],
+    "seed": ["contact","get in touch","inquiry","question","support","help","reach out"]
+  },
+
+  "generic_feedback": {
+    "fields": [
+      { "name":"comments", "label":"Comments","type":"textarea","family":"textual","validation":"none" }
+    ],
+    "seed": ["comment","feedback","suggestion","thoughts","idea"]
   }
 }
