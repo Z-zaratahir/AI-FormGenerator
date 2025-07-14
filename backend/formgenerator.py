@@ -89,12 +89,20 @@ def build_form_spec(prompt: str) -> Dict[str, Any]:
             "confidence": 1.0, "label": "Upload Image"
         })
 
-    if any(k in prompt_lower for k in ["file", "document", "upload"]) and "resume" not in matched_flags:
+    if (
+    any(k in prompt_lower for k in ["file", "document", "upload"])
+    and "resume" not in matched_flags
+    and "image" not in matched_flags
+    ):
         override_fields.append({
-            "type": "file", "family": "file",
-            "validation": "file_type", "accept": ".pdf,.doc,.docx,.txt",
-            "confidence": 1.0, "label": "Upload File"
-        })
+        "type": "file",
+        "family": "file",
+        "validation": "file_type",
+        "accept": ".pdf,.doc,.docx,.txt",
+        "confidence": 1.0,
+        "label": "Upload File"
+    })
+
 
     range_match = re.search(r"(\d+)\s*(?:-|to)\s*(\d+)", prompt)
     if range_match and "rating" in prompt_lower:
@@ -165,17 +173,29 @@ def build_form_spec(prompt: str) -> Dict[str, Any]:
 if __name__ == "__main__":
     prompts = [
         ### TEST PROMPTS
-        "I'd like to apply for a job and I want to upload my CV",               
-        "Register for the upcoming webinar",                                            
-        "Submit a suggestion to improve our app",                    
-        "Contact the support team about an issue",                  
-        "Enter your mobile number and email",                                                                
-        "Fill out your student registration form",
-        "satisfaction rating 1-10",
-        "upload your resume",
-        "customer email address",
+        "Customer email address",
+        "Enter your phone number",
+        "Upload your resume or CV",
+        "Submit your profile picture",
+        "Student ID and other details",
+        "Provide feedback or suggestions",
+        "What's your official email?",
+        "Drop your phone number here",
+        "Send over your CV please",
+        "Upload an image of your product",
+        "Rate our app between 1 to 5",
+        "Give a rating from 1 to 10",
+        "Fill out the student registration form",
+        "Sign up for the webinar",
+        "Take our customer feedback survey",
+        "Enter your name and email",
+        "Upload any supporting documents",
+        "Choose your gender",
+        "Add a short note or suggestion"
     ]
     for p in prompts:
         spec = build_form_spec(p)
         print(f"Prompt: {p}\nSpec: {json.dumps(spec, indent=2)}\n")
+
+
         
