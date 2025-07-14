@@ -289,11 +289,14 @@ class FormGenerator:
 
 
         # --- Phase 4: Post-Processing and Cleanup ---
+        # --- Phase 4: Post-Processing and Cleanup ---
         final_fields = self.post_process_name_fields(final_fields)
-        
+
+        # strip out internal 'pos' tags
         for field in final_fields: 
             field.pop('pos', None)
-        
+
+        # password‐confirmation logic unchanged...
         password_field_index = next((i for i, field in enumerate(final_fields) if field.get('id') == 'PASSWORD'), -1)
         if password_field_index != -1 and "CONFIRM_PASSWORD" not in added_ids:
             if re.search(r"\b(confirm|confirmation|retype).{0,5}password", prompt.lower()):
@@ -301,7 +304,65 @@ class FormGenerator:
                 confirm_password_field = create_field_entry(field_def, "logic", 0.98)
                 final_fields.insert(password_field_index + 1, confirm_password_field)
 
+        # ─── New: Field-specific regex validations ────────────────────────────────────
+        for field in final_fields:
+            fid = field.get('id', '')
+            # Email: must contain '@' and end with '.com'
+            if fid == 'EMAIL':
+                field['validation'].update({
+                    'required': True,
+                    'pattern': r'^[\w\.-]+@[\w\.-]+\.[cC][oO][m]$'
+                })
+            # Phone: exactly 11 digits
+            elif fid == 'PHONE':
+                field['validation'].update({
+                    'required': True,
+                    'pattern': r'^\d{11}$'
+                })
+            # Name fields: cannot be empty
+            elif fid in ('FIRST_NAME', 'LAST_NAME', 'FULL_NAME'):
+                field['validation'].update({
+                    'required': True
+                })
+            # You can extend this `elif` chain for any other special fields.
+        
+        # ─── Step 0: (Optional) Your existing per‑ID overrides ──────────────────────
+        # (You can leave your EMAIL, PHONE, NAME regex blocks here)
+
+        # ─── Step 1: Define generic defaults per field type ────────────────────────
+        type_defaults = {
+            "textarea": {"required": False, "maxLength": 1000},
+            "text":     {"required": False, "maxLength": 255},
+            "file":     {"required": False},   # most file fields define their own fileTypes/maxSize in JSON
+            "url":      {"required": False, "rule": "url"},
+            "email":    {"required": True,  "rule": "email_format"},
+            "tel":      {"required": True,  "pattern": r"^\d{11}$"},
+            "date":     {"required": False},
+            "time":     {"required": False},
+            "select":   {"required": False},
+            "radio":    {"required": False},
+            "checkbox": {"required": False},
+            "number":   {"required": False},
+            "password": {"required": True,  "minLength": 8}
+            # add any other types you want as catch‑alls…
+        }
+
+        # ─── Step 2: Merge JSON + per‑ID + type defaults ───────────────────────────
+        for field in final_fields:
+            # 1) Start with whatever came from fields.json
+            val = field.setdefault("validation", {})
+
+            # 2) (Optional) Your per‑ID overrides—e.g. EMAIL, PHONE, NAME—go here
+            #    (skip this if you prefer to drive everything from JSON + type_defaults)
+
+            # 3) Fill in any missing keys from the type_defaults map
+            defaults = type_defaults.get(field["type"], {})
+            for key, default_val in defaults.items():
+                val.setdefault(key, default_val)
+
+
         return final_fields, detected_template_name
+
 
 # --- Main Application Setup ---
 fields_data, templates_data = load_knowledge_base('fields.json', 'templates.json')
@@ -320,5 +381,62 @@ def process_prompt_route():
         
     return jsonify({"title": "Generated Form", "prompt": prompt, "template": template_name, "fields": generated_fields})
 
+# ─── SERVER‑SIDE VALIDATION HELPER ─────────────────────────────────────────
+def validate_submission(values: dict, schema: list):
+    errors = {}
+    for field in schema:
+        fid   = field["id"]
+        rules = field.get("validation", {})
+        val   = values.get(fid, "")
+
+        # 1) Required?
+        if rules.get("required") and not val:
+            errors[fid] = "This field is required."
+            continue
+
+        # 2) Skip further checks if empty
+        if not val:
+            continue
+
+        # 3) Length checks
+        if "minLength" in rules and len(val) < rules["minLength"]:
+            errors[fid] = f"Must be at least {rules['minLength']} characters."
+        if "maxLength" in rules and len(val) > rules["maxLength"]:
+            errors[fid] = f"Must be no more than {rules['maxLength']} characters."
+
+        # 4) Regex pattern
+        pattern = rules.get("pattern")
+        if pattern and not re.fullmatch(pattern, val):
+            errors[fid] = "Invalid format."
+
+        # 5) “rule” shortcuts
+        rule = rules.get("rule")
+        if rule == "email_format":
+            if not re.fullmatch(r"^[\w\.-]+@[\w\.-]+\.[A-Za-z]{2,}$", val):
+                errors[fid] = "Must be a valid email address."
+        elif rule == "phone_number":
+            if not re.fullmatch(r"\d{11}", val):
+                errors[fid] = "Must be exactly 11 digits."
+
+    return errors
+
+
+@app.route("/submit", methods=["POST"])
+@limiter.limit("5 per minute")
+def submit_route():
+    payload = request.get_json(force=True)
+    values  = payload.get("values", {})
+    schema  = payload.get("schema", [])
+
+    # debug log—remove or comment out in production
+    print(">>> /submit values:", values)
+    print(">>> /submit schema:", [f['id'] + ":" + str(f.get('validation')) for f in schema])
+
+    errs = validate_submission(values, schema)
+    if errs:
+        return jsonify({"success": False, "errors": errs}), 400
+
+    # All validations passed—proceed with your next steps
+    return jsonify({"success": True, "message": "Form submitted successfully."})
 if __name__ == "__main__":
     app.run(debug=True)
