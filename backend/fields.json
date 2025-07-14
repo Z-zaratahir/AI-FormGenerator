@@ -1,38 +1,23 @@
 [
   {
-    "id": "FIRST_NAME",
-    "label": "First Name",
-    "type": "text",
-    "patterns": [[{"LOWER": "first"}, {"LOWER": "name"}], [{"LOWER": "given"}, {"LOWER": "name"}]],
-    "fuzzy_keywords": ["firstname"]
+    "id": "FIRST_NAME", "label": "First Name", "type": "text", "patterns": [[{"LOWER": "first"}, {"LOWER": "name"}], [{"LOWER": "given"}, {"LOWER": "name"}]], "fuzzy_keywords": ["firstname"],
+    "validation": {"required": true, "minLength": 2}
   },
   {
-    "id": "LAST_NAME",
-    "label": "Last Name",
-    "type": "text",
-    "patterns": [[{"LOWER": "last"}, {"LOWER": "name"}], [{"LOWER": "family"}, {"LOWER": "name"}]],
-    "fuzzy_keywords": ["lastname", "surname"]
+    "id": "LAST_NAME", "label": "Last Name", "type": "text", "patterns": [[{"LOWER": "last"}, {"LOWER": "name"}], [{"LOWER": "family"}, {"LOWER": "name"}]], "fuzzy_keywords": ["lastname", "surname"],
+    "validation": {"required": true, "minLength": 2}
   },
   {
-    "id": "FULL_NAME",
-    "label": "Full Name",
-    "type": "text",
-    "patterns": [[{"LOWER": "full"}, {"LOWER": "name"}], [{"LOWER": "name"}]],
-    "fuzzy_keywords": ["name"]
+    "id": "FULL_NAME", "label": "Full Name", "type": "text", "patterns": [[{"LOWER": "full"}, {"LOWER": "name"}], [{"LOWER": "name"}]], "fuzzy_keywords": ["name"],
+    "validation": {"required": true, "minLength": 3}
   },
   {
-    "id": "EMAIL",
-    "label": "Email Address",
-    "type": "email",
-    "patterns": [[{"LEMMA": "email"}]],
-    "fuzzy_keywords": ["email", "emial"]
+    "id": "EMAIL", "label": "Email Address", "type": "email", "patterns": [[{"LEMMA": "email"}]], "fuzzy_keywords": ["email", "emial"],
+    "validation": {"required": true, "rule": "email"}
   },
   {
-    "id": "PHONE",
-    "label": "Phone Number",
-    "type": "tel",
-    "patterns": [[{"LEMMA": "phone"}]],
-    "fuzzy_keywords": ["phone", "mobile"]
+    "id": "PHONE", "label": "Phone Number", "type": "tel", "patterns": [[{"LEMMA": "phone"}]], "fuzzy_keywords": ["phone", "mobile"],
+    "validation": {"required": false, "rule": "phone"}
   },
   {
     "id": "ADDRESS",
@@ -77,25 +62,16 @@
     "fuzzy_keywords": ["dob", "birthday"]
   },
   {
-    "id": "USERNAME",
-    "label": "Username",
-    "type": "text",
-    "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]],
-    "fuzzy_keywords": ["username", "user", "userid"]
+    "id": "USERNAME", "label": "Username", "type": "text", "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]], "fuzzy_keywords": ["username", "user", "userid"],
+    "validation": {"required": true, "minLength": 4, "maxLength": 20}
   },
   {
-    "id": "PASSWORD",
-    "label": "Password",
-    "type": "password",
-    "patterns": [[{"LOWER": "password"}]],
-    "fuzzy_keywords": ["password"]
+    "id": "PASSWORD", "label": "Password", "type": "password", "patterns": [[{"LOWER": "password"}]], "fuzzy_keywords": ["password"],
+    "validation": {"required": true, "minLength": 8, "rule": "password_strength"}
   },
   {
-    "id": "CONFIRM_PASSWORD",
-    "label": "Confirm Password",
-    "type": "password",
-    "patterns": [[{"LOWER": "confirm"}, {"LOWER": "password"}]],
-    "fuzzy_keywords": ["confirm password"]
+    "id": "CONFIRM_PASSWORD", "label": "Confirm Password", "type": "password", "patterns": [[{"LOWER": "confirm"}, {"LOWER": "password"}]], "fuzzy_keywords": ["confirm password"],
+    "validation": {"required": true, "matches": "PASSWORD"}
   },
   {
     "id": "COMPANY_NAME",
@@ -112,11 +88,8 @@
     "fuzzy_keywords": ["job title", "role", "position"]
   },
   {
-    "id": "WEBSITE_URL",
-    "label": "Website URL",
-    "type": "url",
-    "patterns": [[{"LOWER": "website"}], [{"LOWER": "url"}]],
-    "fuzzy_keywords": ["website", "url", "site"]
+    "id": "WEBSITE_URL", "label": "Website URL", "type": "url", "patterns": [[{"LOWER": "website"}], [{"LOWER": "url"}]], "fuzzy_keywords": ["website", "url", "site"],
+    "validation": {"required": false, "rule": "url"}
   },
   {
     "id": "PORTFOLIO_LINK",
@@ -126,11 +99,8 @@
     "fuzzy_keywords": ["portfolio", "work"]
   },
   {
-    "id": "RESUME_UPLOAD",
-    "label": "Resume/CV",
-    "type": "file",
-    "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]],
-    "fuzzy_keywords": ["resume", "cv"]
+    "id": "RESUME_UPLOAD", "label": "Resume/CV", "type": "file", "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]], "fuzzy_keywords": ["resume", "cv"],
+    "validation": {"required": true, "fileTypes": ["pdf", "doc", "docx"], "maxSizeMB": 5}
   },
   {
     "id": "COVER_LETTER",
@@ -237,12 +207,9 @@
     "patterns": [[{"LOWER": "appointment"}, {"LOWER": "time"}]],
     "fuzzy_keywords": ["appointment time"]
   },
-  {
-    "id": "RATING",
-    "label": "Rating (1-5)",
-    "type": "number",
-    "patterns": [[{"LEMMA": "rate"}]],
-    "fuzzy_keywords": ["rating"]
+   {
+    "id": "RATING", "label": "Rating (1-5)", "type": "number", "patterns": [[{"LEMMA": "rate"}]], "fuzzy_keywords": ["rating"],
+    "validation": {"required": true, "min": 1, "max": 5}
   },
   {
     "id": "SATISFACTION",
@@ -280,18 +247,12 @@
     "fuzzy_keywords": ["subject", "topic"]
   },
   {
-    "id": "MESSAGE",
-    "label": "Message",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "message"}]],
-    "fuzzy_keywords": ["message", "body"]
+    "id": "MESSAGE", "label": "Message", "type": "textarea", "patterns": [[{"LOWER": "message"}]], "fuzzy_keywords": ["message", "body"],
+    "validation": {"required": true, "maxLength": 5000}
   },
   {
-    "id": "TERMS_AND_CONDITIONS",
-    "label": "I agree to the Terms and Conditions",
-    "type": "checkbox",
-    "patterns": [[{"LOWER": "terms"}]],
-    "fuzzy_keywords": ["terms"]
+    "id": "TERMS_AND_CONDITIONS", "label": "I agree to the Terms and Conditions", "type": "checkbox", "patterns": [[{"LOWER": "terms"}]], "fuzzy_keywords": ["terms"],
+    "validation": {"mustBeChecked": true}
   },
   {
     "id": "EMERGENCY_CONTACT",

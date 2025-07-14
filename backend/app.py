@@ -20,7 +20,6 @@ print("Model loaded.")
 
 # --- Data Loading Function ---
 def load_knowledge_base(fields_path, templates_path):
-    """Loads field definitions and form templates from JSON files."""
     try:
         with open(fields_path, 'r', encoding='utf-8') as f:
             fields_data = json.load(f)
@@ -28,30 +27,23 @@ def load_knowledge_base(fields_path, templates_path):
             templates_data = json.load(f)
         print("Knowledge base loaded successfully from JSON files.")
         return fields_data, templates_data
-    except FileNotFoundError as e:
-        print(f"Error: Could not find a required knowledge base file: {e}")
-        exit(1)
-    except json.JSONDecodeError as e:
-        print(f"Error: Could not parse a JSON file. Check for syntax errors: {e}")
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"FATAL: Could not load or parse knowledge base file. Error: {e}")
         exit(1)
 
-# --- Helper Class for Field Data ---
 class FieldDefinition:
-    """A simple class to hold structured data for each field."""
-    def __init__(self, id, label, type, patterns, fuzzy_keywords=None):
+    def __init__(self, id, label, type, patterns, fuzzy_keywords=None, validation=None, **kwargs):
         self.id = id
         self.label = label
         self.type = type
         self.patterns = patterns
         self.fuzzy_keywords = fuzzy_keywords or []
+        self.validation = validation or {}
 
 # --- The Form Generator Engine ---
 class FormGenerator:
     def __init__(self, fields_data, templates_data):
-        # 1. Process loaded field data into FieldDefinition objects
         field_definitions = [FieldDefinition(**data) for data in fields_data]
-        
-        # 2. Build internal maps and matchers from the structured objects
         self.field_map = {f.id: f for f in field_definitions}
         self.fuzzy_map = {kw: f.id for f in field_definitions for kw in f.fuzzy_keywords}
         for field in field_definitions:
@@ -61,11 +53,18 @@ class FormGenerator:
         self.form_templates = self._resolve_template_aliases(templates_data)
 
     def _resolve_template_aliases(self, templates):
+        # resolve all string aliases (e.g., "application": "job_application")
         resolved = {}
         for key, value in templates.items():
             while isinstance(value, str):
-                value = templates.get(value, [])
+                value = templates.get(value, {})
             resolved[key] = value
+        
+        # Ensring all templates have the required keys for consistency
+        for key, value in resolved.items():
+            if isinstance(value, dict):
+                if "fields" not in value: value["fields"] = []
+                if "seeds" not in value: value["seeds"] = []
         return resolved
 
     def _build_matcher(self, field_definitions):
@@ -77,18 +76,23 @@ class FormGenerator:
         matcher.add("ATTR_REQUIRED", [[{"LOWER": "required"}]])
         matcher.add("LOGIC_NEGATION", [[{"LOWER": {"IN": ["except", "without", "not", "don't", "no"]}}]])
         matcher.add("LOGIC_QUANTIFIER", [[{"like_num": True}, {"OP": "*"}, {"POS": "NOUN"}]])
-        matcher.add("LOGIC_ARBITRARY_FIELD", [
-            [{"LOWER": {"IN": ["a", "an"]}}, {"LOWER": "field"}, {"LOWER": "for"}],
-            [{"LOWER": {"IN": ["a", "an"]}}, {"LOWER": "input"}, {"LOWER": "for"}]
+        matcher.add("LOGIC_NUMERIC_RANGE", [
+            [{"like_num": True}, {"ORTH": "-", "OP": "?"}, {"like_num": True}], # "1-10" or "1 10"
+            [{"like_num": True}, {"LOWER": "to"}, {"like_num": True}]           # "1 to 10"
         ])
+        matcher.add("LOGIC_OPTIONS", [
+        [
+            {"POS": "NOUN", "OP": "+"}, # One or more nouns (e.g., "satisfaction level")
+            {"LOWER": "with"},
+            {"LOWER": {"IN": ["options", "choices"]}},
+            {"LOWER": {"IN": ["for", "of"]}, "OP": "?"} # Optional "for" or "of"
+        ]
+    ])
         return matcher
-
+    
     def word_to_num(self, word):
-        num_map = {
-            "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
-            "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10
-        }
-        return num_map.get(word.lower(), None)
+        num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
+        return num_map.get(word.lower())
 
     def find_all_negated_nouns(self, doc, start_index):
         nouns = []
@@ -112,131 +116,209 @@ class FormGenerator:
         doc = nlp(prompt)
         all_matches = self.matcher(doc)
         
+
+
         # --- Phase 1: Intent Extraction ---
-        excluded_ids, quantities, arbitrary_fields, attributes, explicit_ids = set(), {}, [], [], set()
+        excluded_ids, quantities, attributes, explicit_ids = set(), {}, [], set()
+        dynamic_ranges = [] # For storing extracted ranges like "1-10"
+        dynamic_options = []
 
         for match_id, start, end in all_matches:
             rule_id = nlp.vocab.strings[match_id]
 
-            if rule_id.startswith("LOGIC_"):
-                if rule_id == "LOGIC_NEGATION":
-                    negated_nouns = self.find_all_negated_nouns(doc, end)
-                    for noun in negated_nouns:
-                        target_match = process.extractOne(noun, self.fuzzy_map.keys())
-                        if target_match and target_match[1] > 80:
-                            excluded_ids.add(self.fuzzy_map[target_match[0]])
-                elif rule_id == "LOGIC_QUANTIFIER":
-                    num_text = doc[start].text
-                    num = self.word_to_num(num_text) or (int(num_text) if num_text.isdigit() else None)
-                    target_noun_phrase = doc[start+1:end].text
-                    if num:
-                        target_match = process.extractOne(target_noun_phrase, self.fuzzy_map.keys())
-                        if target_match and target_match[1] > 80:
-                            field_id = self.fuzzy_map[target_match[0]]
-                            quantities[field_id] = {"num": num, "pos": start}
-                elif rule_id == "LOGIC_ARBITRARY_FIELD":
-                    label_text = doc[end:].text.split(',')[0].split(' and ')[0].strip().strip("'\"")
-                    if label_text:
-                        arbitrary_fields.append({"label": label_text.title(), "type": "text", "source": "arbitrary", "pos": start})
+            if rule_id == "LOGIC_OPTIONS":
+                # The 'end' is the token where the trigger phrase (e.g., "with options") ends.
+                # Find the token index for "with" to separate the subject from the trigger.
+                subject_end_token_index = next((i for i in range(start, end) if doc[i].lower_ == "with"), None)
+                if not subject_end_token_index: continue
+
+                # The subject is the noun phrase before "with".
+                subject_phrase = doc[start:subject_end_token_index].text
+                
+                # The options list starts after the matched pattern.
+                options_text_span = doc[end:]
+                
+                # Logic to parse the options string into a clean list
+                options_list = []
+                for part in options_text_span.text.split(' and '):
+                    options_list.extend(part.split(','))
+                
+                cleaned_options = [opt.strip().replace("'", "").title() for opt in options_list if opt.strip()]
+                
+                # Stop parsing if we hit a verb, indicating a new clause.
+                final_options = []
+                for option in cleaned_options:
+                    if any(verb in option.lower() for verb in [' is ', ' are ', ' make ', ' add ']):
+                        break
+                    final_options.append(option)
+                
+                if subject_phrase and final_options:
+                    dynamic_options.append({"subject": subject_phrase, "options": final_options})
+
+            elif rule_id == "LOGIC_NUMERIC_RANGE":
+                span = doc[start:end]
+                nums = [int(token.text) for token in span if token.like_num]
+                if len(nums) == 2:
+                    dynamic_ranges.append({"min": min(nums), "max": max(nums), "pos": start})
+            
+            elif rule_id == "LOGIC_NEGATION":
+                negated_nouns = self.find_all_negated_nouns(doc, end)
+                for noun in negated_nouns:
+                    target_match = process.extractOne(noun, self.fuzzy_map.keys())
+                    if target_match and target_match[1] > 80:
+                        excluded_ids.add(self.fuzzy_map[target_match[0]])
+            
+            elif rule_id == "LOGIC_QUANTIFIER":
+                num_text = doc[start].text
+                num = self.word_to_num(num_text) or (int(num_text) if num_text.isdigit() else None)
+                target_noun_phrase = doc[start+1:end].text
+                if num:
+                    target_match = process.extractOne(target_noun_phrase, self.fuzzy_map.keys())
+                    if target_match and target_match[1] > 80:
+                        quantities[self.fuzzy_map[target_match[0]]] = {"num": num, "pos": start}
             
             elif rule_id.startswith("ATTR_"):
                 attributes.append({"rule": rule_id, "pos": start})
-
+            
             elif rule_id in self.field_map:
-                explicit_ids.add( (rule_id, start) )
-        
+                explicit_ids.add((rule_id, start))
+
+
         # --- Phase 2: Field Generation ---
-        candidate_fields = []
-        added_ids = set()
+        candidate_fields, added_ids = [], set()
+        detected_template_name = "custom"
+
+        def create_field_entry(field_def, source, confidence, pos=None):
+            """Helper to create a new field dictionary, including a deep copy of validation rules."""
+            entry = {
+                "id": field_def.id,
+                "label": field_def.label,
+                "type": field_def.type,
+                "source": source,
+                "confidence": confidence,
+                "validation": dict(field_def.validation) # Use dict() for a shallow copy, sufficient for a 1-level dict.
+            }
+            if pos is not None:
+                entry['pos'] = pos
+            return entry
 
         # Step 1: Template Detection
-        template_field_ids = []
-        sorted_keys = sorted([k for k in self.form_templates.keys() if not isinstance(self.form_templates[k], str)], key=len, reverse=True)
+        prompt_lower = prompt.lower()
+        sorted_keys = sorted([k for k,v in self.form_templates.items() if isinstance(v, dict)], key=len, reverse=True)
         for key in sorted_keys:
-            pattern = r'\b' + re.escape(key).replace('_', r'\s?') + r'\b'
-            if re.search(pattern, prompt.lower()):
-                template_field_ids = self.form_templates.get(key, [])
+            template_data = self.form_templates[key]
+            search_terms = [key.replace('_', ' ')] + template_data.get('seeds', [])
+            if any(re.search(r'\b' + re.escape(term) + r'\b', prompt_lower) for term in search_terms):
+                template_field_ids = template_data.get("fields", [])
+                detected_template_name = key
                 break
-        
-        # Step 2: Quantifiers
+        else:
+            template_field_ids = []
+
+        # Step 2: Assemble fields (Quantifiers > Explicit > Template)
+        # Process Quantifiers
         for field_id, data in quantities.items():
             if field_id in excluded_ids: continue
             field_def = self.field_map[field_id]
             for i in range(data['num']):
-                candidate_fields.append({"id": field_id, "label": f"{field_def.label} #{i+1}", "type": field_def.type, "source": "quantifier", "confidence": 0.95, "pos": data['pos']})
+                # Use the new helper function to create each field instance
+                entry = create_field_entry(field_def, "quantifier", 0.95, data['pos'])
+                entry['label'] = f"{field_def.label} #{i+1}" # Customize label for quantifiers
+                candidate_fields.append(entry)
             added_ids.add(field_id)
 
-        # Step 3: Explicit matches
+        # Process Explicit Matches
         for field_id, pos in explicit_ids:
-             if field_id not in added_ids:
+            if field_id not in added_ids and field_id not in excluded_ids:
                 field_def = self.field_map[field_id]
-                candidate_fields.append({"id": field_id, "label": field_def.label, "type": field_def.type, "source": "matcher", "confidence": 1.0, "pos": pos})
+                candidate_fields.append(create_field_entry(field_def, "matcher", 1.0, pos))
                 added_ids.add(field_id)
 
-        # Step 4: Template fields
+        # Process Template Fields
         for field_id in template_field_ids:
-            if field_id not in added_ids:
+            if field_id not in added_ids and field_id not in excluded_ids:
                 field_def = self.field_map[field_id]
-                candidate_fields.append({"id": field_id, "label": field_def.label, "type": field_def.type, "source": "template", "confidence": 0.90})
+                candidate_fields.append(create_field_entry(field_def, "template", 0.90))
                 added_ids.add(field_id)
-        
-        # Step 5: Arbitrary fields
-        for field in arbitrary_fields:
-            field['confidence'] = 0.85
-            candidate_fields.append(field)
+
+
 
         # --- Phase 3: Filtering & Attribute Application ---
-        final_fields = [f for f in candidate_fields if f.get('id') not in excluded_ids]
+        final_fields = candidate_fields 
 
+        # Apply Attributes (e.g., "required")
         for attr in attributes:
-            if not final_fields: continue
             fields_with_pos = [f for f in final_fields if 'pos' in f]
             if not fields_with_pos: continue
-            
             target_field = min(fields_with_pos, key=lambda f: abs(f['pos'] - attr['pos']))
-            
             if attr['rule'] == "ATTR_REQUIRED":
                 if target_field.get('source') == 'quantifier':
-                    quantifier_id = target_field.get('id')
                     for field in final_fields:
-                        if field.get('id') == quantifier_id and field.get('source') == 'quantifier':
-                            field['required'] = True
-                else:
-                    target_field['required'] = True
+                        target_field['validation']['required'] = True
         
+        # Apply Dynamic Ranges
+        for drange in dynamic_ranges:
+            applicable_fields = [f for f in final_fields if f.get('type') == 'number' and 'pos' in f]
+            if not applicable_fields: continue
+            target_field = min(applicable_fields, key=lambda f: abs(f['pos'] - drange['pos']))
+            target_field['validation']['min'] = drange['min']
+            target_field['validation']['max'] = drange['max']
+            target_field['type'] = 'range'
+            target_field['label'] = f"Rating ({drange['min']}-{drange['max']})"
+
+        # Dynamic Options based on subject, not proximity
+        for d_opts in dynamic_options:
+            subject = d_opts["subject"]
+            options = d_opts["options"]
+            
+            candidate_field_map = {f['label'].lower(): f for f in final_fields}
+            target_match = process.extractOne(subject, candidate_field_map.keys(), score_cutoff=85)
+            
+            if target_match:
+                target_field = candidate_field_map[target_match[0]]
+                target_field['options'] = options
+                target_field['type'] = 'select'
+            else:
+                # Graceful Fallback: Create a new field if no existing one matches the subject
+                arbitrary_field = {
+                    "id": subject.upper().replace(" ", "_"), "label": subject.title(),
+                    "type": "select", "source": "arbitrary_options", "confidence": 0.90,
+                    "options": options, "validation": {}
+                }
+                final_fields.append(arbitrary_field)
+
+
         # --- Phase 4: Post-Processing and Cleanup ---
         final_fields = self.post_process_name_fields(final_fields)
         
-        for field in final_fields: field.pop('pos', None)
+        for field in final_fields: 
+            field.pop('pos', None)
         
-        password_field_index = -1
-        for i, field in enumerate(final_fields):
-            if field.get('id') == 'PASSWORD':
-                password_field_index = i
+        password_field_index = next((i for i, field in enumerate(final_fields) if field.get('id') == 'PASSWORD'), -1)
         if password_field_index != -1 and "CONFIRM_PASSWORD" not in added_ids:
-             if re.search(r"\b(confirm|confirmation|retype).{0,5}password", prompt.lower()):
-                final_fields.insert(password_field_index + 1, {"id": "CONFIRM_PASSWORD", "label": "Confirm Password", "type": "password", "source": "logic", "confidence": 0.98})
+            if re.search(r"\b(confirm|confirmation|retype).{0,5}password", prompt.lower()):
+                field_def = self.field_map["CONFIRM_PASSWORD"]
+                confirm_password_field = create_field_entry(field_def, "logic", 0.98)
+                final_fields.insert(password_field_index + 1, confirm_password_field)
 
-        return final_fields
+        return final_fields, detected_template_name
 
 # --- Main Application Setup ---
-# Load data from external files
 fields_data, templates_data = load_knowledge_base('fields.json', 'templates.json')
-
-# Create a single, reusable instance of the generator
 form_gen = FormGenerator(fields_data, templates_data)
 
 @app.route("/process", methods=["POST"])
+@limiter.limit("2 per second")
 def process_prompt_route():
     data = request.get_json()
-    prompt = data.get("prompt", "")
-    if not prompt: return jsonify({"error": "Prompt is empty"}), 400
+    if not data or not (prompt := data.get("prompt")):
+        return jsonify({"error": "Prompt is empty or invalid request"}), 400
     
-    generated_fields = form_gen.process_prompt(prompt)
+    generated_fields, template_name = form_gen.process_prompt(prompt)
     if not generated_fields:
-        return jsonify({"title": "Could not generate form", "prompt": prompt, "fields": [], "message": "I couldn't understand the type of form you want. Try being more specific, like 'a contact form' or 'an internship application form'."})
+        return jsonify({"title": "Could not generate form", "prompt": prompt, "fields": [], "template": "none", "message": "I couldn't understand the type of form you want. Try being more specific, like 'a contact form' or 'an internship application form'."})
         
-    return jsonify({"title": "Generated Form", "prompt": prompt, "fields": generated_fields})
+    return jsonify({"title": "Generated Form", "prompt": prompt, "template": template_name, "fields": generated_fields})
 
 if __name__ == "__main__":
     app.run(debug=True)
