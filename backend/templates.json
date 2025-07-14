@@ -1,45 +1,56 @@
 {
-    "contact": {
-        "fields": ["FULL_NAME", "EMAIL", "SUBJECT", "MESSAGE"],
-        "seeds": ["contact us", "get in touch", "reach out"]
-    },
-    "job_application": {
-        "fields": ["FULL_NAME", "EMAIL", "PHONE", "ADDRESS", "RESUME_UPLOAD", "COVER_LETTER", "PORTFOLIO_LINK", "START_DATE", "SALARY_EXPECTATION"],
-        "seeds": ["apply", "career", "hiring", "position"]
-    },
-    "internship": {
-        "fields": ["FULL_NAME", "EMAIL", "PHONE", "PORTFOLIO_LINK", "RESUME_UPLOAD", "COVER_LETTER", "START_DATE"],
-        "seeds": ["intern"]
-    },
-    "rsvp": {
-        "fields": ["FULL_NAME", "EMAIL", "ATTENDING_CHOICE", "NUM_ATTENDEES", "DIETARY_RESTRICTIONS"],
-        "seeds": ["invitation", "attend", "join event"]
-    },
-    "login": {
-        "fields": ["USERNAME", "PASSWORD"],
-        "seeds": ["sign in", "log in"]
-    },
-    "product_review": { 
-        "fields": ["FULL_NAME", "EMAIL", "RATING", "COMMENTS"], 
-        "seeds": [] 
-    },
-    "event_registration": {
-        "fields": ["FULL_NAME", "EMAIL", "NUM_ATTENDEES", "DIETARY_RESTRICTIONS"],
-        "seeds": []
-    },
-    "feedback": {
-        "fields": ["FULL_NAME", "EMAIL", "SATISFACTION", "COMMENTS", "SUGGESTIONS"],
-        "seeds": []
-    },
-    "support_ticket": {
-        "fields": ["FULL_NAME", "EMAIL", "ORDER_ID", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
-        "seeds": ["support request", "help ticket"]
-    },
+  "student_form": {
+    "fields": ["FIRST_NAME", "LAST_NAME", "ROLL_NO", "EMAIL", "PHONE", "ADDRESS"],
+    "seeds": ["student", "enrollment", "admission", "pupil", "learner", "course", "semester", "campus", "graduate", "undergraduate"]
+  },
+  "survey": {
+    "fields": ["SHORT_ANSWER", "COMMENTS", "RATING"],
+    "seeds": ["survey", "questionnaire", "poll", "research", "study", "inquiry", "vote"]
+  },
+  "feedback": {
+    "fields": ["SUBJECT", "COMMENTS", "RATING"],
+    "seeds": ["feedback", "review", "reappraisal", "opinion", "experience", "rate"]
+  },
+  "suggestion_form": {
+    "fields": ["FULL_NAME", "EMAIL", "SUGGESTION"],
+    "seeds": ["suggestion", "idea", "recommendation", "propose", "feature request"]
+  },
+  "job_application": {
+    "fields": ["FULL_NAME", "EMAIL", "PHONE", "RESUME_UPLOAD", "COVER_LETTER", "LINKEDIN_URL"],
+    "seeds": ["job", "career", "application", "resume", "cv", "position", "vacancy", "hiring"]
+  },
+  "event_registration": {
+    "fields": ["PARTICIPANT_NAME", "EVENT_NAME", "EMAIL", "PHONE", "EVENT_DATE", "EVENT_TIME"],
+    "seeds": ["event", "register", "signup", "conference", "webinar", "meeting", "workshop", "ticket"]
+  },
+  "bug_report": {
+    "fields": ["REPORTER_NAME", "ISSUE_TYPE", "DESCRIPTION", "SCREENSHOT_UPLOAD", "PRIORITY"],
+    "seeds": ["bug", "error", "crash", "issue", "fault", "glitch", "problem", "report"]
+  },
+  "contact": {
+    "fields": ["FULL_NAME", "EMAIL", "SUBJECT", "MESSAGE"],
+    "seeds": ["contact", "get in touch", "inquiry", "question", "support", "help", "reach out"]
+  },
+  "login": {
+    "fields": ["USERNAME", "PASSWORD"],
+    "seeds": ["sign in", "log in"]
+  },
+  "product_review": { 
+    "fields": ["FULL_NAME", "EMAIL", "RATING", "COMMENTS"], 
+    "seeds": ["product review"] 
+  },
+  "support_ticket": {
+    "fields": ["FULL_NAME", "EMAIL", "ORDER_ID", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
+    "seeds": ["support request", "help ticket"]
+  },
+  "rsvp": {
+    "fields": ["FULL_NAME", "EMAIL", "ATTENDING_CHOICE", "NUM_ATTENDEES", "DIETARY_RESTRICTIONS"],
+    "seeds": ["rsvp", "invitation", "attend", "join event"]
+  },
 
-    "application": "job_application",
-    "invitation": "rsvp",
-    "booking": "appointment_booking",
-    "patient_registration": "patient_intake",
-    "contact_us": "contact",
-    "new_hire": "employee_onboarding"
+  "internship": "job_application",
+  "admission": "student_form",
+  "application": "job_application",
+  "invitation": "rsvp",
+  "contact_us": "contact"
 }

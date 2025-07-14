@@ -1,65 +1,46 @@
 [
   {
     "id": "FIRST_NAME", "label": "First Name", "type": "text", "patterns": [[{"LOWER": "first"}, {"LOWER": "name"}], [{"LOWER": "given"}, {"LOWER": "name"}]], "fuzzy_keywords": ["firstname"],
-    "validation": {"required": true, "minLength": 2}
+    "validation": {"required": true, "minLength": 2, "rule": "alphabetic"}
   },
   {
     "id": "LAST_NAME", "label": "Last Name", "type": "text", "patterns": [[{"LOWER": "last"}, {"LOWER": "name"}], [{"LOWER": "family"}, {"LOWER": "name"}]], "fuzzy_keywords": ["lastname", "surname"],
-    "validation": {"required": true, "minLength": 2}
+    "validation": {"required": true, "minLength": 2, "rule": "alphabetic"}
   },
   {
     "id": "FULL_NAME", "label": "Full Name", "type": "text", "patterns": [[{"LOWER": "full"}, {"LOWER": "name"}], [{"LOWER": "name"}]], "fuzzy_keywords": ["name"],
-    "validation": {"required": true, "minLength": 3}
+    "validation": {"required": true, "minLength": 3, "rule": "alphabetic"}
+  },
+  {
+    "id": "ROLL_NO", "label": "Roll Number", "type": "number", "patterns": [[{"LOWER": "roll"}, {"LOWER": "number"}], [{"LOWER": "roll"}, {"LOWER": "no"}]], "fuzzy_keywords": ["roll number"],
+    "validation": {"rule": "alphanumeric"}
   },
   {
     "id": "EMAIL", "label": "Email Address", "type": "email", "patterns": [[{"LEMMA": "email"}]], "fuzzy_keywords": ["email", "emial"],
-    "validation": {"required": true, "rule": "email"}
+    "validation": {"required": true, "rule": "email_format"}
   },
   {
     "id": "PHONE", "label": "Phone Number", "type": "tel", "patterns": [[{"LEMMA": "phone"}]], "fuzzy_keywords": ["phone", "mobile"],
-    "validation": {"required": false, "rule": "phone"}
+    "validation": {"required": false, "rule": "phone_number"}
   },
   {
-    "id": "ADDRESS",
-    "label": "Street Address",
-    "type": "text",
-    "patterns": [[{"LOWER": "address"}]],
-    "fuzzy_keywords": ["address", "street"]
+    "id": "ADDRESS", "label": "Address", "type": "textarea", "patterns": [[{"LOWER": "address"}]], "fuzzy_keywords": ["address", "street"],
+    "validation": {}
   },
   {
-    "id": "CITY",
-    "label": "City",
-    "type": "text",
-    "patterns": [[{"LOWER": "city"}]],
-    "fuzzy_keywords": ["city"]
+    "id": "CITY", "label": "City", "type": "text", "patterns": [[{"LOWER": "city"}]], "fuzzy_keywords": ["city"], "validation": {}
   },
   {
-    "id": "STATE",
-    "label": "State / Province",
-    "type": "text",
-    "patterns": [[{"LOWER": "state"}]],
-    "fuzzy_keywords": ["state", "province"]
+    "id": "STATE", "label": "State / Province", "type": "text", "patterns": [[{"LOWER": "state"}]], "fuzzy_keywords": ["state", "province"], "validation": {}
   },
   {
-    "id": "ZIP_CODE",
-    "label": "ZIP / Postal Code",
-    "type": "text",
-    "patterns": [[{"LOWER": {"IN": ["zip", "postal"]}}, {"LOWER": "code"}]],
-    "fuzzy_keywords": ["zip", "postalcode"]
+    "id": "ZIP_CODE", "label": "ZIP / Postal Code", "type": "text", "patterns": [[{"LOWER": {"IN": ["zip", "postal"]}}, {"LOWER": "code"}]], "fuzzy_keywords": ["zip", "postalcode"], "validation": {}
   },
   {
-    "id": "COUNTRY",
-    "label": "Country",
-    "type": "select",
-    "patterns": [[{"LEMMA": "country"}]],
-    "fuzzy_keywords": ["country"]
+    "id": "COUNTRY", "label": "Country", "type": "select", "patterns": [[{"LEMMA": "country"}]], "fuzzy_keywords": ["country"], "validation": {}
   },
   {
-    "id": "DATE_OF_BIRTH",
-    "label": "Date of Birth",
-    "type": "date",
-    "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]],
-    "fuzzy_keywords": ["dob", "birthday"]
+    "id": "DATE_OF_BIRTH", "label": "Date of Birth", "type": "date", "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]], "fuzzy_keywords": ["dob", "birthday"], "validation": {}
   },
   {
     "id": "USERNAME", "label": "Username", "type": "text", "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]], "fuzzy_keywords": ["username", "user", "userid"],
@@ -74,219 +55,108 @@
     "validation": {"required": true, "matches": "PASSWORD"}
   },
   {
-    "id": "COMPANY_NAME",
-    "label": "Company Name",
-    "type": "text",
-    "patterns": [[{"LOWER": "company"}]],
-    "fuzzy_keywords": ["company", "organization"]
+    "id": "COMPANY_NAME", "label": "Company Name", "type": "text", "patterns": [[{"LOWER": "company"}]], "fuzzy_keywords": ["company", "organization"], "validation": {}
   },
   {
-    "id": "JOB_TITLE",
-    "label": "Job Title",
-    "type": "text",
-    "patterns": [[{"LOWER": "job"}, {"LOWER": "title"}]],
-    "fuzzy_keywords": ["job title", "role", "position"]
+    "id": "JOB_TITLE", "label": "Job Title", "type": "text", "patterns": [[{"LOWER": "job"}, {"LOWER": "title"}]], "fuzzy_keywords": ["job title", "role", "position"], "validation": {}
   },
   {
     "id": "WEBSITE_URL", "label": "Website URL", "type": "url", "patterns": [[{"LOWER": "website"}], [{"LOWER": "url"}]], "fuzzy_keywords": ["website", "url", "site"],
     "validation": {"required": false, "rule": "url"}
   },
   {
-    "id": "PORTFOLIO_LINK",
-    "label": "Portfolio Link",
-    "type": "url",
-    "patterns": [[{"LOWER": "portfolio"}]],
-    "fuzzy_keywords": ["portfolio", "work"]
+    "id": "PORTFOLIO_LINK", "label": "Portfolio Link", "type": "url", "patterns": [[{"LOWER": "portfolio"}]], "fuzzy_keywords": ["portfolio", "work"], "validation": {}
   },
   {
-    "id": "RESUME_UPLOAD", "label": "Resume/CV", "type": "file", "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]], "fuzzy_keywords": ["resume", "cv"],
-    "validation": {"required": true, "fileTypes": ["pdf", "doc", "docx"], "maxSizeMB": 5}
+    "id": "RESUME_UPLOAD", "label": "Upload Resume", "type": "file", "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]], "fuzzy_keywords": ["resume", "cv"],
+    "validation": {"required": true, "fileTypes": ["pdf", "docx"], "maxSizeMB": 5}
   },
   {
-    "id": "COVER_LETTER",
-    "label": "Cover Letter",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "cover"}, {"LOWER": "letter"}]],
-    "fuzzy_keywords": ["cover letter"]
+    "id": "COVER_LETTER", "label": "Cover Letter", "type": "textarea", "patterns": [[{"LOWER": "cover"}, {"LOWER": "letter"}]], "fuzzy_keywords": ["cover letter"], "validation": {}
   },
   {
-    "id": "START_DATE",
-    "label": "Available Start Date",
-    "type": "date",
-    "patterns": [[{"LOWER": "start"}, {"LOWER": "date"}]],
-    "fuzzy_keywords": ["start date"]
+    "id": "LINKEDIN_URL", "label": "LinkedIn URL", "type": "url", "patterns": [[{"LOWER": "linkedin"}]], "fuzzy_keywords": ["linkedin", "linkedin profile"],
+    "validation": {"rule": "url"}
   },
   {
-    "id": "SALARY_EXPECTATION",
-    "label": "Salary Expectation",
-    "type": "text",
-    "patterns": [[{"LOWER": "salary"}]],
-    "fuzzy_keywords": ["salary", "compensation"]
+    "id": "START_DATE", "label": "Available Start Date", "type": "date", "patterns": [[{"LOWER": "start"}, {"LOWER": "date"}]], "fuzzy_keywords": ["start date"], "validation": {}
   },
   {
-    "id": "REFERENCES",
-    "label": "References",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "references"}]],
-    "fuzzy_keywords": ["references"]
+    "id": "SALARY_EXPECTATION", "label": "Salary Expectation", "type": "text", "patterns": [[{"LOWER": "salary"}]], "fuzzy_keywords": ["salary", "compensation"], "validation": {}
   },
   {
-    "id": "ORDER_ID",
-    "label": "Order ID",
-    "type": "text",
-    "patterns": [[{"LOWER": "order"}, {"LOWER": "id"}]],
-    "fuzzy_keywords": ["order id", "order number"]
+    "id": "REFERENCES", "label": "References", "type": "textarea", "patterns": [[{"LOWER": "references"}]], "fuzzy_keywords": ["references"], "validation": {}
   },
   {
-    "id": "PRODUCT_NAME",
-    "label": "Product Name",
-    "type": "text",
-    "patterns": [[{"LOWER": "product"}, {"LOWER": "name"}]],
-    "fuzzy_keywords": ["product"]
+    "id": "PARTICIPANT_NAME", "label": "Participant Name", "type": "text", "patterns": [[{"LOWER": "participant"}, {"LOWER": "name"}]], "fuzzy_keywords": ["participant"],
+    "validation": {"rule": "alphabetic"}
   },
   {
-    "id": "QUANTITY",
-    "label": "Quantity",
-    "type": "number",
-    "patterns": [[{"LOWER": "quantity"}]],
-    "fuzzy_keywords": ["quantity", "qty"]
+    "id": "EVENT_NAME", "label": "Event Name", "type": "text", "patterns": [[{"LOWER": "event"}, {"LOWER": "name"}]], "fuzzy_keywords": ["event name"], "validation": {}
   },
   {
-    "id": "SHIPPING_ADDRESS",
-    "label": "Shipping Address",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "shipping"}, {"LOWER": "address"}]],
-    "fuzzy_keywords": ["shipping address"]
+    "id": "EVENT_DATE", "label": "Event Date", "type": "date", "patterns": [[{"LOWER": "event"}, {"LOWER": "date"}]], "fuzzy_keywords": ["event date"], "validation": {}
   },
   {
-    "id": "BILLING_ADDRESS",
-    "label": "Billing Address",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "billing"}, {"LOWER": "address"}]],
-    "fuzzy_keywords": ["billing address"]
+    "id": "EVENT_TIME", "label": "Event Time", "type": "time", "patterns": [[{"LOWER": "event"}, {"LOWER": "time"}]], "fuzzy_keywords": ["event time"], "validation": {}
   },
   {
-    "id": "EVENT_DATE",
-    "label": "Event Date",
-    "type": "date",
-    "patterns": [[{"LOWER": "event"}, {"LOWER": "date"}]],
-    "fuzzy_keywords": ["event date"]
+    "id": "REPORTER_NAME", "label": "Reporter Name", "type": "text", "patterns": [[{"LOWER": "reporter"}, {"LOWER": "name"}]], "fuzzy_keywords": ["reporter"], "validation": {"rule": "alphabetic"}
   },
   {
-    "id": "NUM_ATTENDEES",
-    "label": "Number of Attendees",
-    "type": "number",
-    "patterns": [[{"LOWER": "attendees"}], [{"LOWER": "guests"}]],
-    "fuzzy_keywords": ["attendees", "guests"]
+    "id": "ISSUE_TYPE", "label": "Issue Type", "type": "text", "patterns": [[{"LOWER": "issue"}, {"LOWER": "type"}]], "fuzzy_keywords": ["issue type"], "validation": {}
   },
   {
-    "id": "ATTENDING_CHOICE",
-    "label": "Will you be attending?",
-    "type": "radio",
-    "patterns": [[{"LOWER": "attending"}]],
-    "fuzzy_keywords": ["attending"]
+    "id": "DESCRIPTION", "label": "Description", "type": "textarea", "patterns": [[{"LOWER": "description"}]], "fuzzy_keywords": ["description", "details"], "validation": {}
   },
   {
-    "id": "DIETARY_RESTRICTIONS",
-    "label": "Dietary Restrictions",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "dietary"}]],
-    "fuzzy_keywords": ["diet", "allergies"]
+    "id": "SCREENSHOT_UPLOAD", "label": "Upload Screenshot", "type": "file", "patterns": [[{"LOWER": "screenshot"}]], "fuzzy_keywords": ["screenshot", "screen shot"],
+    "validation": {"fileTypes": ["png", "jpg"], "maxSizeMB": 2}
   },
   {
-    "id": "APPOINTMENT_DATE",
-    "label": "Appointment Date",
-    "type": "date",
-    "patterns": [[{"LOWER": "appointment"}, {"LOWER": "date"}]],
-    "fuzzy_keywords": ["appointment date"]
+    "id": "PRIORITY", "label": "Priority", "type": "select", "patterns": [[{"LOWER": "priority"}]], "fuzzy_keywords": ["priority"],
+    "options": ["Low", "Medium", "High"],
+    "validation": {}
   },
   {
-    "id": "APPOINTMENT_TIME",
-    "label": "Appointment Time",
-    "type": "time",
-    "patterns": [[{"LOWER": "appointment"}, {"LOWER": "time"}]],
-    "fuzzy_keywords": ["appointment time"]
-  },
-   {
-    "id": "RATING", "label": "Rating (1-5)", "type": "number", "patterns": [[{"LEMMA": "rate"}]], "fuzzy_keywords": ["rating"],
-    "validation": {"required": true, "min": 1, "max": 5}
-  },
-  {
-    "id": "SATISFACTION",
-    "label": "Satisfaction Level",
-    "type": "radio",
-    "patterns": [[{"LOWER": "satisfaction"}]],
-    "fuzzy_keywords": ["satisfaction"]
-  },
-  {
-    "id": "RECOMMEND_SCORE",
-    "label": "How likely are you to recommend us?",
-    "type": "number",
-    "patterns": [[{"LOWER": "recommend"}]],
-    "fuzzy_keywords": ["nps"]
-  },
-  {
-    "id": "COMMENTS",
-    "label": "Comments",
-    "type": "textarea",
-    "patterns": [[{"LEMMA": "comment"}]],
-    "fuzzy_keywords": ["comment"]
-  },
-  {
-    "id": "SUGGESTIONS",
-    "label": "Suggestions",
-    "type": "textarea",
-    "patterns": [[{"LOWER": "suggestions"}]],
-    "fuzzy_keywords": ["suggestions"]
-  },
-  {
-    "id": "SUBJECT",
-    "label": "Subject",
-    "type": "text",
-    "patterns": [[{"LOWER": "subject"}]],
-    "fuzzy_keywords": ["subject", "topic"]
+    "id": "SUBJECT", "label": "Subject", "type": "text", "patterns": [[{"LOWER": "subject"}]], "fuzzy_keywords": ["subject", "topic"], "validation": {}
   },
   {
     "id": "MESSAGE", "label": "Message", "type": "textarea", "patterns": [[{"LOWER": "message"}]], "fuzzy_keywords": ["message", "body"],
-    "validation": {"required": true, "maxLength": 5000}
+    "validation": {}
+  },
+  {
+    "id": "RATING", "label": "Rating", "type": "number", "patterns": [[{"LEMMA": "rate"}]], "fuzzy_keywords": ["rating"],
+    "validation": {"min": 1, "max": 5}
+  },
+  {
+    "id": "COMMENTS", "label": "Comments", "type": "textarea", "patterns": [[{"LEMMA": "comment"}]], "fuzzy_keywords": ["comment", "feedback"], "validation": {}
+  },
+  {
+    "id": "SUGGESTION", "label": "Your Suggestion", "type": "textarea", "patterns": [[{"LOWER": "suggestion"}]], "fuzzy_keywords": ["suggestion", "idea"],
+    "validation": {}
+  },
+  {
+    "id": "SHORT_ANSWER", "label": "Short Answer", "type": "textarea", "patterns": [[{"LOWER": "short"}, {"LOWER": "answer"}]], "fuzzy_keywords": ["short answer"],
+    "validation": {"maxLength": 250}
   },
   {
     "id": "TERMS_AND_CONDITIONS", "label": "I agree to the Terms and Conditions", "type": "checkbox", "patterns": [[{"LOWER": "terms"}]], "fuzzy_keywords": ["terms"],
     "validation": {"mustBeChecked": true}
   },
   {
-    "id": "EMERGENCY_CONTACT",
-    "label": "Emergency Contact",
-    "type": "text",
-    "patterns": [[{"LOWER": "emergency"}, {"LOWER": "contact"}]],
-    "fuzzy_keywords": ["emergency contact"]
+    "id": "EMERGENCY_CONTACT", "label": "Emergency Contact", "type": "text", "patterns": [[{"LOWER": "emergency"}, {"LOWER": "contact"}]], "fuzzy_keywords": ["emergency contact"], "validation": {}
   },
   {
-    "id": "HEAR_ABOUT_US",
-    "label": "How did you hear about us?",
-    "type": "select",
-    "patterns": [[{"LOWER": "hear"}, {"LOWER": "about"}]],
-    "fuzzy_keywords": ["source", "referral"]
+    "id": "HEAR_ABOUT_US", "label": "How did you hear about us?", "type": "select", "patterns": [[{"LOWER": "hear"}, {"LOWER": "about"}]], "fuzzy_keywords": ["source", "referral"], "validation": {}
   },
   {
-    "id": "GENERIC_RADIO",
-    "label": "Choice",
-    "type": "radio",
-    "patterns": [[{"LOWER": "radio"}]],
-    "fuzzy_keywords": ["radio"]
+    "id": "GENERIC_RADIO", "label": "Choice", "type": "radio", "patterns": [[{"LOWER": "radio"}]], "fuzzy_keywords": ["radio"], "validation": {}
   },
   {
-    "id": "GENERIC_CHECKBOX",
-    "label": "Option",
-    "type": "checkbox",
-    "patterns": [[{"LOWER": "checkbox"}]],
-    "fuzzy_keywords": ["checkbox"]
+    "id": "GENERIC_CHECKBOX", "label": "Option", "type": "checkbox", "patterns": [[{"LOWER": "checkbox"}]], "fuzzy_keywords": ["checkbox"], "validation": {}
   },
   {
-    "id": "GENERIC_FILE_UPLOAD",
-    "label": "File Upload",
-    "type": "file",
-    "patterns": [[{"LOWER": "file"}, {"LOWER": "upload"}], [{"LOWER": "attachment"}]],
-    "fuzzy_keywords": ["upload", "attachment"]
+    "id": "GENERIC_FILE_UPLOAD", "label": "File Upload", "type": "file", "patterns": [[{"LOWER": "file"}, {"LOWER": "upload"}], [{"LOWER": "attachment"}]], "fuzzy_keywords": ["upload", "attachment"], "validation": {}
   }
 ]
