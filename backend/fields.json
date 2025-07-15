@@ -126,7 +126,8 @@
     "validation": {}
   },
   {
-    "id": "RATING", "label": "Rating", "type": "number", "patterns": [[{"LEMMA": "rate"}]], "fuzzy_keywords": ["rating"],
+    "id": "RATING", "label": "Rating", "type": "number", "patterns": [[{"LEMMA": "rate"}],[{"LOWER": "rating"}],[{"LOWER": "ratings"}],
+    [{"LOWER": "score"}]], "fuzzy_keywords": ["rating"],
     "validation": {"min": 1, "max": 5}
   },
   {
@@ -158,5 +159,25 @@
   },
   {
     "id": "GENERIC_FILE_UPLOAD", "label": "File Upload", "type": "file", "patterns": [[{"LOWER": "file"}, {"LOWER": "upload"}], [{"LOWER": "attachment"}]], "fuzzy_keywords": ["upload", "attachment"], "validation": {}
-  }
+  },
+  {
+  "id": "GENDER", "label": "Gender", "type": "select",
+  "patterns": [[{"LOWER": "gender"}], [{"LOWER": "male"}], [{"LOWER": "female"}], [{"LOWER": "select"}, {"LOWER": "gender"}]],"fuzzy_keywords": ["gender", "male or female"],
+  "validation": {
+    "required": true,
+    "options": ["Male", "Female"]
+  },
+  "options": ["Male", "Female"]
+},
+{
+  "id": "AVAILABILITY", "label": "Availability", "type": "time", "patterns": [[{"LOWER": "available"}], [{"LOWER": "availability"}]],
+  "fuzzy_keywords": ["availability", "when", "schedule"],
+  "validation": {"required": false}
+},
+{
+  "id": "EDUCATION_LEVEL", "label": "Education Level", "type": "select", "patterns": [[{"LOWER": "education"}], [{"LOWER": "qualification"}]],
+  "fuzzy_keywords": ["education", "degree", "qualification"],
+  "options": ["High School", "Bachelor's", "Master's", "PhD"],
+  "validation": {"required": true, "options": ["High School", "Bachelor's", "Master's", "PhD"]}
+}
 ]
