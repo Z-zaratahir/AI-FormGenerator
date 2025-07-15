@@ -417,6 +417,45 @@ def validate_submission(values: dict, schema: list):
         elif rule == "phone_number":
             if not re.fullmatch(r"\d{11}", val):
                 errors[fid] = "Must be exactly 11 digits."
+        
+         # 6) Cross-field logic (e.g., confirm password)
+        if "PASSWORD" in values and "CONFIRM_PASSWORD" in values:
+            if values["PASSWORD"] != values["CONFIRM_PASSWORD"]:
+                errors["CONFIRM_PASSWORD"] = "Passwords do not match."
+
+        # 7) Type parsing for number/date
+        if field.get("type") == "number":
+            try:
+                float(val)  # or int(val), depending on your expected precision
+            except ValueError:
+                errors[fid] = "Must be a valid number."
+        elif field.get("type") == "date":
+            try:
+                from datetime import datetime
+                datetime.strptime(val, "%Y-%m-%d")  # adjust format as needed
+            except ValueError:
+                errors[fid] = "Must be a valid date (YYYY-MM-DD)."
+        
+        # 8) Range limits
+        if field.get("type") == "number":
+            try:
+                num_val = float(val)
+                if "min" in rules and num_val < rules["min"]:
+                    errors[fid] = f"Value must be at least {rules['min']}."
+                if "max" in rules and num_val > rules["max"]:
+                    errors[fid] = f"Value must be at most {rules['max']}."
+            except ValueError:
+                pass
+
+        # 9) Enum enforcement (select field must match allowed options)
+        allowed_options = rules.get("options") or field.get("options")
+        if field.get("type") == "select" and allowed_options:
+            if val not in allowed_options:
+                errors[fid] = f"Invalid option selected. Choose from: {', '.join(allowed_options)}"
+        
+        # 10) Basic sanitization check (e.g., disallow HTML tags)
+        if re.search(r"<[^>]+>", val):
+            errors[fid] = "HTML tags are not allowed."
 
     return errors
 
