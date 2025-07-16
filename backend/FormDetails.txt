@@ -33,3 +33,93 @@ The AI can apply these modifiers to any of the fields or forms generated above.
 4.2. Negation (Exclusion): It can exclude fields based on prompts like "a contact form but without a subject field".
 4.3. Numeric Ranges: It can set minimum and maximum values for number fields from prompts like "a rating from 1 to 10".
 4.4. Dynamic Options: It can create select or radio fields with custom choices from prompts like "a question for department with options for Sales, Marketing, and Engineering".
+
+
+
+Personal & Contact Information
+This is the most common category, covering details about an individual.
+Names (e.g., "full name", "first name", "surname")
+Contact Details (e.g., "email", "phone number", "mobile")
+Mailing Address (e.g., "address", "city", "state", "zip code", "country")
+Demographics (e.g., "date of birth", "gender")
+
+User Account & Authentication
+This category is used for forms related to logging in, registering, or managing an account.
+Credentials (e.g., "username", "password", "confirm password")
+
+Professional & Employment
+This covers fields typically found on job applications or corporate forms.
+Work History (e.g., "company name", "job title")
+Application Materials (e.g., "resume", "cv", "cover letter", "references")
+Online Presence (e.g., "portfolio link", "linkedin url")
+Logistics & Compensation (e.g., "start date", "salary expectation")
+Education (e.g., "education level", "qualification")
+
+Feedback, Surveys & Comments
+This group is for gathering opinions, ratings, or detailed text from users.
+Ratings (e.g., "rating", "score", "satisfaction")
+Written Text (e.g., "comments", "suggestion", "message", "description", "short answer")
+Topics (e.g., "subject", "issue type")
+
+Event & Scheduling
+This category is for registering for events or scheduling appointments.
+Event Details (e.g., "event name", "event date", "event time")
+Attendee Information (e.g., "participant name", "number of attendees", "dietary restrictions")
+Time & Availability (e.g., "time slot", "availability")
+
+File & Web Inputs
+This covers fields that expect a file upload or a web address.
+File Uploads (e.g., "upload file", "attachment", "screenshot")
+Web Links (e.g., "website url")
+
+Support & Reporting
+These fields are typically used in bug reports or customer support tickets.
+Report Details (e.g., "priority", "order id")
+User Identification (e.g., "reporter name")
+
+Generic & Utility
+This is a catch-all for common form elements that don't fit into other categories.
+Choices (e.g., "radio button", "checkbox")
+Agreements (e.g., "terms and conditions")
+Marketing & Meta (e.g., "how did you hear about us")
+
+
+MISSING 
+-----------------------------------------
+
+E-commerce and Financial Transactions
+1.1. Credit Card Number
+1.2. Card Expiration Date (MM/YY)
+1.3. CVV/CVC Security Code
+1.4. Billing Address
+1.5. Discount/Promo Code
+1.6. Gift Card Field
+Structural and Display Elements
+2.1. Headings / Section Titles
+2.2. Instructional Text / Paragraphs
+2.3. Horizontal Dividers
+2.4. Fieldsets (Grouping Boxes)
+2.5. Multi-Column Layouts
+Advanced Input Types and Widgets
+3.1. Generic Slider / Range Input
+3.2. Color Picker
+3.3. Visual Star Rating
+3.4. Digital Signature Pad
+3.5. "Tags" Input Box
+3.6. Rich Text Editor (for bold, italics, etc.)
+Enhanced Validation and Dynamic Behavior
+4.1. Conditional Logic (Show/Hide Fields)
+4.2. Input Masking (e.g., for phone numbers)
+4.3. Real-time Asynchronous Validation (e.g., "username is taken")
+4.4. Data-driven Dropdowns (e.g., a pre-filled list of all countries)
+Legal and Official Document Fields
+5.1. National ID Numbers (e.g., SSN)
+5.2. Driver's License Number
+5.3. Legal Affirmation Checkbox
+Date and Time (Advanced)
+6.1. Date Range Picker (Start Date and End Date)
+6.2. Timezone Selector
+Specialized Fields
+7.1. CAPTCHA / Anti-spam Field
+7.2. "How would you rate your skill in..." Matrix/Table
+
