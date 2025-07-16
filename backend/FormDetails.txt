@@ -1,0 +1,35 @@
+Pre-defined Form Templates
+The AI can generate complete, pre-configured forms by recognizing the following concepts and their associated keywords:
+1.1. Student Form (from "student", "enrollment", "admission")
+1.2. Job Application (from "job", "career", "hiring", "employment")
+1.3. Contact Form (from "contact", "get in touch", "support")
+1.4. Event Registration (from "event", "register", "conference", "webinar")
+1.5. Survey Form (from "survey", "questionnaire", "poll")
+1.6. Feedback Form (from "feedback", "review", "opinion")
+1.7. Suggestion Form (from "suggestion", "idea", "recommendation")
+1.8. Bug Report (from "bug", "error", "crash", "glitch")
+1.9. Product Review (from "product review", "rate this item")
+1.10. Support Ticket (from "support request", "help ticket")
+1.11. RSVP Form (from "rsvp", "invitation", "attend")
+1.12. Login Form (from "login", "sign in")
+1.13. Shipping Address Form (from "shipping", "checkout", "purchase")
+1.14. Password Reset Form (from "password reset", "forgot password")
+1.15. Registration Form (from "registration", "sign up", "create account")
+Quantifiable Field Requests
+The AI can create multiple fields of a specific type when asked.
+2.1. Generic Field Types: It can create unnamed fields based on their type, such as from prompts like "a form with five text fields" or "add three number boxes". This applies to text, number, date, file, url, checkbox, radio, and textarea.
+2.2. Specific Named Fields: It can create multiple instances of specific, named fields, such as from prompts like "add three references" or "two comment boxes". This applies to references, comments, questions, and options.
+Individual Fields by Name or Keyword
+The AI can recognize and add a single instance of any field defined in your knowledge base. These fall into several categories:
+3.1. Personal Information: Includes Full Name, First Name, Last Name, Email, Phone, Address, City, State, ZIP Code, Country, Date of Birth, Gender, and Username/Password fields.
+3.2. Professional & Application: Includes Company Name, Job Title, Website URL, Portfolio Link, LinkedIn URL, Resume Upload, Cover Letter, Start Date, Salary Expectation, Education Level, and References.
+3.3. Event & Registration: Includes Participant Name, Event Name, Event Date, Event Time, Number of Attendees, and Dietary Restrictions.
+3.4. Feedback & Survey: Includes Rating, Satisfaction Rating, Comments, Subject, Suggestion, Short Answer, and "How did you hear about us?".
+3.5. System & E-commerce: Includes Issue Type, Description, Priority, Screenshot Upload, Order ID, and Message.
+3.6. Utility & Generic: Includes Time Slot, Availability, Emergency Contact, and Terms and Conditions.
+Modifiers and Attributes
+The AI can apply these modifiers to any of the fields or forms generated above.
+4.1. Required/Optional: It understands phrases like "a required phone number" or "an optional address".
+4.2. Negation (Exclusion): It can exclude fields based on prompts like "a contact form but without a subject field".
+4.3. Numeric Ranges: It can set minimum and maximum values for number fields from prompts like "a rating from 1 to 10".
+4.4. Dynamic Options: It can create select or radio fields with custom choices from prompts like "a question for department with options for Sales, Marketing, and Engineering".
