@@ -1,56 +1,150 @@
 {
   "student_form": {
-    "fields": ["FIRST_NAME", "LAST_NAME", "ROLL_NO", "EMAIL", "PHONE", "ADDRESS"],
-    "seeds": ["student", "enrollment", "admission", "pupil", "learner", "course", "semester", "campus", "graduate", "undergraduate"]
+    "seeds": ["student", "enrollment", "admission", "pupil", "learner", "course", "semester", "campus", "graduate", "undergraduate"],
+    "fields": [
+      { "id": "FIRST_NAME", "validation": { "required": true } },
+      { "id": "LAST_NAME", "validation": { "required": true } },
+      { "id": "ROLL_NO", "validation": { "required": true } },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "PHONE" },
+      { "id": "ADDRESS" }
+    ]
   },
   "survey": {
-    "fields": ["SHORT_ANSWER", "COMMENTS", "RATING"],
-    "seeds": ["survey", "questionnaire", "poll", "research", "study", "inquiry", "vote"]
+    "seeds": ["survey", "questionnaire", "poll", "research", "study", "inquiry", "vote"],
+    "fields": [
+      { "id": "RATING", "label": "Overall Experience" },
+      { "id": "SHORT_ANSWER", "label": "What did you like most?" },
+      { "id": "COMMENTS", "label": "Any other comments?" }
+    ]
+  },
+  "registration": {
+    "seeds": ["registration", "register", "sign up", "signup", "create account", "new user"],
+    "fields": [
+      { "id": "USERNAME" },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "PASSWORD", "validation": { "required": true } },
+      { "id": "CONFIRM_PASSWORD", "validation": { "required": true } }
+    ]
   },
   "feedback": {
-    "fields": ["SUBJECT", "COMMENTS", "RATING"],
-    "seeds": ["feedback", "review", "reappraisal", "opinion", "experience", "rate"]
+    "seeds": ["feedback", "review", "reappraisal", "opinion", "experience", "rate"],
+    "fields": [
+      { "id": "SUBJECT" },
+      { "id": "RATING" },
+      { "id": "COMMENTS", "validation": { "required": true } }
+    ]
   },
   "suggestion_form": {
-    "fields": ["FULL_NAME", "EMAIL", "SUGGESTION"],
-    "seeds": ["suggestion", "idea", "recommendation", "propose", "feature request"]
+    "seeds": ["suggestion", "idea", "recommendation", "propose", "feature request"],
+    "fields": [
+      { "id": "FULL_NAME" },
+      { "id": "EMAIL" },
+      { "id": "SUGGESTION", "validation": { "required": true } }
+    ]
   },
   "job_application": {
-    "fields": ["FULL_NAME", "EMAIL", "PHONE", "RESUME_UPLOAD", "COVER_LETTER", "LINKEDIN_URL"],
-    "seeds": ["job", "career", "application", "resume", "cv", "position", "vacancy", "hiring"]
+    "seeds": ["job", "career", "application", "resume", "cv", "position", "vacancy", "hiring", "employment", "employment application"],
+    "fields": [
+      { "id": "FULL_NAME", "validation": { "required": true } },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "PHONE", "validation": { "required": true } },
+      { "id": "LINKEDIN_URL" },
+      { "id": "RESUME_UPLOAD", "validation": { "required": true } },
+      { "id": "COVER_LETTER" }
+    ]
   },
   "event_registration": {
-    "fields": ["PARTICIPANT_NAME", "EVENT_NAME", "EMAIL", "PHONE", "EVENT_DATE", "EVENT_TIME"],
-    "seeds": ["event", "register", "signup", "conference", "webinar", "meeting", "workshop", "ticket"]
+    "seeds": ["event", "register", "signup", "conference", "webinar", "meeting", "workshop", "ticket", "registration"],
+    "fields": [
+      { "id": "PARTICIPANT_NAME", "validation": { "required": true } },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "EVENT_NAME", "validation": { "required": true } },
+      { "id": "EVENT_DATE", "validation": { "required": true } },
+      { "id": "EVENT_TIME" },
+      { "id": "PHONE" }
+    ]
   },
   "bug_report": {
-    "fields": ["REPORTER_NAME", "ISSUE_TYPE", "DESCRIPTION", "SCREENSHOT_UPLOAD", "PRIORITY"],
-    "seeds": ["bug", "error", "crash", "issue", "fault", "glitch", "problem", "report"]
+    "seeds": ["bug", "error", "crash", "issue", "fault", "glitch", "problem", "report"],
+    "fields": [
+      { "id": "REPORTER_NAME" },
+      { "id": "ISSUE_TYPE", "validation": { "required": true } },
+      { "id": "PRIORITY", "validation": { "required": true } },
+      { "id": "DESCRIPTION", "validation": { "required": true } },
+      { "id": "SCREENSHOT_UPLOAD" }
+    ]
   },
   "contact": {
-    "fields": ["FULL_NAME", "EMAIL", "SUBJECT", "MESSAGE"],
-    "seeds": ["contact", "get in touch", "inquiry", "question", "support", "help", "reach out"]
+    "seeds": ["contact", "get in touch", "inquiry", "question", "support", "help", "reach out"],
+    "fields": [
+      { "id": "FULL_NAME", "validation": { "required": true } },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "SUBJECT" },
+      { "id": "MESSAGE", "validation": { "required": true, "maxLength": 2000 } }
+    ]
   },
-  "login": {
-    "fields": ["USERNAME", "PASSWORD"],
-    "seeds": ["sign in", "log in"]
-  },
-  "product_review": { 
-    "fields": ["FULL_NAME", "EMAIL", "RATING", "COMMENTS"], 
-    "seeds": ["product review"] 
+  "product_review": {
+    "seeds": ["product review", "rate this item"],
+    "fields": [
+      { "id": "FULL_NAME" },
+      { "id": "RATING", "validation": { "required": true, "min": 1, "max": 5 } },
+      { "id": "COMMENTS" }
+    ]
   },
   "support_ticket": {
-    "fields": ["FULL_NAME", "EMAIL", "ORDER_ID", "SUBJECT", "MESSAGE", "GENERIC_FILE_UPLOAD"],
-    "seeds": ["support request", "help ticket"]
+    "seeds": ["support request", "help ticket", "customer service"],
+    "fields": [
+      { "id": "FULL_NAME", "validation": { "required": true } },
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "ORDER_ID" },
+      { "id": "SUBJECT", "validation": { "required": true } },
+      { "id": "MESSAGE", "validation": { "required": true } },
+      { "id": "GENERIC_FILE_UPLOAD" }
+    ]
   },
   "rsvp": {
-    "fields": ["FULL_NAME", "EMAIL", "ATTENDING_CHOICE", "NUM_ATTENDEES", "DIETARY_RESTRICTIONS"],
-    "seeds": ["rsvp", "invitation", "attend", "join event"]
+    "seeds": ["rsvp", "invitation", "attend", "join event"],
+    "fields": [
+      { "id": "FULL_NAME", "validation": { "required": true } },
+      { "id": "ATTENDING_CHOICE", "validation": { "required": true } },
+      { "id": "NUM_ATTENDEES" },
+      { "id": "DIETARY_RESTRICTIONS" }
+    ]
+  },
+  "login": {
+    "seeds": ["sign in", "log in", "login"],
+    "fields": [
+      { "id": "USERNAME", "validation": { "required": true } },
+      { "id": "PASSWORD", "validation": { "required": true } }
+    ]
+  },
+  "shipping_address": {
+    "seeds": ["shipping", "delivery", "checkout", "purchase"],
+    "fields": [
+        { "id": "FULL_NAME", "validation": { "required": true } },
+        { "id": "ADDRESS", "validation": { "required": true } },
+        { "id": "CITY", "validation": { "required": true } },
+        { "id": "STATE", "validation": { "required": true } },
+        { "id": "ZIP_CODE", "validation": { "required": true } },
+        { "id": "COUNTRY", "validation": { "required": true } }
+    ]
+  },
+  "password_reset": {
+    "seeds": ["password reset", "forgot password", "change password"],
+    "fields": [
+      { "id": "EMAIL", "validation": { "required": true } },
+      { "id": "PASSWORD", "label": "New Password", "validation": { "required": true } },
+      { "id": "CONFIRM_PASSWORD", "label": "Confirm New Password", "validation": { "required": true } }
+    ]
   },
 
   "internship": "job_application",
   "admission": "student_form",
   "application": "job_application",
   "invitation": "rsvp",
-  "contact_us": "contact"
+  "contact_us": "contact",
+  "checkout": "shipping_address",
+  "hiring": "job_application",
+  "signup": "registration"
 }
