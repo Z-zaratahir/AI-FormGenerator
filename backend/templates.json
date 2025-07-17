@@ -130,6 +130,15 @@
         { "id": "COUNTRY", "validation": { "required": true } }
     ]
   },
+  "payment_form": {
+  "seeds": ["payment", "checkout", "transaction", "purchase"],
+  "fields": [
+    { "id": "CREDIT_CARD_NUMBER", "validation": { "required": true } },
+    { "id": "CARD_EXPIRY_DATE", "validation": { "required": true } },
+    { "id": "CVV_CODE", "validation": { "required": true } },
+    { "id": "BILLING_ADDRESS" }
+  ]
+  },
   "password_reset": {
     "seeds": ["password reset", "forgot password", "change password"],
     "fields": [

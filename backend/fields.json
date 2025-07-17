@@ -40,7 +40,7 @@
     "id": "COUNTRY", "label": "Country", "type": "select", "patterns": [[{"LEMMA": "country"}]], "fuzzy_keywords": ["country", "nation"], "validation": {}
   },
   {
-    "id": "DATE_OF_BIRTH", "label": "Date of Birth", "type": "date", "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]], "fuzzy_keywords": ["dob", "birthday"], "validation": {}
+    "id": "DATE_OF_BIRTH", "label": "Date of Birth", "type": "date", "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]], "fuzzy_keywords": ["dob", "birthday", "birth date", "date of birth"], "validation": {}
   },
   {
     "id": "USERNAME", "label": "Username", "type": "text", "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]], "fuzzy_keywords": ["username", "user", "userid"],
@@ -193,5 +193,122 @@
   {
     "id": "GENERIC_QUESTION", "label": "Question", "type": "textarea", "patterns": [[{"LOWER": "question"}]], "fuzzy_keywords": ["question", "inquiry", "ask"],
     "validation": { "maxLength": 1000 }
+  },
+  {
+    "id": "CREDIT_CARD_NUMBER", "label": "Credit Card Number", "type": "text", "patterns": [[{ "LOWER": "credit" }, { "LOWER": "card" }], [{ "LOWER": "card" }, { "LOWER": "number" }]],
+    "fuzzy_keywords": ["credit card", "card number"],
+    "validation": { "required": true, "rule": "credit_card_format" }
+  },
+  {
+    "id": "CARD_EXPIRY_DATE", "label": "Card Expiry (MM/YY)", "type": "text", "patterns": [[{ "LOWER": "expiration" }], [{ "LOWER": "expiry" }]],
+    "fuzzy_keywords": ["expiry date", "mm/yy"],
+    "validation": { "required": true, "rule": "expiry_format" }
+  },
+  {
+    "id": "CVV_CODE", "label": "CVV/CVC", "type": "text", "patterns": [[{ "LOWER": "cvv" }], [{ "LOWER": "cvc" }]],
+    "fuzzy_keywords": ["card verification code", "cvc", "security code"],
+    "validation": { "required": true, "minLength": 3, "maxLength": 4 }
+  },
+  {
+    "id": "BILLING_ADDRESS", "label": "Billing Address", "type": "textarea", "patterns": [[{ "LOWER": "billing" }, { "LOWER": "address" }]],
+    "fuzzy_keywords": ["billing address"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "DISCOUNT_CODE", "label": "Discount/Promo Code", "type": "text", "patterns": [[{ "LOWER": "discount" }], [{ "LOWER": "promo" }]],
+    "fuzzy_keywords": ["discount", "promo code"],
+    "validation": { "maxLength": 20 }
+  },
+  {
+    "id": "GIFT_CARD_CODE", "label": "Gift Card", "type": "text", "patterns": [[{ "LOWER": "gift" }, { "LOWER": "card" }]],
+    "fuzzy_keywords": ["gift card"],
+    "validation": { "maxLength": 20 }
+  },
+  {
+    "id": "SECTION_HEADING", "label": "Section Heading", "type": "heading", "fuzzy_keywords": ["heading", "title", "section title"]
+  },
+  {
+    "id": "INSTRUCTION_TEXT", "label": "Instructions", "type": "paragraph", "fuzzy_keywords": ["instructions", "info", "note"]
+  },
+  {
+    "id": "DIVIDER_LINE", "label": "Divider", "type": "divider", "fuzzy_keywords": ["divider", "line"]
+  },
+  {
+    "id": "FIELDSET_GROUP", "label": "Field Group", "type": "fieldset", "fuzzy_keywords": ["fieldset", "group", "box"]
+  },
+  {
+    "id": "TWO_COLUMN_LAYOUT", "label": "Two Column Layout", "type": "layout", "fuzzy_keywords": ["layout", "columns"]
+  },
+  {
+    "id": "COLOR_PICKER", "label": "Choose a Color", "type": "color", "fuzzy_keywords": ["color", "picker", "palette"]
+  },
+  {
+    "id": "STAR_RATING", "label": "Star Rating", "type": "rating", "fuzzy_keywords": ["stars", "rating"], "validation": { "min": 1, "max": 5 }
+  },
+  {
+    "id": "DIGITAL_SIGNATURE", "label": "Signature", "type": "signature", "fuzzy_keywords": ["signature", "sign here"], "validation": { "required": true }
+  },
+  {
+    "id": "TAGS_INPUT", "label": "Tags", "type": "tags", "fuzzy_keywords": ["tags", "keywords"], "validation": { "maxTags": 10 }
+  },
+  {
+    "id": "RICH_TEXT", "label": "Rich Text Editor", "type": "richtext", "fuzzy_keywords": ["rich text", "formatting", "bold", "italics"]
+  },
+  {
+    "id": "SHOW_HIDE_CONDITION", "label": "Conditional Visibility", "type": "logic", "fuzzy_keywords": ["show", "hide", "if", "condition"]
+  },
+  {
+    "id": "INPUT_MASK", "label": "Masked Input", "type": "mask", "fuzzy_keywords": ["mask", "format input"]
+  },
+  {
+    "id": "ASYNC_USERNAME_CHECK", "label": "Username Availability", "type": "async_validation", "fuzzy_keywords": ["real time validation", "check username"],
+    "validation": { "rule": "available_username" }
+  },
+  {
+    "id": "COUNTRY_SELECT_DYNAMIC", "label": "Select Country", "type": "select", "fuzzy_keywords": ["country list", "dropdown countries"],
+    "validation": { "required": true, "source": "countries_api" }
+  },
+  {
+    "id": "NATIONAL_ID", "label": "National ID Number", "type": "text",
+    "fuzzy_keywords": ["national id", "ssn", "citizen number"],
+    "validation": { "required": true, "rule": "national_id" }
+  },
+  {
+    "id": "DRIVERS_LICENSE", "label": "Driver's License", "type": "text",
+    "fuzzy_keywords": ["driver", "license", "dl number"],
+    "validation": { "required": true, "rule": "alphanumeric" }
+  },
+  {
+    "id": "LEGAL_AGREEMENT", "label": "I affirm the information is true", "type": "checkbox",
+    "fuzzy_keywords": ["affirmation", "legal agreement", "certify"],
+    "validation": { "mustBeChecked": true }
+  },
+  {
+    "id": "DATE_RANGE", "label": "Date Range", "type": "date_range",
+    "fuzzy_keywords": ["start date", "end date", "date range"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "TIMEZONE", "label": "Select Timezone", "type": "select",
+    "fuzzy_keywords": ["timezone", "utc offset", "time zone"],
+    "validation": { "required": true }
+  },
+  {
+  "id": "CAPTCHA_FIELD", "label": "CAPTCHA", "type": "text", "patterns": [],
+  "fuzzy_keywords": ["captcha", "security text", "anti bot"],
+  "validation": {
+    "required": true,
+    "rule": "captcha"
+  }
+  },
+  {
+    "id": "SKILL_MATRIX", "label": "Rate Your Skills",
+    "type": "matrix",
+    "fuzzy_keywords": ["skill", "expertise", "rate yourself"]
+  },
+  {
+  "id": "RANGE_SLIDER", "label": "Select a Range", "type": "range",
+  "fuzzy_keywords": ["range", "slider", "adjust value"],
+  "validation": { "min": 0, "max": 10, "step": 1 }
   }
 ]

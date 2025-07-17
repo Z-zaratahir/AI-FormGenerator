@@ -9,6 +9,7 @@ from spacy.matcher import Matcher
 from rapidfuzz import process
 import re
 import json
+import pytz
 
 app = Flask(__name__)
 CORS(app)
@@ -32,11 +33,12 @@ def load_knowledge_base(fields_path, templates_path):
         exit(1)
 
 class FieldDefinition:
-    def __init__(self, id, label, type, patterns, fuzzy_keywords=None, validation=None, **kwargs):
+    def __init__(self, id, label, type, patterns=None, fuzzy_keywords=None, validation=None, **kwargs):
         self.id = id
         self.label = label
         self.type = type
-        self.patterns = patterns
+        # default to empty list if no patterns provided
+        self.patterns = patterns or []
         self.fuzzy_keywords = fuzzy_keywords or []
         self.validation = validation or {}
 
@@ -238,8 +240,18 @@ class FormGenerator:
             if field_id not in final_fields_map and field_id not in excluded_ids and self.field_map.get(field_id):
                 final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "matcher", 1.0, pos)
 
+        # Step X: Fallback fuzzy keyword scan (always run for missing fields)
+        for keyword, field_id in self.fuzzy_map.items():
+            if (
+                field_id not in final_fields_map and  # Avoid duplicates
+                keyword in prompt.lower() and
+                field_id in self.field_map
+            ):
+                final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "fuzzy_keyword", 0.80)
+
         # The final list of fields is the values from our map
         final_fields = list(final_fields_map.values())
+
 
         # --- Phase 3 & 4: Attribute Application and Cleanup ---
         # (This section is now applied to the correctly assembled list)
@@ -304,8 +316,8 @@ def process_prompt_route():
 
     # Reject if too short, too few words, digits only, or trivial words
     if (
-        len(cleaned) < 10 or
-        word_count < 3 or
+        len(cleaned) < 8 or
+        word_count < 2 or
         cleaned.isdigit() or
         re.fullmatch(r"[A-Za-z]{1,4}", cleaned)  # e.g. "abc", "dfdb"
     ):
@@ -358,6 +370,33 @@ def validate_submission(values: dict, schema: list):
             if not re.fullmatch(r"\d{11}", val):
                 errors[fid] = "Must be exactly 11 digits."
         
+        # ─── INSERT NEW “rule” HANDLERS HERE ───────────────────────────────────────
+        elif rule == "credit_card_format":
+            # simple Luhn‐like or digit‐count check:
+            if not re.fullmatch(r"\d{13,19}", val.replace(" ", "")):
+                errors[fid] = "Must be 13–19 digits (spaces allowed)."
+        elif rule == "expiry_format":
+            # MM/YY between 01/23–12/50, for instance
+            m = re.fullmatch(r"(0[1-9]|1[0-2])\/([2-9]\d)", val)
+            if not m:
+                errors[fid] = "Must be in MM/YY format."
+        elif rule == "national_id":
+            # e.g. Pakistani CNIC: 5-7 digits, dash, 7 digits, dash, 1 digit
+            if not re.fullmatch(r"\d{5}-\d{7}-\d", val):
+                errors[fid] = "Invalid National ID format."
+        elif rule == "alphanumeric":
+            if not re.fullmatch(r"[A-Za-z0-9]+", val):
+                errors[fid] = "Only letters and numbers allowed."
+        elif rule == "available_username":
+            # placeholder for async check
+            # you’d normally call your user‐service here
+            if val.lower() in ("admin","test","root"):
+                errors[fid] = "Username is already taken."
+        elif rule == "captcha":
+            # CAPTCHA rule present, but no validation is applied
+            pass
+
+        
          # 6) Cross-field logic (e.g., confirm password)
         if "PASSWORD" in values and "CONFIRM_PASSWORD" in values:
             if values["PASSWORD"] != values["CONFIRM_PASSWORD"]:
@@ -375,6 +414,42 @@ def validate_submission(values: dict, schema: list):
                 datetime.strptime(val, "%Y-%m-%d")  # adjust format as needed
             except ValueError:
                 errors[fid] = "Must be a valid date (YYYY-MM-DD)."
+        
+        # ─── after your numeric/date parsing block ─────────────────────────────────
+        # handle date_range pickers:
+        if field.get("type") == "date_range" and val:
+            # expect JSON string: {"start":"YYYY-MM-DD","end":"YYYY-MM-DD"}
+            try:
+                jr = json.loads(val)
+                from datetime import datetime
+                s = datetime.strptime(jr["start"], "%Y-%m-%d")
+                e = datetime.strptime(jr["end"],   "%Y-%m-%d")
+                if e < s:
+                    errors[fid] = "End date must be on or after start date."
+            except Exception:
+                errors[fid] = "Invalid date range format."
+        
+        # enforce tag limits:
+        if field.get("type") == "tags":
+            tags = [t.strip() for t in val.split(",") if t.strip()]
+            max_tags = rules.get("maxTags")
+            if max_tags and len(tags) > max_tags:
+                errors[fid] = f"Select no more than {max_tags} tags."
+
+        # enforce star‐rating bounds:
+        if field.get("type") == "rating" and val:
+            try:
+                r = int(val)
+                mn, mx = rules.get("min",1), rules.get("max",5)
+                if r < mn or r > mx:
+                    errors[fid] = f"Rating must be between {mn} and {mx}."
+            except ValueError:
+                errors[fid] = "Rating must be a number."
+
+        # timezone validation:
+        if field.get("type") == "select" and fid == "TIMEZONE" and val:
+            if val not in pytz.all_timezones:
+                errors[fid] = "Invalid timezone selected."
         
         # 8) Range limits
         if field.get("type") == "number":
@@ -419,3 +494,6 @@ def submit_route():
     return jsonify({"success": True, "message": "Form submitted successfully."})
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
