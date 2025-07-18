@@ -9,3 +9,4 @@ rapidfuzz
 nltk
 sentence-transformers
 numpy
+pytz

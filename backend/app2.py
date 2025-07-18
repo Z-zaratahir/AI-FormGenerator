@@ -148,16 +148,19 @@ class FormGenerator:
             return [f for f in fields if f['id'] != 'FULL_NAME']
         return fields
 
+# In app.py, replace the entire existing process_prompt method with this one.
+
     def process_prompt(self, prompt):
         doc = nlp(prompt)
         all_matches = self.matcher(doc)
         all_matches = self.filter_overlapping_matches(all_matches)
-
-        # --- Phase 1: Intent Extraction (This part is correct) ---
+        processed_token_indices = set()
+        # --- Phase 1: Intent Extraction ---
         excluded_ids, attributes, explicit_ids, quantities = set(), [], set(), {}
         dynamic_ranges, dynamic_options = [], []
 
         for match_id, start, end in all_matches:
+            processed_token_indices.update(range(start, end))
             rule_id = nlp.vocab.strings[match_id]
 
             if rule_id == "SMART_QUANTIFIER":
@@ -171,33 +174,46 @@ class FormGenerator:
                     for i in range(len(window) - n + 1):
                         phrase = window[i: i + n].text.lower()
                         target_match = process.extractOne(phrase, self.fuzzy_map.keys(), score_cutoff=90)
-                        if target_match: excluded_ids.add(self.fuzzy_map[target_match[0]])
+                        if target_match:
+                            excluded_ids.add(self.fuzzy_map[target_match[0]])
             elif rule_id in self.field_map:
                 explicit_ids.add((rule_id, start))
             elif rule_id == "LOGIC_NUMERIC_RANGE":
                 nums = [int(token.text) for token in doc[start:end] if token.like_num]
-                if len(nums) == 2: dynamic_ranges.append({"min": min(nums), "max": max(nums), "pos": start})
+                if len(nums) == 2:
+                    dynamic_ranges.append({"min": min(nums), "max": max(nums), "pos": start})
             elif rule_id.startswith("ATTR_"):
                 attributes.append({"rule": rule_id, "pos": start})
             elif rule_id == "LOGIC_OPTIONS":
                 subject_end_token_index = next((i for i in range(start, end) if doc[i].lower_ == "with"), None)
-                if not subject_end_token_index: continue
+                if not subject_end_token_index:
+                    continue
                 subject_phrase = doc[start:subject_end_token_index].text
                 options_text_span = doc[end:]
                 options_list = [opt.strip().replace("'", "").title() for part in options_text_span.text.split(' and ') for opt in part.split(',') if opt.strip()]
                 final_options = [opt for opt in options_list if not any(verb in opt.lower() for verb in [' is ', ' are ', ' make ', ' add '])]
-                if subject_phrase and final_options: dynamic_options.append({"subject": subject_phrase, "options": final_options})
+                if subject_phrase and final_options:
+                    dynamic_options.append({"subject": subject_phrase, "options": final_options})
 
-        # --- Phase 2: Field Generation (Rewritten for correctness) ---
-        
+        # --- Phase 2: Field Generation ---
+
+        # FIX #1 IS HERE: This helper function MUST include the 'options' field.
         def create_field_entry(field_def, source, confidence, pos=None):
-            entry = {"id": field_def.id, "label": field_def.label, "type": field_def.type, "source": source, "confidence": confidence, "validation": dict(field_def.validation)}
-            if pos is not None: entry['pos'] = pos
+            entry = {
+                "id": field_def.id,
+                "label": field_def.label,
+                "type": field_def.type,
+                "source": source,
+                "confidence": confidence,
+                "validation": dict(field_def.validation),
+                "options": field_def.options  # <-- This line was missing
+            }
+            if pos is not None:
+                entry['pos'] = pos
             return entry
 
-        # This dictionary will hold our final fields, using ID as the key to prevent duplicates.
         final_fields_map = {}
-        
+
         # Step 1: Template Detection (Highest Priority)
         prompt_lower = prompt.lower()
         detected_template_name = "custom"
@@ -211,14 +227,14 @@ class FormGenerator:
                 field_id = item.get('id') if isinstance(item, dict) else item
                 if field_id not in excluded_ids and self.field_map.get(field_id):
                     overrides = item.get('validation', {}) if isinstance(item, dict) else {}
-                    new_field = create_field_entry(self.field_map[field_id], "template", 0.90)
+                    field_def = self.field_map[field_id]
+                    new_field = create_field_entry(field_def, "template", 0.90)
                     new_field['validation'].update(overrides)
                     final_fields_map[field_id] = new_field
 
-        # Step 1.5: Process DYNAMIC options (like "t-shirt size with options...")
+        # Step 1.5: Handle Dynamic Options to claim their subjects before generic quantifiers
         subjects_handled_by_dynamic_options = set()
         for i, dopt in enumerate(dynamic_options):
-            # Create the dynamic select field right away
             field_id = f"DYNAMIC_SELECT_{i+1}"
             dynamic_field_def = FieldDefinition(
                 id=field_id,
@@ -227,53 +243,70 @@ class FormGenerator:
                 options=dopt['options']
             )
             final_fields_map[field_id] = create_field_entry(dynamic_field_def, "dynamic_options", 1.0)
-            last_word = dopt['subject'].split()[-1].lower()
-            subjects_handled_by_dynamic_options.add(last_word)
-            subjects_handled_by_dynamic_options.add(last_word.rstrip('s'))
-            subjects_handled_by_dynamic_options.add(f"{last_word}s")
+            if dopt['subject']:
+                last_word = dopt['subject'].split()[-1].lower()
+                singular_word = last_word.rstrip('s')
+                subjects_handled_by_dynamic_options.add(singular_word)
+                subjects_handled_by_dynamic_options.add(f"{singular_word}s")
+                # Also add the word 'option' to the set since it triggered this
+                subjects_handled_by_dynamic_options.add("option")
+                subjects_handled_by_dynamic_options.add("options")
+
 
         # Step 2: Process Quantifiers (Add or create fields)
         generic_types = ["text", "number", "date", "file", "url", "checkbox", "radio", "textarea", "option"]
         for keyword, data in quantities.items():
+            # FIX #2 IS HERE: This check prevents the redundant "Option" field.
+            if keyword in subjects_handled_by_dynamic_options:
+                continue
+
             if keyword in generic_types:
                 for i in range(data['num']):
                     field_id = f"GENERIC_{keyword.upper()}_{i+1}"
-                    generic_data = {"id": field_id, "label": f"{keyword.title()} Field #{i+1}", "type": keyword, "validation": {}}
+                    field_type = 'checkbox' if keyword == 'option' else keyword
+                    generic_data = {
+                        "id": field_id,
+                        "label": f"{keyword.title()} Field #{i+1}",
+                        "type": field_type,
+                        "validation": {}
+                    }
                     final_fields_map[field_id] = create_field_entry(FieldDefinition(**generic_data), "generic_request", 1.0, data['pos'])
             else:
                 target_match = process.extractOne(keyword, self.fuzzy_map.keys(), score_cutoff=85)
                 if target_match:
                     field_id = self.fuzzy_map[target_match[0]]
                     if field_id in self.field_map:
-                        # If a single field exists, we remove it to replace it with multiple
-                        final_fields_map.pop(field_id, None) 
+                        final_fields_map.pop(field_id, None)
                         for i in range(data['num']):
-                            entry_id = f"{field_id}_{i+1}" # Create unique IDs for each instance
+                            entry_id = f"{field_id}_{i+1}"
                             entry = create_field_entry(self.field_map[field_id], "quantifier", 0.95, data['pos'])
                             entry['id'] = entry_id
                             entry['label'] = f"{self.field_map[field_id].label} #{i+1}"
                             final_fields_map[entry_id] = entry
-                            
+
         # Step 3: Add other explicitly mentioned fields (if not already present)
         for field_id, pos in explicit_ids:
             if field_id not in final_fields_map and field_id not in excluded_ids and self.field_map.get(field_id):
                 final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "matcher", 1.0, pos)
 
-        # Step X: Fallback fuzzy keyword scan (always run for missing fields)
-        for keyword, field_id in self.fuzzy_map.items():
-            if (
-                field_id not in final_fields_map and  # Avoid duplicates
-                keyword in prompt.lower() and
-                field_id in self.field_map
-            ):
-                final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "fuzzy_keyword", 0.80)
+        # Step X: Fallback fuzzy keyword scan
+        for token in doc:
+            if token.i in processed_token_indices:
+                continue
+
+            keyword = token.text.lower()
+            if keyword in self.fuzzy_map:
+                field_id = self.fuzzy_map[keyword]
+                
+                if field_id not in final_fields_map and field_id in self.field_map:
+                    final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "fuzzy_keyword_token", 0.75)
+                    processed_token_indices.add(token.i)
 
         # The final list of fields is the values from our map
         final_fields = list(final_fields_map.values())
 
 
         # --- Phase 3 & 4: Attribute Application and Cleanup ---
-        # (This section is now applied to the correctly assembled list)
         
         # Remove any fields that were meant to be excluded (double-check)
         final_fields = [f for f in final_fields if f['id'] not in excluded_ids]

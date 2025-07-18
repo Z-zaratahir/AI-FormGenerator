@@ -25,7 +25,7 @@ function FormField({ field, index }) {
 
   const inputProps = {
     id: inputId,
-    name: field.label.toLowerCase().replace(/\s/g, '-'),
+    name: field.id,
     style: { width: '100%', boxSizing: 'border-box', padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #ccc' },
     required: isRequired,
     placeholder: field.placeholder || '',
@@ -131,10 +131,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState({ message: '', errors: null, success: false });
+
   const handleGenerate = async () => {
     if (!prompt) { setError("Please enter a prompt."); return; }
     setError('');
     setFormData(null);
+    setSubmissionStatus({ message: '', errors: null, success: false }); 
     setLoading(true);
 
     try {
@@ -148,6 +152,31 @@ function App() {
     }
   };
   
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setSubmissionStatus({ message: '', errors: null, success: false });
+
+    const form = event.target;
+    // FormData uses the 'name' attribute of inputs, which we fixed earlier
+    const values = Object.fromEntries(new FormData(form).entries());
+    
+    const payload = {
+      values,
+      schema: formData.fields,
+    };
+
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/submit', payload);
+      setSubmissionStatus({ message: res.data.message, success: true });
+      form.reset(); // Optionally clear the form on success
+    } catch (err) {
+      const { message = 'Submission failed. Please check the errors below.', errors = {} } = err.response?.data || {};
+      setSubmissionStatus({ message, errors, success: false });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="app-container">
@@ -170,16 +199,33 @@ function App() {
 
       {error && <div className="error-message">❌ {error}</div>}
 
-      {formData && formData.fields.length > 0 && (
+      {submissionStatus.message && (
+        <div className={submissionStatus.success ? "success-message" : "error-message"}>
+          {submissionStatus.success ? '✅' : '❌'} {submissionStatus.message}
+        </div>
+      )}
+
+
+       {formData && formData.fields.length > 0 && (
         <div className="form-preview">
           <h2>{formData.title}</h2>
           <p className="debug-info"><em>Template matched: {formData.template}</em></p>
-          <form onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
-            {formData.fields.map((field, idx) => (
-              // Pass the index for generating a unique key and ID
-              <FormField key={`${field.id || field.label}-${idx}`} field={field} index={idx} />
-            ))}
-            <button type="submit" className="submit-button">Submit Form</button>
+          <form onSubmit={handleSubmit}>
+            {formData.fields.map((field, idx) => {
+
+              const fieldError = submissionStatus.errors?.[field.id];
+              return (
+
+                <div key={`${field.id || field.label}-${idx}`}>
+                  <FormField field={field} index={idx} />
+                  {fieldError && <div className="field-error">{fieldError}</div>}
+                </div>
+              )
+            })}
+
+            <button type="submit" className="submit-button" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting...' : 'Submit Form'}
+            </button>
           </form>
         </div>
       )}

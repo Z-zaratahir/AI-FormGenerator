@@ -73,17 +73,6 @@ body {
   cursor: not-allowed;
 }
 
-/* --- Error & Form Preview Styling --- */
-.error-message {
-  color: #c0392b;
-  background-color: #fbeae5;
-  padding: 1rem;
-  border-radius: 6px;
-  margin-bottom: 1.5rem;
-  border: 1px solid #e74c3c;
-  text-align: center;
-}
-
 .form-preview {
   margin-top: 2rem;
 }
@@ -131,4 +120,35 @@ body {
 
 .submit-button:hover {
   background-color: #27ae60;
+}
+
+.success-message {
+  background-color: #e6ffed;
+  border: 1px solid #b7e4c7;
+  color: #2d6a4f;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* --- Status & Error Messages --- */
+
+.error-message {
+  background-color: #ffebe6;
+  border: 1px solid #e4b7b7;
+  color: #8b0000;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Style for individual field validation errors */
+.field-error {
+  color: #d90429;
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-top: -2px;
+  padding-bottom: 10px;
 }
