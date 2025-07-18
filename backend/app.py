@@ -35,6 +35,7 @@ def load_knowledge_base(fields_path, templates_path):
 
 class FieldDefinition:
     def __init__(self, id, label, type, patterns=None, fuzzy_keywords=None, validation=None, options=None, **kwargs):
+
         self.id = id
         self.label = label
         self.type = type
