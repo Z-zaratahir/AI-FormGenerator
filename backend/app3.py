@@ -1,4 +1,4 @@
-#app2.py:
+#app3.py:
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -292,42 +292,118 @@ class FormGenerator:
         final_fields_map = {}
 
         # Step 1: Template Detection (Highest Priority)
-        prompt_lower = prompt.lower()
-        detected_template_name = "custom"
-        best_match_score = 0
-        best_template_id = None
 
+        # =================== START OF FINAL, COMPLETE REPLACEMENT CODE ===================
+
+        def calculate_specificity_score(field_item, field_def):
+            """
+            Calculates how 'specific' a field definition from a template is.
+            """
+            if not isinstance(field_item, dict):
+                return 0
+            score = 0
+            if field_item.get("label") and field_item.get("label") != field_def.label:
+                score += 2
+            if 'validation' in field_item and field_item['validation'].get('placeholder'):
+                score += 1
+            if field_item.get("validation"):
+                score += len(field_item["validation"])
+            return score
+
+        # Step 1: Template Detection, Merging, and Safeguards
+        prompt_lower = prompt.lower()
+        
+        # --- Stage 1: High-Confidence Seed Matching ---
+        detected_template_ids = set()
+        matched_seeds = set()
         for template_name, data in self.form_templates.items():
-            # Create a list of all possible keywords for this template
             all_seeds = [template_name.replace('_', ' ')]
             if isinstance(data, dict) and "seeds" in data:
                 all_seeds.extend(data.get("seeds", []))
-
-            # Check if any seed word is present in the prompt
             for seed in all_seeds:
                 if seed in prompt_lower:
-                    # Prioritize longer, more specific matches
-                    score = 90 + len(seed)
-                    if score > best_match_score:
-                        best_match_score = score
-                        best_template_id = template_name
+                    detected_template_ids.add(template_name)
+                    matched_seeds.add(seed) # Track the seed we found
 
-        if best_template_id:
-            detected_template_name = best_template_id
-            template_data = self.form_templates.get(best_template_id, {})
-            # Resolve aliases (e.g., "application" -> "job_application")
-            while isinstance(template_data, str):
-                template_data = self.form_templates.get(template_data, {})
+        # --- NEW: Stage 2: Noun Chunk Inference for Secondary Templates ---
+        # This allows us to find templates from phrases like "a section for payment"
+        for chunk in doc.noun_chunks:
+            chunk_text = chunk.text.lower()
+            # Avoid re-processing text that was part of a high-confidence seed
+            if any(seed in chunk_text for seed in matched_seeds):
+                continue
+            
+            # Match the chunk against all possible template keywords
+            target_match = process.extractOne(chunk_text, self.template_keywords.keys(), score_cutoff=90)
+            if target_match:
+                template_id = self.template_keywords[target_match[0]]
+                detected_template_ids.add(template_id)
 
-            template_field_ids = template_data.get("fields", [])
-            for item in template_field_ids:
-                field_id = item.get('id') if isinstance(item, dict) else item
-                if field_id not in excluded_ids and self.field_map.get(field_id):
-                    overrides = item.get('validation', {}) if isinstance(item, dict) else {}
-                    field_def = self.field_map[field_id]
+        # --- Domain Cohesion Check (Franken-Form Prevention) ---
+        if len(detected_template_ids) > 1:
+            template_domains = set()
+            primary_template_id = None
+            longest_seed_len = 0
+
+            for t_id in detected_template_ids:
+                template_info = self.form_templates.get(t_id, {})
+                if isinstance(template_info, dict):
+                    all_seeds = [t_id.replace('_', ' ')] + template_info.get("seeds", [])
+                    for seed in all_seeds:
+                        if seed in prompt_lower and len(seed) > longest_seed_len:
+                            longest_seed_len = len(seed)
+                            primary_template_id = t_id
+                    
+                    if "domain" in template_info:
+                        template_domains.add(template_info["domain"])
+            
+            compatible_domains = [{'Business', 'Financial'}, {'Event', 'Service'}, {'Education', 'Community'}]
+            is_compatible = any(template_domains.issubset(c) for c in compatible_domains)
+
+            if len(template_domains) > 1 and not is_compatible and primary_template_id:
+                print(f"Franken-form prevented. Domains {template_domains} are not compatible. Defaulting to best match: {primary_template_id}")
+                detected_template_ids = {primary_template_id}
+
+        detected_template_name = ", ".join(sorted(list(detected_template_ids))) if detected_template_ids else "custom"
+
+        # --- Load and Merge fields from the (now validated) template list ---
+        if detected_template_ids:
+            for template_id in sorted(list(detected_template_ids)):
+                template_data = self.form_templates.get(template_id, {})
+                while isinstance(template_data, str):
+                    template_data = self.form_templates.get(template_data, {})
+
+                template_field_items = template_data.get("fields", [])
+                for item in template_field_items:
+                    field_id_base = item.get('id') if isinstance(item, dict) else item
+                    id_suffix = item.get('id_suffix', '') if isinstance(item, dict) else ''
+                    field_id = f"{field_id_base}{id_suffix}"
+                    
+                    if field_id_base not in self.field_map: continue
+
+                    field_def = self.field_map[field_id_base]
+                    
+                    if field_id in final_fields_map:
+                        existing_entry = final_fields_map[field_id]
+                        new_item_score = calculate_specificity_score(item, field_def)
+                        existing_item_score = existing_entry.get("specificity_score", 0)
+                        if new_item_score <= existing_item_score:
+                            continue
+
                     new_field = create_field_entry(field_def, "template", 0.90)
-                    new_field['validation'].update(overrides)
+                    new_field["id"] = field_id # Apply the suffix if it exists
+                    new_field["specificity_score"] = calculate_specificity_score(item, field_def)
+
+                    if isinstance(item, dict):
+                        if 'label' in item: new_field['label'] = item['label']
+                        if 'validation' in item: new_field['validation'].update(item.get('validation', {}))
+                        if 'options' in item: new_field['options'] = item['options']
+                        if 'placeholder' in item.get('validation', {}):
+                             new_field.setdefault('validation', {})['placeholder'] = item['validation']['placeholder']
+                    
                     final_fields_map[field_id] = new_field
+
+        # =================== END OF FINAL, COMPLETE REPLACEMENT CODE ===================
 
         # Step 1.5: Handle Dynamic Options to claim their subjects before generic quantifiers
         subjects_handled_by_dynamic_options = set()
@@ -476,7 +552,7 @@ class FormGenerator:
 
     
 # --- Main Application Setup ---
-fields_data, templates_data = load_knowledge_base('fields.json', 'templates.json')
+fields_data, templates_data = load_knowledge_base('fields.json', 'templates2.json')
 form_gen = FormGenerator(fields_data, templates_data)
 
 @app.route("/process", methods=["POST"])

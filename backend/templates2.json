@@ -1,5 +1,6 @@
 {
   "student_form": {
+    "domain": "Education",
     "seeds": ["student form", "enrollment form", "admission form", "course registration", "student enrollment", "campus registration", "graduate application", "undergraduate application"],
     "fields": [
       { "id": "FIRST_NAME", "validation": { "required": true } },
@@ -11,7 +12,6 @@
       { "id": "DATE_OF_BIRTH", "validation": { "required": true } }
     ]
   },
-   
   "medical_intake": {
     "domain": "Medical",
     "seeds": ["medical form", "patient intake", "health questionnaire", "doctor visit form", "clinic registration"],
@@ -27,6 +27,7 @@
     ]
   },
   "ecommerce_checkout": {
+    "domain": "Financial",
     "seeds": ["checkout form", "online purchase", "buy now", "shopping cart", "order form"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -40,6 +41,7 @@
     ]
   },
   "tech_support": {
+    "domain": "Business",
     "seeds": ["tech support", "help desk", "IT help", "computer problem", "software issue"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -51,6 +53,7 @@
     ]
   },
   "parent_consent": {
+    "domain": "Personal",
     "seeds": ["parent consent", "permission slip", "child authorization", "school trip form"],
     "fields": [
       {"id": "PARENT_NAME", "label": "Parent/Guardian Name", "validation": {"required": true}},
@@ -62,6 +65,7 @@
     ]
   },
   "car_rental": {
+    "domain": "Travel",
     "seeds": ["car rental", "vehicle reservation", "rent a car", "auto lease form"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -73,6 +77,7 @@
     ]
   },
   "insurance_claim": {
+    "domain": "Financial",
     "seeds": ["insurance claim", "file a claim", "accident report", "damage claim"],
     "fields": [
       {"id": "POLICY_NUMBER", "label": "Policy Number", "validation": {"required": true}},
@@ -84,6 +89,7 @@
     ]
   },
   "home_loan": {
+    "domain": "Financial",
     "seeds": ["mortgage application", "home loan", "house financing", "property loan"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -96,6 +102,7 @@
     ]
   },
   "conference_speaker": {
+    "domain": "Event",
     "seeds": ["speaker application", "presenter submission", "talk proposal", "conference speaker"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -109,6 +116,7 @@
     ]
   },
   "pet_adoption": {
+    "domain": "Personal",
     "seeds": ["adopt a pet", "animal adoption", "pet application", "rescue form"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -121,6 +129,7 @@
     ]
   },
   "employee_feedback": {
+    "domain": "Business",
     "seeds": ["employee survey", "workplace feedback", "staff satisfaction", "company culture survey"],
     "fields": [
       {"id": "DEPARTMENT", "validation": {"required": false}},
@@ -131,6 +140,7 @@
     ]
   },
   "freelance_contract": {
+    "domain": "Business",
     "seeds": ["freelance agreement", "contractor form", "independent contractor", "service agreement"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -143,6 +153,7 @@
     ]
   },
   "school_enrollment": {
+    "domain": "Education",
     "seeds": ["school registration", "student enrollment", "class signup", "academy admission"],
     "fields": [
       {"id": "STUDENT_NAME", "label": "Student Full Name", "validation": {"required": true}},
@@ -155,6 +166,7 @@
     ]
   },
   "travel_visa": {
+    "domain": "Travel",
     "seeds": ["visa application", "travel visa", "entry permit", "immigration form"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -167,6 +179,7 @@
     ]
   },
   "event_volunteer": {
+    "domain": "Community",
     "seeds": ["event helper", "festival volunteer", "charity event help", "community volunteer"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -178,6 +191,7 @@
     ]
   },
   "tutoring_request": {
+    "domain": "Education",
     "seeds": ["tutor request", "learning help", "academic support", "private tutor"],
     "fields": [
       {"id": "STUDENT_NAME", "label": "Student Name", "validation": {"required": true}},
@@ -189,6 +203,7 @@
     ]
   },
   "covid_screening": {
+    "domain": "Medical",
     "seeds": ["health screening", "covid form", "pandemic questionnaire", "symptom checker"],
     "fields": [
       {"id": "FULL_NAME", "validation": {"required": true}},
@@ -199,6 +214,7 @@
     ]
   },
   "survey": {
+    "domain": "Feedback",
     "seeds": ["survey", "questionnaire", "poll", "research study", "inquiry form", "voting form"],
     "fields": [
       { "id": "RATING", "label": "Overall, how would you rate your experience?", "validation": { "required": true } },
@@ -207,6 +223,7 @@
     ]
   },
   "registration": {
+    "domain": "User Management",
     "seeds": ["user registration", "register account", "sign up form", "signup form", "create account", "new user form"],
     "fields": [
       { "id": "USERNAME", "validation": { "required": true, "placeholder": "Must be unique, 4-20 characters" } },
@@ -216,6 +233,7 @@
     ]
   },
   "feedback": {
+    "domain": "Feedback",
     "seeds": ["feedback form", "customer review", "share your opinion", "rate your experience"],
     "fields": [
       { "id": "FULL_NAME", "label": "Your Name (Optional)", "validation": { "required": false } },
@@ -225,6 +243,7 @@
     ]
   },
   "suggestion_form": {
+    "domain": "Feedback",
     "seeds": ["suggestion", "idea", "recommendation", "propose", "feature request"],
     "fields": [
       { "id": "FULL_NAME" },
@@ -233,6 +252,7 @@
     ]
   },
   "job_application": {
+    "domain": "Business",
     "seeds": ["job application", "career application", "apply for position", "hiring form", "employment application"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -244,6 +264,7 @@
     ]
   },
   "event_registration": {
+    "domain": "Event",
     "seeds": ["event registration", "conference registration", "webinar signup", "workshop ticket", "meeting signup"],
     "fields": [
       { "id": "PARTICIPANT_NAME", "label": "Full Name", "validation": { "required": true } },
@@ -254,6 +275,7 @@
     ]
   },
   "bug_report": {
+    "domain": "Business",
     "seeds": ["bug report", "error report", "crash report", "submit an issue", "fault report", "glitch report", "technical problem"],
     "fields": [
       { "id": "REPORTER_NAME", "label": "Your Name (Optional)", "validation": { "required": false } },
@@ -265,6 +287,7 @@
     ]
   },
   "contact": {
+    "domain": "General",
     "seeds": ["contact form", "contact us", "get in touch", "inquiry form", "ask a question", "support request", "help center"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -274,6 +297,7 @@
     ]
   },
   "product_review": {
+    "domain": "Feedback",
     "seeds": ["product review", "rate this item", "review this product"],
     "fields": [
       { "id": "FULL_NAME", "label": "Your Display Name", "validation": { "required": false, "placeholder": "e.g., John D." } },
@@ -284,6 +308,7 @@
     ]
   },
   "support_ticket": {
+    "domain": "Business",
     "seeds": ["support request", "help ticket", "customer service"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -295,6 +320,7 @@
     ]
   },
   "rsvp": {
+    "domain": "Event",
     "seeds": ["rsvp form", "invitation response", "attend event", "join the event"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -304,6 +330,7 @@
     ]
   },
   "login": {
+    "domain": "User Management",
     "seeds": ["sign in", "log in", "login"],
     "fields": [
       { "id": "USERNAME", "validation": { "required": true } },
@@ -311,6 +338,7 @@
     ]
   },
   "shipping_address": {
+    "domain": "Financial",
     "seeds": ["shipping form", "delivery address", "checkout address"],
     "fields": [
         { "id": "FULL_NAME", "validation": { "required": true } },
@@ -323,6 +351,7 @@
     ]
   },
   "payment_form": {
+    "domain": "Financial",
     "seeds": ["payment form", "credit card details", "purchase form", "transaction form"],
     "fields": [
       { "id": "CREDIT_CARD_NUMBER", "validation": { "required": true } },
@@ -333,6 +362,7 @@
     ]
   },
   "gym_membership": {
+    "domain": "Health & Fitness",
     "seeds": ["gym membership", "fitness club application", "health club signup", "workout membership"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -348,6 +378,7 @@
     ]
   },
   "password_reset": {
+    "domain": "User Management",
     "seeds": ["password reset", "forgot password", "change password"],
     "fields": [
       { "id": "EMAIL", "validation": { "required": true } },
@@ -356,6 +387,7 @@
     ]
   },
   "it_support_ticket": {
+    "domain": "Business",
     "seeds": ["it support", "tech support", "computer problem", "hardware issue", "software issue"],
     "fields": [
       { "id": "FULL_NAME", "label": "Employee Name", "validation": { "required": true } },
@@ -366,8 +398,8 @@
       { "id": "SCREENSHOT_UPLOAD", "label": "Upload Screenshot or Log File (Optional)" }
     ]
   },
-
   "volunteer_signup": {
+    "domain": "Community",
     "seeds": ["volunteer signup", "non-profit signup", "charity work application", "sign up to help"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -380,7 +412,8 @@
       { "id": "LEGAL_AGREEMENT", "label": "I agree to the volunteer waiver and code of conduct", "validation": { "mustBeChecked": true } }
     ]
   },
-    "hotel_booking": {
+  "hotel_booking": {
+    "domain": "Travel",
     "seeds": ["hotel booking", "book a room", "hotel reservation", "book a hotel", "inn booking", "motel reservation"],
     "fields": [
       { "id": "FULL_NAME", "label": "Guest Name", "validation": { "required": true } },
@@ -394,6 +427,7 @@
     ]
   },
   "patient_intake": {
+    "domain": "Medical",
     "seeds": ["patient intake", "new patient form", "medical history form", "doctor's office form", "clinic registration"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -410,6 +444,7 @@
     ]
   },
   "real_estate_inquiry": {
+    "domain": "Real Estate",
     "seeds": ["real estate inquiry", "property showing request", "contact a realtor", "schedule a viewing", "ask about a listing"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -424,6 +459,7 @@
     ]
   },
   "restaurant_reservation": {
+    "domain": "Service",
     "seeds": ["restaurant reservation", "book a table", "dinner reservation", "make a reservation"],
     "fields": [
       { "id": "FULL_NAME", "label": "Reservation Name", "validation": { "required": true } },
@@ -437,6 +473,7 @@
     ]
   },
   "scholarship_application": {
+    "domain": "Education",
     "seeds": ["scholarship application", "apply for scholarship", "financial aid application", "grant application"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -452,6 +489,7 @@
     ]
   },
   "website_design_quote": {
+    "domain": "Service",
     "seeds": ["website design quote", "web design request", "get a website quote", "new website project"],
     "fields": [
       { "id": "FULL_NAME", "validation": { "required": true } },
@@ -464,7 +502,8 @@
       { "id": "COMMENTS", "label": "Examples of websites you like (Optional)", "type": "textarea", "validation": { "required": false } }
     ]
   },
-    "employee_onboarding": {
+  "employee_onboarding": {
+    "domain": "Business",
     "seeds": ["employee onboarding", "new hire form", "staff onboarding", "employee setup"],
     "fields": [
       { "id": "SECTION_HEADING", "label": "Personal Information" },
@@ -489,6 +528,7 @@
     ]
   },
   "grant_application": {
+    "domain": "Financial",
     "seeds": ["grant application", "apply for funding", "research grant proposal", "non-profit grant"],
     "fields": [
       { "id": "SECTION_HEADING", "label": "Applicant Information" },
@@ -509,6 +549,7 @@
     ]
   },
   "it_asset_request": {
+    "domain": "Business",
     "seeds": ["it asset request", "new hardware request", "software license request", "request a laptop"],
     "fields": [
       { "id": "FULL_NAME", "label": "Employee Name", "validation": { "required": true } },
@@ -521,6 +562,7 @@
     ]
   },
   "apartment_rental_application": {
+    "domain": "Real Estate",
     "seeds": ["apartment rental application", "apply to rent", "lease application", "tenant application"],
     "fields": [
       { "id": "SECTION_HEADING", "label": "Applicant Details" },
@@ -547,6 +589,7 @@
     ]
   },
   "customer_satisfaction_survey_nps": {
+    "domain": "Feedback",
     "seeds": ["customer satisfaction survey", "nps survey", "net promoter score", "rate our service"],
     "fields": [
       { "id": "SATISFACTION_RATING", "label": "On a scale of 0-10, how likely are you to recommend our company to a friend or colleague?", "type": "range", "validation": { "required": true, "min": 0, "max": 10 } },
@@ -556,6 +599,7 @@
     ]
   },
   "return_merchandise_authorization_rma": {
+    "domain": "Business",
     "seeds": ["rma form", "return request", "request a return", "merchandise return", "return authorization"],
     "fields": [
       { "id": "ORDER_ID", "label": "Original Order ID", "validation": { "required": true } },
@@ -567,237 +611,8 @@
       { "id": "IMAGE_UPLOAD", "label": "Upload photo of damage or incorrect item (if applicable)", "validation": { "required": false } }
     ]
   },
-    "tax_preparation": {
-    "seeds": ["tax form", "tax preparation", "irs form", "income tax filing", "tax return", "1040 form", "tax document", "w2 submission", "tax questionnaire"],
-    "fields": [
-      { "id": "FULL_NAME", "validation": { "required": true } },
-      { "id": "SSN", "label": "Social Security Number", "validation": { "required": true, "rule": "ssn_format" } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "FILING_STATUS", "type": "select", "options": ["Single", "Married Filing Jointly", "Married Filing Separately", "Head of Household", "Qualifying Widow(er)"], "validation": { "required": true } },
-      { "id": "W2_UPLOAD", "label": "Upload W-2 Forms", "validation": { "required": true, "fileTypes": ["pdf", "jpg"] } },
-      { "id": "1099_UPLOAD", "label": "Upload 1099 Forms (if applicable)", "validation": { "required": false } },
-      { "id": "DEDUCTIONS", "label": "Itemized Deductions", "type": "textarea", "validation": { "required": false, "placeholder": "List deductible expenses: mortgage interest, charitable donations, etc." } },
-      { "id": "PREVIOUS_AGI", "label": "Previous Year AGI (for verification)", "validation": { "required": false } },
-      { "id": "DIGITAL_SIGNATURE", "validation": { "required": true } }
-    ]
-  },
-  "home_improvement_quote": {
-    "seeds": ["home improvement quote", "remodeling estimate", "contractor bid", "renovation request", "construction quote", "handyman services", "home repair estimate"],
-    "fields": [
-      { "id": "PROPERTY_ADDRESS", "validation": { "required": true } },
-      { "id": "PROJECT_TYPE", "type": "select", "options": ["Kitchen Remodel", "Bathroom Remodel", "Roofing", "Flooring", "Painting", "Landscaping", "Other"], "validation": { "required": true } },
-      { "id": "PROJECT_DESCRIPTION", "type": "textarea", "validation": { "required": true, "placeholder": "Describe the work needed in detail" } },
-      { "id": "BUDGET_RANGE", "type": "select", "options": ["<$5,000", "$5,000-$15,000", "$15,000-$30,000", "$30,000+"], "validation": { "required": true } },
-      { "id": "TIMEFRAME", "label": "Desired Start Date", "validation": { "required": false } },
-      { "id": "PROPERTY_PHOTOS", "label": "Upload Photos of Area", "validation": { "required": false } },
-      { "id": "HOME_AGE", "label": "Year Home Was Built", "validation": { "required": false } }
-    ]
-  },
-  "child_care_enrollment": {
-    "seeds": ["child care form", "daycare registration", "preschool enrollment", "babysitter application", "nanny application", "after school program", "childcare intake"],
-    "fields": [
-      { "id": "CHILD_NAME", "validation": { "required": true } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "PARENT_NAME", "validation": { "required": true } },
-      { "id": "PARENT_CONTACT", "validation": { "required": true } },
-      { "id": "EMERGENCY_CONTACT", "validation": { "required": true } },
-      { "id": "ALLERGIES", "type": "textarea", "validation": { "required": true, "placeholder": "List all allergies or write 'None'" } },
-      { "id": "MEDICAL_NOTES", "validation": { "required": false } },
-      { "id": "SCHEDULE", "label": "Days/Hours Needed", "validation": { "required": true } },
-      { "id": "AUTHORIZED_PICKUP", "label": "Authorized Pickup Persons", "type": "textarea", "validation": { "required": true } }
-    ]
-  },
-  "car_insurance_quote": {
-    "seeds": ["auto insurance quote", "car insurance application", "vehicle coverage", "insurance estimate", "policy application", "motor insurance", "coverage quote"],
-    "fields": [
-      { "id": "DRIVER_NAME", "validation": { "required": true } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "DRIVERS_LICENSE", "validation": { "required": true } },
-      { "id": "VEHICLE_MAKE", "validation": { "required": true } },
-      { "id": "VEHICLE_MODEL", "validation": { "required": true } },
-      { "id": "VEHICLE_YEAR", "validation": { "required": true } },
-      { "id": "VIN", "label": "Vehicle Identification Number", "validation": { "required": false } },
-      { "id": "COVERAGE_TYPE", "type": "select", "options": ["Liability Only", "Full Coverage", "Collision", "Comprehensive"], "validation": { "required": true } },
-      { "id": "DRIVING_HISTORY", "label": "Any accidents or violations in last 5 years?", "type": "textarea", "validation": { "required": true } }
-    ]
-  },
-  "college_application": {
-    "seeds": ["college application", "university application", "undergrad admission", "higher ed application", "degree program application", "college admission", "university enrollment"],
-    "fields": [
-      { "id": "FULL_NAME", "validation": { "required": true } },
-      { "id": "HIGH_SCHOOL", "validation": { "required": true } },
-      { "id": "GRADUATION_YEAR", "validation": { "required": true } },
-      { "id": "GPA", "label": "High School GPA", "validation": { "required": true } },
-      { "id": "INTENDED_MAJOR", "validation": { "required": false } },
-      { "id": "ESSAY", "label": "Personal Statement", "type": "textarea", "validation": { "required": true, "minLength": 500 } },
-      { "id": "ACTIVITIES", "label": "Extracurricular Activities", "type": "textarea", "validation": { "required": false } },
-      { "id": "TRANSCRIPT_UPLOAD", "validation": { "required": true, "fileTypes": ["pdf"] } },
-      { "id": "TEST_SCORES", "label": "SAT/ACT Scores (if available)", "validation": { "required": false } }
-    ]
-  },
-  "home_inspection": {
-    "seeds": ["home inspection request", "property inspection", "house assessment", "building inspection", "real estate inspection", "pre-purchase inspection"],
-    "fields": [
-      { "id": "PROPERTY_ADDRESS", "validation": { "required": true } },
-      { "id": "INSPECTION_TYPE", "type": "select", "options": ["General Home Inspection", "Pest Inspection", "Radon Testing", "Mold Inspection", "Roof Inspection", "Foundation Inspection"], "validation": { "required": true } },
-      { "id": "SQUARE_FOOTAGE", "validation": { "required": false } },
-      { "id": "HOME_AGE", "validation": { "required": false } },
-      { "id": "SPECIAL_REQUESTS", "type": "textarea", "validation": { "required": false, "placeholder": "Any specific concerns or areas to focus on?" } },
-      { "id": "PREFERRED_DATE", "validation": { "required": true } },
-      { "id": "ACCESS_INSTRUCTIONS", "type": "textarea", "validation": { "required": false } }
-    ]
-  },
-  "life_insurance": {
-    "seeds": ["life insurance application", "term life quote", "whole life policy", "insurance coverage", "death benefit application", "policy application"],
-    "fields": [
-      { "id": "FULL_NAME", "validation": { "required": true } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "GENDER", "validation": { "required": true } },
-      { "id": "HEIGHT", "validation": { "required": true } },
-      { "id": "WEIGHT", "validation": { "required": true } },
-      { "id": "TOBACCO_USE", "type": "select", "options": ["Never", "Former", "Current"], "validation": { "required": true } },
-      { "id": "COVERAGE_AMOUNT", "validation": { "required": true } },
-      { "id": "BENEFICIARY", "label": "Primary Beneficiary", "validation": { "required": true } },
-      { "id": "MEDICAL_HISTORY", "type": "textarea", "validation": { "required": true } }
-    ]
-  },
-  "moving_quote": {
-    "seeds": ["moving estimate", "relocation quote", "moving company request", "moving services", "household move", "apartment move", "long distance move"],
-    "fields": [
-      { "id": "MOVE_DATE", "validation": { "required": true } },
-      { "id": "ORIGIN_ADDRESS", "validation": { "required": true } },
-      { "id": "DESTINATION_ADDRESS", "validation": { "required": true } },
-      { "id": "HOME_SIZE", "type": "select", "options": ["Studio", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "House <1500 sq ft", "House 1500-3000 sq ft", "House 3000+ sq ft"], "validation": { "required": true } },
-      { "id": "SPECIAL_ITEMS", "label": "Large/Valuable Items", "type": "textarea", "validation": { "required": false, "placeholder": "Piano, artwork, fragile items, etc." } },
-      { "id": "PACKING_SERVICES", "type": "select", "options": ["Full Packing", "Partial Packing", "No Packing Needed"], "validation": { "required": true } },
-      { "id": "STORAGE_NEEDS", "label": "Need Storage?", "type": "select", "options": ["Yes", "No"], "validation": { "required": true } }
-    ]
-  },
-  "pet_sitting": {
-    "seeds": ["pet sitting request", "dog walking service", "pet care form", "animal care request", "pet visit form", "overnight pet care", "pet boarding"],
-    "fields": [
-      { "id": "PET_NAME", "validation": { "required": true } },
-      { "id": "PET_TYPE", "validation": { "required": true } },
-      { "id": "PET_AGE", "validation": { "required": false } },
-      { "id": "CARE_DATES", "label": "Service Dates Needed", "validation": { "required": true } },
-      { "id": "CARE_INSTRUCTIONS", "type": "textarea", "validation": { "required": true, "placeholder": "Feeding schedule, medications, special needs" } },
-      { "id": "VET_INFO", "label": "Veterinarian Contact", "validation": { "required": true } },
-      { "id": "EMERGENCY_CONTACT", "validation": { "required": true } },
-      { "id": "HOME_ACCESS", "label": "Home Access Instructions", "type": "textarea", "validation": { "required": false } }
-    ]
-  },
-  "business_license": {
-    "seeds": ["business license application", "company registration", "business permit", "occupational license", "professional license", "trade license", "municipal permit"],
-    "fields": [
-      { "id": "BUSINESS_NAME", "validation": { "required": true } },
-      { "id": "BUSINESS_TYPE", "type": "select", "options": ["Sole Proprietorship", "Partnership", "LLC", "Corporation", "Nonprofit"], "validation": { "required": true } },
-      { "id": "BUSINESS_ADDRESS", "validation": { "required": true } },
-      { "id": "EIN", "label": "Employer Identification Number", "validation": { "required": false } },
-      { "id": "BUSINESS_DESCRIPTION", "type": "textarea", "validation": { "required": true } },
-      { "id": "OWNER_INFO", "label": "Owner Information", "type": "textarea", "validation": { "required": true } },
-      { "id": "PROOF_OF_INSURANCE", "label": "Upload Insurance Certificate", "validation": { "required": false } }
-    ]
-  },
-  "therapy_intake": {
-    "seeds": ["therapy intake form", "counseling questionnaire", "mental health assessment", "psychologist intake", "therapist form", "behavioral health form"],
-    "fields": [
-      { "id": "FULL_NAME", "validation": { "required": true } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "PRIMARY_CONCERN", "type": "textarea", "validation": { "required": true, "placeholder": "What brings you to therapy?" } },
-      { "id": "MENTAL_HISTORY", "label": "Mental Health History", "type": "textarea", "validation": { "required": false } },
-      { "id": "MEDICATIONS", "label": "Current Medications", "validation": { "required": false } },
-      { "id": "GOALS", "label": "Therapy Goals", "type": "textarea", "validation": { "required": false } },
-      { "id": "EMERGENCY_CONTACT", "validation": { "required": true } },
-      { "id": "INSURANCE_INFO", "label": "Insurance Information", "validation": { "required": false } }
-    ]
-  },
-  "catering_request": {
-    "seeds": ["catering quote", "food service request", "event catering", "meal delivery request", "party catering", "corporate catering", "wedding catering"],
-    "fields": [
-      { "id": "EVENT_DATE", "validation": { "required": true } },
-      { "id": "EVENT_TYPE", "type": "select", "options": ["Wedding", "Corporate", "Birthday", "Anniversary", "Graduation", "Other"], "validation": { "required": true } },
-      { "id": "GUEST_COUNT", "validation": { "required": true } },
-      { "id": "CUISINE_PREFERENCE", "type": "select", "options": ["American", "Italian", "Mexican", "Asian", "Mediterranean", "Custom"], "validation": { "required": true } },
-      { "id": "DIETARY_RESTRICTIONS", "type": "textarea", "validation": { "required": false, "placeholder": "Vegetarian, gluten-free, allergies, etc." } },
-      { "id": "EVENT_ADDRESS", "validation": { "required": true } },
-      { "id": "BUDGET_RANGE", "validation": { "required": false } },
-      { "id": "SPECIAL_REQUESTS", "type": "textarea", "validation": { "required": false } }
-    ]
-  },
-  "tutoring_signup": {
-    "seeds": ["tutoring signup", "academic help request", "learning center enrollment", "study help form", "homework help", "test prep signup", "educational tutoring"],
-    "fields": [
-      { "id": "STUDENT_NAME", "validation": { "required": true } },
-      { "id": "GRADE_LEVEL", "validation": { "required": true } },
-      { "id": "SUBJECTS", "type": "textarea", "validation": { "required": true, "placeholder": "List subjects needing help (e.g., Algebra, Chemistry)" } },
-      { "id": "LEARNING_STYLE", "label": "Preferred Learning Method", "type": "select", "options": ["Visual", "Auditory", "Hands-on", "Combination"], "validation": { "required": false } },
-      { "id": "GOALS", "type": "textarea", "validation": { "required": false, "placeholder": "Specific learning goals or challenges" } },
-      { "id": "AVAILABILITY", "validation": { "required": true } },
-      { "id": "PARENT_CONTACT", "validation": { "required": true } }
-    ]
-  },
-  "car_wash": {
-    "seeds": ["car wash service", "auto detailing request", "vehicle cleaning", "car wash appointment", "auto spa service", "mobile car wash", "detailing package"],
-    "fields": [
-      { "id": "VEHICLE_MAKE", "validation": { "required": true } },
-      { "id": "VEHICLE_MODEL", "validation": { "required": true } },
-      { "id": "VEHICLE_SIZE", "type": "select", "options": ["Compact", "Sedan", "SUV", "Truck", "Van"], "validation": { "required": true } },
-      { "id": "SERVICE_TYPE", "type": "select", "options": ["Basic Wash", "Premium Wash", "Full Detail", "Interior Only", "Exterior Only"], "validation": { "required": true } },
-      { "id": "PREFERRED_DATE", "validation": { "required": true } },
-      { "id": "SPECIAL_REQUESTS", "type": "textarea", "validation": { "required": false, "placeholder": "Odor removal, pet hair, etc." } },
-      { "id": "LOCATION", "type": "select", "options": ["Drive-in", "Mobile Service"], "validation": { "required": true } }
-    ]
-  },
-  "music_lessons": {
-    "seeds": ["music lesson signup", "instrument lessons", "voice lessons", "music tutor", "piano lessons", "guitar lessons", "music instruction"],
-    "fields": [
-      { "id": "STUDENT_NAME", "validation": { "required": true } },
-      { "id": "AGE", "validation": { "required": false } },
-      { "id": "INSTRUMENT", "type": "select", "options": ["Piano", "Guitar", "Violin", "Drums", "Voice", "Bass", "Other"], "validation": { "required": true } },
-      { "id": "SKILL_LEVEL", "type": "select", "options": ["Beginner", "Intermediate", "Advanced"], "validation": { "required": true } },
-      { "id": "GOALS", "type": "textarea", "validation": { "required": false, "placeholder": "What would you like to achieve?" } },
-      { "id": "AVAILABILITY", "validation": { "required": true } },
-      { "id": "INSTRUMENT_OWNERSHIP", "label": "Do you own the instrument?", "type": "select", "options": ["Yes", "No"], "validation": { "required": true } }
-    ]
-  },
-  "photography_booking": {
-    "seeds": ["photo shoot booking", "photographer hire", "portrait session", "event photography", "wedding photos", "family photos", "professional headshots"],
-    "fields": [
-      { "id": "SESSION_TYPE", "type": "select", "options": ["Portrait", "Wedding", "Event", "Commercial", "Family", "Newborn", "Other"], "validation": { "required": true } },
-      { "id": "SESSION_DATE", "validation": { "required": true } },
-      { "id": "LOCATION", "validation": { "required": true } },
-      { "id": "PARTICIPANT_COUNT", "validation": { "required": false } },
-      { "id": "SPECIAL_REQUESTS", "type": "textarea", "validation": { "required": false, "placeholder": "Specific poses, themes, or must-have shots" } },
-      { "id": "BUDGET_RANGE", "validation": { "required": false } },
-      { "id": "DELIVERABLES", "label": "Desired Products", "type": "checkbox_group", "options": ["Digital Files", "Prints", "Album", "Online Gallery"], "validation": { "required": true } }
-    ]
-  },
-  "fitness_assessment": {
-    "seeds": ["fitness evaluation", "personal training intake", "gym assessment", "health screening", "fitness consultation", "workout plan request", "body composition"],
-    "fields": [
-      { "id": "FULL_NAME", "validation": { "required": true } },
-      { "id": "DATE_OF_BIRTH", "validation": { "required": true } },
-      { "id": "HEIGHT", "validation": { "required": true } },
-      { "id": "WEIGHT", "validation": { "required": true } },
-      { "id": "FITNESS_LEVEL", "type": "select", "options": ["Beginner", "Intermediate", "Advanced"], "validation": { "required": true } },
-      { "id": "GOALS", "type": "textarea", "validation": { "required": true, "placeholder": "Weight loss, muscle gain, endurance, etc." } },
-      { "id": "MEDICAL_CONDITIONS", "type": "textarea", "validation": { "required": true, "placeholder": "List any injuries or health concerns" } },
-      { "id": "AVAILABILITY", "validation": { "required": true } }
-    ]
-  },
-  "language_classes": {
-    "seeds": ["language course signup", "foreign language class", "esl registration", "language lessons", "conversation class", "language tutoring", "linguistic course"],
-    "fields": [
-      { "id": "STUDENT_NAME", "validation": { "required": true } },
-      { "id": "LANGUAGE", "type": "select", "options": ["Spanish", "French", "Mandarin", "German", "Japanese", "Italian", "Other"], "validation": { "required": true } },
-      { "id": "PROFICIENCY", "type": "select", "options": ["Beginner", "Intermediate", "Advanced", "Native Speaker"], "validation": { "required": true } },
-      { "id": "GOALS", "type": "textarea", "validation": { "required": false, "placeholder": "Conversation, business, travel, etc." } },
-      { "id": "PREFERRED_METHOD", "type": "select", "options": ["In-Person", "Online"], "validation": { "required": true } },
-      { "id": "AVAILABILITY", "validation": { "required": true } },
-      { "id": "LEARNING_STYLE", "type": "select", "options": ["Structured Lessons", "Conversation Practice", "Cultural Immersion"], "validation": { "required": false } }
-    ]
-  },
-    "adoption_application": {
+  "adoption_application": {
+    "domain": "Personal",
     "seeds": ["pet adoption form", "animal rescue application", "shelter adoption", "foster application", "adopt a dog", "adopt a cat", "pet rescue form"],
     "fields": [
       { "id": "ADOPTER_NAME", "validation": { "required": true } },
@@ -814,8 +629,8 @@
       { "id": "TERMS_AGREEMENT", "label": "I agree to provide proper care", "validation": { "mustBeChecked": true } }
     ]
   },
-  
   "bike_rental": {
+    "domain": "Travel",
     "seeds": ["bicycle rental", "bike hire form", "cycle rental", "mountain bike rental", "city bike booking", "bike tour reservation"],
     "fields": [
       { "id": "RENTER_NAME", "validation": { "required": true } },
@@ -830,8 +645,8 @@
       { "id": "RENTAL_AGREEMENT", "label": "I accept rental terms", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "boat_charter": {
+    "domain": "Travel",
     "seeds": ["boat rental", "yacht charter", "sailing booking", "fishing charter", "boat tour reservation", "watercraft rental"],
     "fields": [
       { "id": "CHARTER_DATE", "validation": { "required": true } },
@@ -844,8 +659,8 @@
       { "id": "SAFETY_AGREEMENT", "label": "Safety Waiver Agreement", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "camp_registration": {
+    "domain": "Education",
     "seeds": ["summer camp", "youth camp", "sports camp", "overnight camp", "day camp", "adventure camp", "camp signup"],
     "fields": [
       { "id": "CAMPER_NAME", "validation": { "required": true } },
@@ -860,8 +675,8 @@
       { "id": "TRANSPORTATION_NEEDS", "label": "Needs Transportation?", "type": "checkbox", "validation": { "required": false } }
     ]
   },
-
   "dental_new_patient": {
+    "domain": "Medical",
     "seeds": ["dental intake", "dentist form", "oral health questionnaire", "dental records", "new patient dental", "dental history"],
     "fields": [
       { "id": "PATIENT_NAME", "validation": { "required": true } },
@@ -876,8 +691,8 @@
       { "id": "PRIVACY_POLICY", "label": "HIPAA Acknowledgement", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "dna_test_kit": {
+    "domain": "Personal",
     "seeds": ["dna test registration", "ancestry kit", "genetic test form", "health dna test", "family tree dna", "genealogy test"],
     "fields": [
       { "id": "TESTER_NAME", "validation": { "required": true } },
@@ -890,8 +705,8 @@
       { "id": "DATA_PRIVACY", "label": "Data Sharing Preferences", "type": "checkbox_group", "options": ["Share with researchers", "Opt out of data sharing"], "validation": { "required": true } }
     ]
   },
-
   "elder_care": {
+    "domain": "Medical",
     "seeds": ["senior care", "elderly care", "aging parent care", "caregiver application", "senior assistance", "home care request"],
     "fields": [
       { "id": "CLIENT_NAME", "validation": { "required": true } },
@@ -906,8 +721,8 @@
       { "id": "CARE_SCHEDULE", "label": "Desired Care Schedule", "validation": { "required": true } }
     ]
   },
-
   "farmers_market_vendor": {
+    "domain": "Business",
     "seeds": ["market vendor", "farmers market booth", "artisan application", "produce vendor", "craft fair booth", "local market seller"],
     "fields": [
       { "id": "BUSINESS_NAME", "validation": { "required": true } },
@@ -921,8 +736,8 @@
       { "id": "MARKET_AGREEMENT", "label": "Vendor Terms Agreement", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "genealogy_request": {
+    "domain": "Personal",
     "seeds": ["family history", "genealogy research", "ancestry search", "family tree research", "heritage research"],
     "fields": [
       { "id": "RESEARCHER_NAME", "validation": { "required": true } },
@@ -935,8 +750,8 @@
       { "id": "DOCUMENTS_UPLOAD", "label": "Upload Any Family Documents", "validation": { "required": false } }
     ]
   },
-
   "home_security": {
+    "domain": "Service",
     "seeds": ["security system", "alarm installation", "home monitoring", "surveillance system", "smart home security"],
     "fields": [
       { "id": "PROPERTY_ADDRESS", "validation": { "required": true } },
@@ -949,8 +764,8 @@
       { "id": "ACCESS_CODE", "label": "Desired Access Code", "validation": { "required": false } }
     ]
   },
-
   "language_translation": {
+    "domain": "Service",
     "seeds": ["document translation", "certified translation", "language translation", "translation service", "multilingual translation"],
     "fields": [
       { "id": "CLIENT_NAME", "validation": { "required": true } },
@@ -964,8 +779,8 @@
       { "id": "SPECIAL_INSTRUCTIONS", "type": "textarea", "validation": { "required": false } }
     ]
   },
-
   "martial_arts": {
+    "domain": "Health & Fitness",
     "seeds": ["dojo registration", "martial arts class", "karate signup", "jiu-jitsu enrollment", "taekwondo school", "self-defense class"],
     "fields": [
       { "id": "STUDENT_NAME", "validation": { "required": true } },
@@ -978,8 +793,8 @@
       { "id": "DOJO_RULES", "label": "Agree to Dojo Rules", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "nursing_application": {
+    "domain": "Education",
     "seeds": ["nursing program", "nursing school", "rn program", "lpn application", "nursing degree", "healthcare education"],
     "fields": [
       { "id": "APPLICANT_NAME", "validation": { "required": true } },
@@ -993,8 +808,8 @@
       { "id": "BACKGROUND_CHECK", "label": "Consent for Background Check", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "organic_certification": {
+    "domain": "Business",
     "seeds": ["organic farm", "organic certification", "usda organic", "organic producer", "organic application"],
     "fields": [
       { "id": "FARM_NAME", "validation": { "required": true } },
@@ -1008,8 +823,8 @@
       { "id": "INSPECTION_AVAILABILITY", "label": "Available for Inspection Dates", "validation": { "required": true } }
     ]
   },
-
   "park_permit": {
+    "domain": "Event",
     "seeds": ["park reservation", "event permit", "picnic reservation", "park shelter", "outdoor event", "park wedding"],
     "fields": [
       { "id": "EVENT_NAME", "validation": { "required": true } },
@@ -1023,8 +838,8 @@
       { "id": "INSURANCE_PROOF", "label": "Upload Insurance Certificate", "validation": { "required": false } }
     ]
   },
-
   "quilt_show": {
+    "domain": "Community",
     "seeds": ["quilt exhibition", "quilt competition", "fiber arts show", "quilt entry", "textile exhibition"],
     "fields": [
       { "id": "QUILTER_NAME", "validation": { "required": true } },
@@ -1038,8 +853,8 @@
       { "id": "INSURANCE_VALUE", "label": "Insurance Value", "validation": { "required": true } }
     ]
   },
-
   "recycling_request": {
+    "domain": "Service",
     "seeds": ["recycling pickup", "bulk recycling", "e-waste pickup", "hazardous waste", "compost bin", "recycling service"],
     "fields": [
       { "id": "SERVICE_ADDRESS", "validation": { "required": true } },
@@ -1051,8 +866,8 @@
       { "id": "HAZARDOUS_MATERIALS", "label": "Contains Hazardous Materials?", "type": "checkbox", "validation": { "required": false } }
     ]
   },
-
   "scuba_certification": {
+    "domain": "Health & Fitness",
     "seeds": ["diving certification", "scuba lessons", "padi certification", "dive training", "open water diver"],
     "fields": [
       { "id": "DIVER_NAME", "validation": { "required": true } },
@@ -1065,8 +880,8 @@
       { "id": "WAIVER_AGREEMENT", "label": "Diving Risks Acknowledgement", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "television_appearance": {
+    "domain": "Media",
     "seeds": ["tv show application", "reality show", "game show", "talent show", "tv interview", "news segment"],
     "fields": [
       { "id": "APPLICANT_NAME", "validation": { "required": true } },
@@ -1078,8 +893,8 @@
       { "id": "RELEASE_FORM", "label": "Media Release Agreement", "validation": { "mustBeChecked": true } }
     ]
   },
-
   "us_passport": {
+    "domain": "Travel",
     "seeds": ["passport application", "passport renewal", "us passport", "travel document", "passport photo"],
     "fields": [
       { "id": "APPLICANT_NAME", "validation": { "required": true } },
@@ -1093,6 +908,7 @@
     ]
   },
   "course_evaluation": {
+    "domain": "Education",
     "seeds": ["course evaluation", "class feedback", "teacher review", "rate my professor"],
     "fields": [
       { "id": "RATING", "label": "Overall Course Rating", "validation": { "required": true } },
