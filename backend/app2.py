@@ -5,6 +5,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import spacy
 from spacy.matcher import Matcher
+import copy
 #from spacy.tokens import Span
 #from spacy.util import filter_spans
 from rapidfuzz import process
@@ -86,52 +87,21 @@ class FormGenerator:
             if field.patterns:
                 matcher.add(field.id, field.patterns)
 
-        # --- FINAL, COMPREHENSIVE ATTRIBUTE RULES ---
-
-        # === REQUIRED / MANDATORY PATTERNS ===
         # These patterns handle all common ways of expressing obligation.
         matcher.add("ATTR_REQUIRED", [
-            # 1. Direct synonyms
-            [{"LOWER": "required"}],
-            [{"LOWER": "mandatory"}],
-            [{"LOWER": "compulsory"}],
-            [{"LOWER": "essential"}],
-
-            # 2. Verb phrases of obligation
-            [{"LOWER": "must"}, {"LEMMA": "be"}],
-            [{"LOWER": "has"}, {"LOWER": "to"}, {"LEMMA": "be"}],
+            [{"LOWER": "required"}], [{"LOWER": "mandatory"}], [{"LOWER": "compulsory"}], [{"LOWER": "essential"}],
+            [{"LOWER": "must"}, {"LEMMA": "be"}], [{"LOWER": "has"}, {"LOWER": "to"}, {"LEMMA": "be"}],
             [{"LEMMA": "need"}, {"LOWER": "to"}, {"LEMMA": "be"}],
-
-            # 3. Double Negatives (Handles "should not be optional" and "should be not optional")
-            # This group is the specific fix for your request.
             [{"LOWER": "not"}, {"LEMMA": "be", "OP": "?"}, {"LOWER": "optional"}],
-            #  - "not optional" (matches "not optional")
-            #  - "not be optional" (matches "should not be optional")
             [{"LEMMA": "be"}, {"LOWER": "not"}, {"LOWER": "optional"}],
-            #  - "be not optional" (matches "should be not optional", "is not optional")
-
-            # 4. Other creative double negatives
             [{"LOWER": "cannot"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
             [{"LOWER": "can"}, {"LOWER": "n't"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
         ])
-
-        # === OPTIONAL / NOT REQUIRED PATTERNS ===
-        # These patterns handle all common ways of expressing optionality.
         matcher.add("ATTR_OPTIONAL", [
-            # 1. Direct synonym
             [{"LOWER": "optional"}],
-
-            # 2. Negated Obligations (Handles "should not be required" and "should be not required")
-            # This group is the other half of the specific fix.
             [{"LOWER": "not"}, {"LEMMA": "be", "OP": "?"}, {"LOWER": "required"}],
-            #  - "not required" (matches "not required")
-            #  - "not be required" (matches "should not be required")
             [{"LEMMA": "be"}, {"LOWER": "not"}, {"LOWER": "required"}],
-            #  - "be not required" (matches "should be not required", "is not required")
-            
             [{"LOWER": "not"}, {"LOWER": "mandatory"}],
-
-            # 3. Verb phrases of permission
             [{"LEMMA": "can"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
             [{"LOWER": "doesn't"}, {"LOWER": "have"}, {"LOWER": "to"}, {"LOWER": "be"}],
         ])
@@ -144,7 +114,7 @@ class FormGenerator:
         # This is the single, unified quantifier rule that handles both generic and specific nouns
         matcher.add("SMART_QUANTIFIER", [[
             {"like_num": True},
-            {"OP": "*", "is_punct": False},
+            {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*"}, # Allow adjectives or nouns in between
             {"LOWER": {"IN": [
                 "text", "number", "date", "file", "url", "checkbox", "radio", "textarea",
                 "reference", "references", "comment", "comments", "question", "questions", "option", "options"
@@ -239,10 +209,24 @@ class FormGenerator:
                         break # Found the noun, stop searching
 
             elif rule_id == "SMART_QUANTIFIER":
-                num_text = doc[start].text
-                num = self.word_to_num(num_text) or (int(num_text) if num_text.isdigit() else 1)
-                keyword = doc[end - 1].text.lower().rstrip('s')
-                quantities[keyword] = {"num": num, "pos": start}
+                span = doc[start:end]
+                num_token = span[0]
+                num = self.word_to_num(num_token.text) or (int(num_token.text) if num_token.like_num else 1)
+                
+                keyword_token = None
+                quantifier_keywords = {
+                    "text", "number", "date", "file", "url", "checkbox", "radio", "textarea",
+                    "reference", "references", "comment", "comments", "question", "questions", "option", "options"
+                }
+                for token in span:
+                    if token.lower_ in quantifier_keywords:
+                        keyword_token = token
+                        break
+                
+                if keyword_token:
+                    keyword = keyword_token.lemma_.lower()
+                    # STEP 1: Store the full match range (start, end) not just the position.
+                    quantities[keyword] = {"num": num, "start": start, "end": end}
 
             elif rule_id in self.field_map:
                 explicit_ids.add((rule_id, start))
@@ -350,54 +334,63 @@ class FormGenerator:
                 subjects_handled_by_dynamic_options.add("options")
 
 
-        # Step 2: Process Quantifiers (Add or create fields)
+        # Step 2: Process Quantifiers (High Priority)
         generic_types = ["text", "number", "date", "file", "url", "checkbox", "radio", "textarea", "option"]
+        quantified_field_ids = set()
+
         for keyword, data in quantities.items():
-            # FIX #2 IS HERE: This check prevents the redundant "Option" field.
             if keyword in subjects_handled_by_dynamic_options:
                 continue
+
+            # STEP 2: Be PRECISE. Only mark the tokens of this specific match as processed.
+            processed_token_indices.update(range(data['start'], data['end']))
 
             if keyword in generic_types:
                 for i in range(data['num']):
                     field_id = f"GENERIC_{keyword.upper()}_{i+1}"
                     field_type = 'checkbox' if keyword == 'option' else keyword
-                    generic_data = {
-                        "id": field_id,
-                        "label": f"{keyword.title()} Field #{i+1}",
-                        "type": field_type,
-                        "validation": {}
-                    }
-                    final_fields_map[field_id] = create_field_entry(FieldDefinition(**generic_data), "generic_request", 1.0, data['pos'])
+                    generic_def = FieldDefinition(id=field_id, label=f"{keyword.title()} Field #{i+1}", type=field_type)
+                    # Use 'start' instead of 'pos' for consistency
+                    final_fields_map[field_id] = create_field_entry(generic_def, "generic_quantifier", 1.0, data['start'])
             else:
-                target_match = process.extractOne(keyword, self.fuzzy_map.keys(), score_cutoff=85)
+                target_match = process.extractOne(keyword, self.fuzzy_map.keys(), score_cutoff=88)
                 if target_match:
-                    field_id = self.fuzzy_map[target_match[0]]
-                    if field_id in self.field_map:
-                        final_fields_map.pop(field_id, None)
+                    field_id_base = self.fuzzy_map[target_match[0]]
+                    if field_id_base in self.field_map:
+                        quantified_field_ids.add(field_id_base)
+                        final_fields_map.pop(field_id_base, None)
+                        
                         for i in range(data['num']):
-                            entry_id = f"{field_id}_{i+1}"
-                            entry = create_field_entry(self.field_map[field_id], "quantifier", 0.95, data['pos'])
-                            entry['id'] = entry_id
-                            entry['label'] = f"{self.field_map[field_id].label} #{i+1}"
-                            final_fields_map[entry_id] = entry
-
-        # Step 3: Add other explicitly mentioned fields
+                            entry_id = f"{field_id_base}_{i+1}"
+                            entry_label = f"{self.field_map[field_id_base].label} #{i+1}"
+                            
+                            copied_def = copy.deepcopy(self.field_map[field_id_base])
+                            copied_def.id = entry_id
+                            copied_def.label = entry_label
+                            
+                            # Use 'start' instead of 'pos' for consistency
+                            final_fields_map[entry_id] = create_field_entry(copied_def, "quantifier", 0.95, data['start'])
+        
+        # Step 3: Add other explicitly mentioned fields (from specific matcher patterns)
         for field_id, pos in explicit_ids:
-            if field_id not in final_fields_map and field_id not in excluded_ids and self.field_map.get(field_id):
+            if field_id not in final_fields_map and field_id not in excluded_ids:
                 final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "matcher", 1.0, pos)
 
-        # Step X: Fallback fuzzy keyword scan
-        for token in doc:
-            if token.i in processed_token_indices:
-                continue
+        # Step 4: Intelligent Noun Chunk Fallback Scan
+        if not best_template_id:
+            for chunk in doc.noun_chunks:
+                if any(token.i in processed_token_indices for token in chunk):
+                    continue
 
-            keyword = token.text.lower()
-            if keyword in self.fuzzy_map:
-                field_id = self.fuzzy_map[keyword]
-                
-                if field_id not in final_fields_map and field_id in self.field_map:
-                    final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "fuzzy_keyword_token", 0.75)
-                    processed_token_indices.add(token.i)
+                target_match = process.extractOne(chunk.lemma_, self.fuzzy_map.keys(), score_cutoff=88)
+                if target_match:
+                    field_id = self.fuzzy_map[target_match[0]]
+                    if field_id in quantified_field_ids:
+                        continue
+                    
+                    if field_id not in final_fields_map and field_id in self.field_map:
+                        final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "noun_chunk_scan", 0.85, chunk.start)
+                        processed_token_indices.update(range(chunk.start, chunk.end))
 
         # The final list of fields is the values from our map
         final_fields = list(final_fields_map.values())
