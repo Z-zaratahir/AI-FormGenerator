@@ -1023,6 +1023,954 @@
     "fuzzy_keywords": ["burial wishes"],
     "validation": {}
   },
+    {
+    "id": "PET_NAME",
+    "label": "Pet's Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "name"}]
+    ],
+    "fuzzy_keywords": ["animal name", "dog name", "cat name"],
+    "validation": {"maxLength": 50}
+  },
+  {
+    "id": "PET_TYPE",
+    "label": "Type of Pet",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "type"}]
+    ],
+    "fuzzy_keywords": ["animal type", "species"],
+    "options": ["Dog", "Cat", "Bird", "Fish", "Reptile", "Small Mammal", "Other"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "PET_BREED",
+    "label": "Pet Breed",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "breed"}]
+    ],
+    "fuzzy_keywords": ["dog breed", "cat breed"],
+    "validation": {"maxLength": 50}
+  },
+  {
+    "id": "PET_AGE",
+    "label": "Pet Age (Years)",
+    "type": "number",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "age"}]
+    ],
+    "fuzzy_keywords": ["animal age"],
+    "validation": {"min": 0, "max": 30}
+  },
+  {
+    "id": "VETERINARIAN_NAME",
+    "label": "Veterinarian Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "vet"}, {"LOWER": "name"}]
+    ],
+    "fuzzy_keywords": ["animal doctor"],
+    "validation": {"rule": "alphabetic"}
+  },
+  {
+    "id": "MICROCHIP_NUMBER",
+    "label": "Microchip ID",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "microchip"}]
+    ],
+    "fuzzy_keywords": ["pet id", "chip number"],
+    "validation": {"rule": "alphanumeric"}
+  },
+  {
+    "id": "FAVORITE_FOOD",
+    "label": "Favorite Food",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "favorite"}, {"LOWER": "food"}]
+    ],
+    "fuzzy_keywords": ["preferred meal", "likes to eat"],
+    "validation": {"maxLength": 100}
+  },
+  {
+    "id": "FOOD_ALLERGIES",
+    "label": "Food Allergies",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "food"}, {"LOWER": "allergies"}]
+    ],
+    "fuzzy_keywords": ["dietary restrictions", "allergic to"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "VACCINATION_RECORD",
+    "label": "Vaccination Record",
+    "type": "file",
+    "patterns": [
+      [{"LOWER": "vaccination"}, {"LOWER": "record"}]
+    ],
+    "fuzzy_keywords": ["immunization history", "vet records"],
+    "validation": {"fileTypes": ["pdf", "jpg", "png"], "maxSizeMB": 5}
+  },
+  {
+    "id": "LAST_VET_VISIT",
+    "label": "Last Vet Visit Date",
+    "type": "date",
+    "patterns": [
+      [{"LOWER": "last"}, {"LOWER": "vet"}, {"LOWER": "visit"}]
+    ],
+    "fuzzy_keywords": ["recent checkup"],
+    "validation": {}
+  },
+  {
+    "id": "NEXT_APPOINTMENT",
+    "label": "Next Appointment Date",
+    "type": "date",
+    "patterns": [
+      [{"LOWER": "next"}, {"LOWER": "appointment"}]
+    ],
+    "fuzzy_keywords": ["scheduled visit"],
+    "validation": {}
+  },
+  {
+    "id": "PET_INSURANCE",
+    "label": "Pet Insurance Provider",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "insurance"}]
+    ],
+    "fuzzy_keywords": ["animal insurance"],
+    "validation": {"maxLength": 50}
+  },
+  {
+    "id": "POLICY_NUMBER",
+    "label": "Insurance Policy Number",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "policy"}, {"LOWER": "number"}]
+    ],
+    "fuzzy_keywords": ["insurance id"],
+    "validation": {"rule": "alphanumeric"}
+  },
+  {
+    "id": "EMERGENCY_CONTACT_2",
+    "label": "Secondary Emergency Contact",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "secondary"}, {"LOWER": "emergency"}, {"LOWER": "contact"}]
+    ],
+    "fuzzy_keywords": ["backup contact"],
+    "validation": {}
+  },
+  {
+    "id": "PET_DESCRIPTION",
+    "label": "Pet Description",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "description"}]
+    ],
+    "fuzzy_keywords": ["animal appearance", "physical traits"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "DISTINCTIVE_MARKS",
+    "label": "Distinctive Marks/Features",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "distinctive"}, {"LOWER": "marks"}]
+    ],
+    "fuzzy_keywords": ["unique features", "identifying marks"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "PET_PHOTO",
+    "label": "Upload Pet Photo",
+    "type": "file",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "photo"}]
+    ],
+    "fuzzy_keywords": ["animal picture", "upload image"],
+    "validation": {"fileTypes": ["jpg", "png"], "maxSizeMB": 2}
+  },
+  {
+    "id": "DAILY_ROUTINE",
+    "label": "Daily Routine",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "daily"}, {"LOWER": "routine"}]
+    ],
+    "fuzzy_keywords": ["schedule", "typical day"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "BEHAVIOR_NOTES",
+    "label": "Behavioral Notes",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "behavior"}, {"LOWER": "notes"}]
+    ],
+    "fuzzy_keywords": ["temperament", "personality"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "TRAINING_COMPLETED",
+    "label": "Training Completed",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "training"}, {"LOWER": "completed"}]
+    ],
+    "fuzzy_keywords": ["commands known", "obedience"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "SPECIAL_NEEDS",
+    "label": "Special Needs",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "special"}, {"LOWER": "needs"}]
+    ],
+    "fuzzy_keywords": ["medical needs", "disabilities"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "MEDICATION_SCHEDULE",
+    "label": "Medication Schedule",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "medication"}, {"LOWER": "schedule"}]
+    ],
+    "fuzzy_keywords": ["drug routine", "pill times"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "EXERCISE_REQUIREMENTS",
+    "label": "Exercise Requirements",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "exercise"}, {"LOWER": "requirements"}]
+    ],
+    "fuzzy_keywords": ["activity needs", "walk schedule"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "SOCIALIZATION",
+    "label": "Socialization With Other Animals",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "socialization"}]
+    ],
+    "fuzzy_keywords": ["gets along with", "other pets"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "GROOMING_NEEDS",
+    "label": "Grooming Needs",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "grooming"}, {"LOWER": "needs"}]
+    ],
+    "fuzzy_keywords": ["bathing", "brushing"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "BOARDING_PREFERENCES",
+    "label": "Boarding Preferences",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "boarding"}, {"LOWER": "preferences"}]
+    ],
+    "fuzzy_keywords": ["kennel needs", "pet sitting"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "FAVORITE_TOYS",
+    "label": "Favorite Toys",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "favorite"}, {"LOWER": "toys"}]
+    ],
+    "fuzzy_keywords": ["preferred playthings"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "FEEDING_SCHEDULE",
+    "label": "Feeding Schedule",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "feeding"}, {"LOWER": "schedule"}]
+    ],
+    "fuzzy_keywords": ["meal times", "food routine"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "TREAT_PREFERENCES",
+    "label": "Treat Preferences",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "treat"}, {"LOWER": "preferences"}]
+    ],
+    "fuzzy_keywords": ["snack likes", "reward foods"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "LEASH_REQUIREMENTS",
+    "label": "Leash Requirements",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "leash"}, {"LOWER": "requirements"}]
+    ],
+    "fuzzy_keywords": ["walking equipment"],
+    "validation": {"maxLength": 100}
+  },
+  {
+    "id": "CRATE_TRAINED",
+    "label": "Is Your Pet Crate Trained?",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "crate"}, {"LOWER": "trained"}]
+    ],
+    "fuzzy_keywords": ["kennel trained"],
+    "options": ["Yes", "No", "Sometimes"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "HOUSE_TRAINED",
+    "label": "Is Your Pet House Trained?",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "house"}, {"LOWER": "trained"}]
+    ],
+    "fuzzy_keywords": ["potty trained"],
+    "options": ["Yes", "No", "Mostly"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "BARKING_HABITS",
+    "label": "Barking Habits",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "barking"}, {"LOWER": "habits"}]
+    ],
+    "fuzzy_keywords": ["vocalization"],
+    "options": ["Quiet", "Moderate", "Frequent", "Only when necessary"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "CHEWING_HABITS",
+    "label": "Chewing Habits",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "chewing"}, {"LOWER": "habits"}]
+    ],
+    "fuzzy_keywords": ["destructive chewing"],
+    "options": ["None", "Occasional", "Frequent", "Only appropriate items"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "DIGGING_HABITS",
+    "label": "Digging Habits",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "digging"}, {"LOWER": "habits"}]
+    ],
+    "fuzzy_keywords": ["yard digging"],
+    "options": ["None", "Occasional", "Frequent"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "ESCAPE_ATTEMPTS",
+    "label": "Escape Attempts",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "escape"}, {"LOWER": "attempts"}]
+    ],
+    "fuzzy_keywords": ["runaway"],
+    "options": ["Never", "Rarely", "Sometimes", "Frequently"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "CAR_RIDE_BEHAVIOR",
+    "label": "Behavior During Car Rides",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "car"}, {"LOWER": "ride"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["travel behavior"],
+    "options": ["Calm", "Anxious", "Excited", "Gets carsick"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "VET_VISIT_BEHAVIOR",
+    "label": "Behavior at Vet Visits",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "vet"}, {"LOWER": "visit"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["doctor behavior"],
+    "options": ["Calm", "Nervous", "Aggressive", "Fearful"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "GROOMING_BEHAVIOR",
+    "label": "Behavior During Grooming",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "grooming"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["bath behavior"],
+    "options": ["Calm", "Nervous", "Aggressive", "Fearful"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "CHILDREN_REACTION",
+    "label": "Reaction to Children",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "children"}, {"LOWER": "reaction"}]
+    ],
+    "fuzzy_keywords": ["kids behavior"],
+    "options": ["Loves them", "Tolerant", "Nervous", "Aggressive"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "STRANGER_REACTION",
+    "label": "Reaction to Strangers",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "stranger"}, {"LOWER": "reaction"}]
+    ],
+    "fuzzy_keywords": ["new people"],
+    "options": ["Friendly", "Reserved", "Nervous", "Aggressive"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "OTHER_PETS_REACTION",
+    "label": "Reaction to Other Pets",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "other"}, {"LOWER": "pets"}, {"LOWER": "reaction"}]
+    ],
+    "fuzzy_keywords": ["animal interaction"],
+    "options": ["Friendly", "Dominant", "Submissive", "Aggressive"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "NOISE_REACTION",
+    "label": "Reaction to Loud Noises",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "noise"}, {"LOWER": "reaction"}]
+    ],
+    "fuzzy_keywords": ["thunder", "fireworks"],
+    "options": ["Calm", "Anxious", "Fearful", "No reaction"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "WATER_REACTION",
+    "label": "Reaction to Water",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "water"}, {"LOWER": "reaction"}]
+    ],
+    "fuzzy_keywords": ["swimming"],
+    "options": ["Loves it", "Tolerates it", "Avoids it", "Fearful"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "CARRIER_COMFORT",
+    "label": "Comfort in Carrier",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "carrier"}, {"LOWER": "comfort"}]
+    ],
+    "fuzzy_keywords": ["kennel comfort"],
+    "options": ["Very comfortable", "Tolerates it", "Resists", "Panics"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "LEASH_BEHAVIOR",
+    "label": "Behavior on Leash",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "leash"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["walking behavior"],
+    "options": ["Walks nicely", "Pulls", "Lags behind", "Reactive"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "OFF_LEASH_BEHAVIOR",
+    "label": "Behavior Off Leash",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "off"}, {"LOWER": "leash"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["recall"],
+    "options": ["Comes when called", "Wanders but returns", "Runs away", "Stays close"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "DOG_PARK_BEHAVIOR",
+    "label": "Behavior at Dog Parks",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "dog"}, {"LOWER": "park"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["social behavior"],
+    "options": ["Plays well", "Dominant", "Submissive", "Avoids others"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "HOME_ALONE_BEHAVIOR",
+    "label": "Behavior When Home Alone",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "home"}, {"LOWER": "alone"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["separation"],
+    "options": ["Calm", "Anxious", "Destructive", "Vocal"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "NIGHTTIME_BEHAVIOR",
+    "label": "Nighttime Behavior",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "nighttime"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["sleep habits"],
+    "options": ["Sleeps through night", "Restless", "Needs bathroom", "Vocal"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "MEALTIME_BEHAVIOR",
+    "label": "Mealtime Behavior",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "mealtime"}, {"LOWER": "behavior"}]
+    ],
+    "fuzzy_keywords": ["food aggression"],
+    "options": ["Calm", "Excited", "Protective", "Needs space"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "TOY_AGGRESSION",
+    "label": "Toy Aggression",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "toy"}, {"LOWER": "aggression"}]
+    ],
+    "fuzzy_keywords": ["resource guarding"],
+    "options": ["None", "Mild", "Moderate", "Severe"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "BED_AGGRESSION",
+    "label": "Bed/Space Aggression",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "bed"}, {"LOWER": "aggression"}]
+    ],
+    "fuzzy_keywords": ["territorial"],
+    "options": ["None", "Mild", "Moderate", "Severe"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "TRAINING_METHODS",
+    "label": "Training Methods Used",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "training"}, {"LOWER": "methods"}]
+    ],
+    "fuzzy_keywords": ["positive reinforcement", "clicker"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "TRAINING_GOALS",
+    "label": "Current Training Goals",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "training"}, {"LOWER": "goals"}]
+    ],
+    "fuzzy_keywords": ["working on"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "CHALLENGING_BEHAVIORS",
+    "label": "Challenging Behaviors",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "challenging"}, {"LOWER": "behaviors"}]
+    ],
+    "fuzzy_keywords": ["problem behaviors"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "REWARD_PREFERENCES",
+    "label": "Reward Preferences",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "reward"}, {"LOWER": "preferences"}]
+    ],
+    "fuzzy_keywords": ["what motivates"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "FEAR_RESPONSES",
+    "label": "Fear Responses",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "fear"}, {"LOWER": "responses"}]
+    ],
+    "fuzzy_keywords": ["triggers"],
+    "validation": {"maxLength": 300}
+  },
+  {
+    "id": "COMFORT_ITEMS",
+    "label": "Comfort Items",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "comfort"}, {"LOWER": "items"}]
+    ],
+    "fuzzy_keywords": ["security blanket"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "VET_PHONE",
+    "label": "Veterinarian Phone Number",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "vet"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["clinic number"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "VET_ADDRESS",
+    "label": "Veterinarian Address",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "vet"}, {"LOWER": "address"}]
+    ],
+    "fuzzy_keywords": ["clinic location"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "ALTERNATE_VET",
+    "label": "Alternate Veterinarian",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "alternate"}, {"LOWER": "vet"}]
+    ],
+    "fuzzy_keywords": ["backup vet"],
+    "validation": {"maxLength": 100}
+  },
+  {
+    "id": "EMERGENCY_CLINIC",
+    "label": "Emergency Clinic Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "emergency"}, {"LOWER": "clinic"}]
+    ],
+    "fuzzy_keywords": ["after hours vet"],
+    "validation": {"maxLength": 100}
+  },
+  {
+    "id": "EMERGENCY_CLINIC_PHONE",
+    "label": "Emergency Clinic Phone",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "emergency"}, {"LOWER": "clinic"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["emergency number"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "PET_SITTER_NAME",
+    "label": "Pet Sitter Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "sitter"}]
+    ],
+    "fuzzy_keywords": ["dog walker"],
+    "validation": {"rule": "alphabetic"}
+  },
+  {
+    "id": "PET_SITTER_PHONE",
+    "label": "Pet Sitter Phone",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "sitter"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["sitter contact"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "BOARDING_FACILITY",
+    "label": "Boarding Facility Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "boarding"}, {"LOWER": "facility"}]
+    ],
+    "fuzzy_keywords": ["kennel name"],
+    "validation": {"maxLength": 100}
+  },
+  {
+    "id": "BOARDING_PHONE",
+    "label": "Boarding Facility Phone",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "boarding"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["kennel contact"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "GROOMER_NAME",
+    "label": "Groomer Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "groomer"}]
+    ],
+    "fuzzy_keywords": ["grooming salon"],
+    "validation": {"rule": "alphabetic"}
+  },
+  {
+    "id": "GROOMER_PHONE",
+    "label": "Groomer Phone",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "groomer"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["grooming contact"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "TRAINER_NAME",
+    "label": "Trainer Name",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "trainer"}]
+    ],
+    "fuzzy_keywords": ["obedience instructor"],
+    "validation": {"rule": "alphabetic"}
+  },
+  {
+    "id": "TRAINER_PHONE",
+    "label": "Trainer Phone",
+    "type": "tel",
+    "patterns": [
+      [{"LOWER": "trainer"}, {"LOWER": "phone"}]
+    ],
+    "fuzzy_keywords": ["training contact"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "PET_WEIGHT",
+    "label": "Current Weight (lbs)",
+    "type": "number",
+    "patterns": [
+      [{"LOWER": "pet"}, {"LOWER": "weight"}]
+    ],
+    "fuzzy_keywords": ["animal weight"],
+    "validation": {"min": 1, "max": 200}
+  },
+  {
+    "id": "IDEAL_WEIGHT",
+    "label": "Ideal Weight (lbs)",
+    "type": "number",
+    "patterns": [
+      [{"LOWER": "ideal"}, {"LOWER": "weight"}]
+    ],
+    "fuzzy_keywords": ["target weight"],
+    "validation": {"min": 1, "max": 200}
+  },
+  {
+    "id": "BODY_CONDITION_SCORE",
+    "label": "Body Condition Score (1-9)",
+    "type": "number",
+    "patterns": [
+      [{"LOWER": "body"}, {"LOWER": "condition"}, {"LOWER": "score"}]
+    ],
+    "fuzzy_keywords": ["bcs"],
+    "validation": {"min": 1, "max": 9}
+  },
+  {
+    "id": "LAST_WEIGH_IN",
+    "label": "Last Weigh-In Date",
+    "type": "date",
+    "patterns": [
+      [{"LOWER": "last"}, {"LOWER": "weigh"}, {"LOWER": "in"}]
+    ],
+    "fuzzy_keywords": ["weight check"],
+    "validation": {}
+  },
+  {
+    "id": "FOOD_BRAND",
+    "label": "Current Food Brand",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "food"}, {"LOWER": "brand"}]
+    ],
+    "fuzzy_keywords": ["kibble brand"],
+    "validation": {"maxLength": 50}
+  },
+  {
+    "id": "FOOD_TYPE",
+    "label": "Food Type",
+    "type": "text",
+    "patterns": [
+      [{"LOWER": "food"}, {"LOWER": "type"}]
+    ],
+    "fuzzy_keywords": ["kibble", "wet food"],
+    "validation": {"maxLength": 50}
+  },
+  {
+    "id": "FOOD_AMOUNT",
+    "label": "Daily Food Amount (cups)",
+    "type": "number",
+    "patterns": [
+      [{"LOWER": "food"}, {"LOWER": "amount"}]
+    ],
+    "fuzzy_keywords": ["portion size"],
+    "validation": {"min": 0.25, "max": 10}
+  },
+  {
+    "id": "FOOD_FREQUENCY",
+    "label": "Feeding Frequency",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "feeding"}, {"LOWER": "frequency"}]
+    ],
+    "fuzzy_keywords": ["meals per day"],
+    "options": ["Free feed", "1x daily", "2x daily", "3x daily", "4x daily"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "TREAT_FREQUENCY",
+    "label": "Treat Frequency",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "treat"}, {"LOWER": "frequency"}]
+    ],
+    "fuzzy_keywords": ["snacks per day"],
+    "options": ["None", "Rarely", "1-2 daily", "3-5 daily", "Many"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "HUMAN_FOOD",
+    "label": "Human Food Given",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "human"}, {"LOWER": "food"}]
+    ],
+    "fuzzy_keywords": ["table scraps"],
+    "options": ["Never", "Rarely", "Occasionally", "Frequently"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "WATER_SOURCE",
+    "label": "Water Source",
+    "type": "select",
+    "patterns": [
+      [{"LOWER": "water"}, {"LOWER": "source"}]
+    ],
+    "fuzzy_keywords": ["drinking water"],
+    "options": ["Bowl", "Fountain", "Automatic dispenser", "Other"],
+    "validation": {"required": true}
+  },
+  {
+    "id": "SUPPLEMENTS",
+    "label": "Supplements Given",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "supplements"}]
+    ],
+    "fuzzy_keywords": ["vitamins", "joint care"],
+    "validation": {"maxLength": 200}
+  },
+  {
+    "id": "MEDICAL_HISTORY",
+    "label": "Medical History",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "medical"}, {"LOWER": "history"}]
+    ],
+    "fuzzy_keywords": ["health history"],
+    "validation": {"maxLength": 1000}
+  },
+  {
+    "id": "SURGERIES",
+    "label": "Surgeries/Procedures",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "surgeries"}]
+    ],
+    "fuzzy_keywords": ["operations"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "CHRONIC_CONDITIONS",
+    "label": "Chronic Conditions",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "chronic"}, {"LOWER": "conditions"}]
+    ],
+    "fuzzy_keywords": ["ongoing health"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "CURRENT_MEDS",
+    "label": "Current Medications",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "current"}, {"LOWER": "medications"}]
+    ],
+    "fuzzy_keywords": ["prescriptions"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "PAST_MEDS",
+    "label": "Past Medications",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "past"}, {"LOWER": "medications"}]
+    ],
+    "fuzzy_keywords": ["previous prescriptions"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "VACCINATION_HISTORY",
+    "label": "Vaccination History",
+    "type": "textarea",
+    "patterns": [
+      [{"LOWER": "vaccination"}, {"LOWER": "history"}]
+    ],
+    "fuzzy_keywords": ["immunization record"],
+    "validation": {"maxLength": 500}
+  },
+  {
+    "id": "LAST_FLEA_TREATMENT",
+    "label": "Last Flea/Tick Treatment",
+    "type": "date",
+    "patterns": [
+      [{"LOWER": "last"}, {"LOWER": "flea"}, {"LOWER": "treatment"}]
+    ],
+    "fuzzy_keywords": ["parasite prevention"],
+    "validation": {}
+  },
+  {
+    "id": "LAST_DEWORMING",
+    "label": "Last Deworming",
+    "type": "date",
+    "patterns": [
+      [{"LOWER": "last"}, {"LOWER": "deworming"}]
+    ],
+    "fuzzy_keywords": ["worm treatment"],
+    "validation": {}
+  },
   {
     "id": "ORGAN_DONOR",
     "label": "Organ Donor Status",

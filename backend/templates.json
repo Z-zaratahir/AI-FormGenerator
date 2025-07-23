@@ -1101,6 +1101,216 @@
       { "id": "SUGGESTION", "label": "How could this course be improved?", "validation": { "required": false } }
     ]
   },
+    "personal_trainer_application": {
+    "seeds": ["personal trainer certification", "fitness instructor application", "trainer registration", "gym instructor form"],
+    "fields": [
+      { "id": "FULL_NAME", "validation": { "required": true } },
+      { "id": "CERTIFICATION", "label": "Current Certifications", "validation": { "required": true } },
+      { "id": "SPECIALTY", "type": "select", "options": ["Strength Training", "Yoga", "Pilates", "CrossFit", "Senior Fitness", "Sports Specific"], "validation": { "required": true } },
+      { "id": "EXPERIENCE_YEARS", "type": "number", "validation": { "required": true } },
+      { "id": "CPR_CERTIFIED", "type": "checkbox", "validation": { "required": true } },
+      { "id": "AVAILABILITY", "validation": { "required": true } }
+    ]
+  },
+
+  "art_gallery_submission": {
+    "seeds": ["art submission", "gallery application", "artist portfolio", "exhibition proposal"],
+    "fields": [
+      { "id": "ARTIST_NAME", "validation": { "required": true } },
+      { "id": "ART_MEDIUM", "type": "select", "options": ["Painting", "Sculpture", "Photography", "Digital", "Mixed Media", "Other"], "validation": { "required": true } },
+      { "id": "ART_TITLE", "validation": { "required": true } },
+      { "id": "DIMENSIONS", "validation": { "required": true } },
+      { "id": "PRICE", "type": "number", "validation": { "required": true } },
+      { "id": "ART_PHOTO", "label": "Upload Images of Artwork", "validation": { "required": true } },
+      { "id": "ARTIST_STATEMENT", "type": "textarea", "validation": { "required": false } }
+    ]
+  },
+
+  "flight_compensation": {
+    "seeds": ["flight delay claim", "airline compensation", "lost luggage claim", "flight cancellation"],
+    "fields": [
+      { "id": "PASSENGER_NAME", "validation": { "required": true } },
+      { "id": "FLIGHT_NUMBER", "validation": { "required": true } },
+      { "id": "DATE_OF_FLIGHT", "validation": { "required": true } },
+      { "id": "ISSUE_TYPE", "type": "select", "options": ["Delay", "Cancellation", "Overbooking", "Lost Luggage", "Damaged Luggage"], "validation": { "required": true } },
+      { "id": "DELAY_DURATION", "label": "Delay Duration (hours)", "type": "number", "validation": { "required": false } },
+      { "id": "COMPENSATION_AMOUNT", "type": "number", "validation": { "required": false } },
+      { "id": "BOARDING_PASS_UPLOAD", "validation": { "required": true } }
+    ]
+  },
+
+  "community_garden": {
+    "seeds": ["garden plot application", "community garden signup", "urban farming", "allotment request"],
+    "fields": [
+      { "id": "APPLICANT_NAME", "validation": { "required": true } },
+      { "id": "PLOT_SIZE", "type": "select", "options": ["Small (4x4)", "Medium (8x8)", "Large (12x12)"], "validation": { "required": true } },
+      { "id": "GARDENING_EXPERIENCE", "type": "textarea", "validation": { "required": false } },
+      { "id": "PLANT_PLAN", "label": "What do you plan to grow?", "validation": { "required": false } },
+      { "id": "VOLUNTEER_INTEREST", "type": "checkbox", "label": "Interested in volunteer opportunities?", "validation": { "required": false } }
+    ]
+  },
+
+  "book_club": {
+    "seeds": ["book club registration", "reading group signup", "literary society", "book discussion group"],
+    "fields": [
+      { "id": "MEMBER_NAME", "validation": { "required": true } },
+      { "id": "FAVORITE_GENRES", "type": "checkbox_group", "options": ["Fiction", "Non-Fiction", "Mystery", "Sci-Fi", "Biography", "History"], "validation": { "required": true } },
+      { "id": "MEETING_PREFERENCE", "type": "select", "options": ["In-Person", "Online", "Hybrid"], "validation": { "required": true } },
+      { "id": "BOOK_SUGGESTION", "validation": { "required": false } }
+    ]
+  },
+
+  "science_fair": {
+    "seeds": ["science project registration", "research fair", "student science competition", "STEM fair"],
+    "fields": [
+      { "id": "STUDENT_NAME", "validation": { "required": true } },
+      { "id": "GRADE_LEVEL", "validation": { "required": true } },
+      { "id": "SCHOOL_NAME", "validation": { "required": true } },
+      { "id": "PROJECT_TITLE", "validation": { "required": true } },
+      { "id": "PROJECT_CATEGORY", "type": "select", "options": ["Biology", "Chemistry", "Physics", "Engineering", "Computer Science", "Environmental"], "validation": { "required": true } },
+      { "id": "PROJECT_DESCRIPTION", "type": "textarea", "validation": { "required": true } },
+      { "id": "SPECIAL_NEEDS", "label": "Special Equipment Needs", "validation": { "required": false } }
+    ]
+  },
+
+  "veterinary_appointment": {
+    "seeds": ["vet visit", "pet doctor appointment", "animal clinic", "pet health check"],
+    "fields": [
+      { "id": "PET_NAME", "validation": { "required": true } },
+      { "id": "PET_TYPE", "validation": { "required": true } },
+      { "id": "PET_AGE", "validation": { "required": true } },
+      { "id": "REASON_FOR_VISIT", "type": "select", "options": ["Routine Checkup", "Vaccination", "Illness", "Injury", "Dental", "Surgery"], "validation": { "required": true } },
+      { "id": "SYMPTOMS", "type": "textarea", "validation": { "required": false } },
+      { "id": "PREFERRED_DATE", "validation": { "required": true } },
+      { "id": "PREFERRED_VET", "validation": { "required": false } }
+    ]
+  },
+
+  "podcast_guest": {
+    "seeds": ["podcast appearance", "show guest application", "interview request", "media guest"],
+    "fields": [
+      { "id": "GUEST_NAME", "validation": { "required": true } },
+      { "id": "EXPERTISE", "validation": { "required": true } },
+      { "id": "TOPIC_PROPOSAL", "type": "textarea", "validation": { "required": true } },
+      { "id": "PREVIOUS_EXPERIENCE", "type": "textarea", "validation": { "required": false } },
+      { "id": "AVAILABILITY", "validation": { "required": true } },
+      { "id": "EQUIPMENT", "label": "Recording Equipment Available", "type": "checkbox_group", "options": ["Microphone", "Camera", "Quiet Space", "None"], "validation": { "required": true } }
+    ]
+  },
+
+  "baby_registry": {
+    "seeds": ["baby shower registry", "newborn gift list", "baby wishlist", "nursery registry"],
+    "fields": [
+      { "id": "PARENT_NAME", "validation": { "required": true } },
+      { "id": "DUE_DATE", "validation": { "required": true } },
+      { "id": "BABY_GENDER", "type": "select", "options": ["Boy", "Girl", "Surprise"], "validation": { "required": false } },
+      { "id": "THEME_COLOR", "validation": { "required": false } },
+      { "id": "STORE_PREFERENCES", "type": "checkbox_group", "options": ["Amazon", "Target", "BuyBuy Baby", "Other"], "validation": { "required": true } },
+      { "id": "SPECIAL_REQUESTS", "type": "textarea", "validation": { "required": false } }
+    ]
+  },
+
+  "adult_education": {
+    "seeds": ["continuing education", "adult learning", "night class registration", "professional development"],
+    "fields": [
+      { "id": "STUDENT_NAME", "validation": { "required": true } },
+      { "id": "COURSE_INTEREST", "validation": { "required": true } },
+      { "id": "SCHEDULE_PREFERENCE", "type": "select", "options": ["Weekday Evenings", "Weekends", "Online", "Flexible"], "validation": { "required": true } },
+      { "id": "GOALS", "type": "textarea", "validation": { "required": false } },
+      { "id": "EMPLOYER_SPONSORSHIP", "type": "checkbox", "validation": { "required": false } }
+    ]
+  },
+
+  "craft_workshop": {
+    "seeds": ["art workshop", "craft class", "DIY session", "creative workshop"],
+    "fields": [
+      { "id": "PARTICIPANT_NAME", "validation": { "required": true } },
+      { "id": "WORKSHOP_NAME", "validation": { "required": true } },
+      { "id": "SKILL_LEVEL", "type": "select", "options": ["Beginner", "Intermediate", "Advanced"], "validation": { "required": true } },
+      { "id": "MATERIALS_NEEDED", "type": "checkbox", "label": "Need materials provided?", "validation": { "required": false } },
+      { "id": "ACCESSIBILITY_NEEDS", "validation": { "required": false } }
+    ]
+  },
+
+  "city_complaint": {
+    "seeds": ["municipal complaint", "city service request", "pothole report", "noise complaint"],
+    "fields": [
+      { "id": "COMPLAINT_TYPE", "type": "select", "options": ["Road Maintenance", "Noise", "Trash Collection", "Park Maintenance", "Public Safety"], "validation": { "required": true } },
+      { "id": "LOCATION", "validation": { "required": true } },
+      { "id": "DESCRIPTION", "type": "textarea", "validation": { "required": true } },
+      { "id": "DATE_OCCURRED", "validation": { "required": true } },
+      { "id": "IMAGE_UPLOAD", "label": "Upload Photos of Issue", "validation": { "required": false } }
+    ]
+  },
+
+  "virtual_assistant": {
+    "seeds": ["remote assistant", "virtual helper", "online assistant", "digital assistant"],
+    "fields": [
+      { "id": "CLIENT_NAME", "validation": { "required": true } },
+      { "id": "SERVICE_NEEDS", "type": "checkbox_group", "options": ["Email Management", "Scheduling", "Data Entry", "Research", "Customer Service"], "validation": { "required": true } },
+      { "id": "HOURS_NEEDED", "type": "select", "options": ["<5 hrs/week", "5-10 hrs/week", "10-20 hrs/week", "20+ hrs/week"], "validation": { "required": true } },
+      { "id": "TIMEZONE", "validation": { "required": true } },
+      { "id": "START_DATE", "validation": { "required": true } }
+    ]
+  },
+
+  "wine_club": {
+    "seeds": ["wine subscription", "wine delivery", "monthly wine club", "wine tasting membership"],
+    "fields": [
+      { "id": "MEMBER_NAME", "validation": { "required": true } },
+      { "id": "WINE_PREFERENCE", "type": "select", "options": ["Red", "White", "Mixed", "Sparkling"], "validation": { "required": true } },
+      { "id": "SHIPMENT_FREQUENCY", "type": "select", "options": ["Monthly", "Bimonthly", "Quarterly"], "validation": { "required": true } },
+      { "id": "GIFT_MEMBERSHIP", "type": "checkbox", "validation": { "required": false } },
+      { "id": "ALLERGIES", "validation": { "required": false } }
+    ]
+  },
+
+  "disability_services": {
+    "seeds": ["accessibility request", "disability accommodation", "special needs form", "ADA compliance"],
+    "fields": [
+      { "id": "REQUESTER_NAME", "validation": { "required": true } },
+      { "id": "ACCOMMODATION_TYPE", "type": "select", "options": ["Mobility", "Visual", "Hearing", "Learning", "Other"], "validation": { "required": true } },
+      { "id": "SPECIFIC_NEEDS", "type": "textarea", "validation": { "required": true } },
+      { "id": "DOCUMENTATION_UPLOAD", "label": "Upload Supporting Documentation", "validation": { "required": false } },
+      { "id": "CONTACT_PREFERENCE", "type": "select", "options": ["Email", "Phone", "Text", "Video Call"], "validation": { "required": true } }
+    ]
+  },
+
+  "green_energy": {
+    "seeds": ["solar panel quote", "home energy audit", "renewable energy", "solar installation"],
+    "fields": [
+      { "id": "PROPERTY_ADDRESS", "validation": { "required": true } },
+      { "id": "PROPERTY_TYPE", "type": "select", "options": ["Single Family", "Multi-Family", "Commercial", "Other"], "validation": { "required": true } },
+      { "id": "ROOF_TYPE", "type": "select", "options": ["Asphalt Shingle", "Metal", "Tile", "Flat", "Other"], "validation": { "required": true } },
+      { "id": "AVERAGE_BILL", "label": "Current Monthly Electric Bill", "type": "number", "validation": { "required": true } },
+      { "id": "INTERESTED_IN", "type": "checkbox_group", "options": ["Solar Panels", "Battery Storage", "EV Charger", "Whole Home Audit"], "validation": { "required": true } }
+    ]
+  },
+
+  "archeological_survey": {
+    "seeds": ["artifact report", "historical find", "archeology discovery", "cultural heritage"],
+    "fields": [
+      { "id": "REPORTER_NAME", "validation": { "required": true } },
+      { "id": "FIND_LOCATION", "validation": { "required": true } },
+      { "id": "ARTIFACT_DESCRIPTION", "type": "textarea", "validation": { "required": true } },
+      { "id": "MATERIAL", "type": "select", "options": ["Ceramic", "Stone", "Metal", "Bone", "Wood", "Other"], "validation": { "required": true } },
+      { "id": "IMAGE_UPLOAD", "validation": { "required": true } },
+      { "id": "COORDINATES", "label": "GPS Coordinates (if known)", "validation": { "required": false } }
+    ]
+  },
+
+  "wildlife_sighting": {
+    "seeds": ["animal sighting", "wildlife report", "rare bird sighting", "nature observation"],
+    "fields": [
+      { "id": "OBSERVER_NAME", "validation": { "required": true } },
+      { "id": "SPECIES", "validation": { "required": true } },
+      { "id": "LOCATION", "validation": { "required": true } },
+      { "id": "DATE_TIME", "validation": { "required": true } },
+      { "id": "BEHAVIOR", "type": "textarea", "validation": { "required": false } },
+      { "id": "IMAGE_UPLOAD", "validation": { "required": false } },
+      { "id": "CONDITION", "type": "select", "options": ["Healthy", "Injured", "Deceased", "Unknown"], "validation": { "required": false } }
+    ]
+  },
 
   "internship": "job_application",
   "admission": "student_form",
@@ -1197,5 +1407,23 @@
   "tv_audition": "television_appearance",
   "reality_show_app": "television_appearance",
   "renew_passport": "us_passport",
-  "passport_form": "us_passport"
+  "passport_form": "us_passport",
+  "fitness_trainer": "personal_trainer_application",
+  "artist_submission": "art_gallery_submission",
+  "airline_claim": "flight_compensation",
+  "urban_gardening": "community_garden",
+  "reading_group": "book_club",
+  "stem_fair": "science_fair",
+  "vet_visit": "veterinary_appointment",
+  "podcast_appearance": "podcast_guest",
+  "baby_wishlist": "baby_registry",
+  "continuing_ed": "adult_education",
+  "art_class": "craft_workshop",
+  "municipal_request": "city_complaint",
+  "online_assistant": "virtual_assistant",
+  "wine_membership": "wine_club",
+  "accessibility_request": "disability_services",
+  "solar_quote": "green_energy",
+  "artifact_report": "archeological_survey",
+  "animal_report": "wildlife_sighting"
 }
