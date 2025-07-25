@@ -12,6 +12,7 @@ from rapidfuzz import process
 import re
 import json
 import pytz
+from transformers import pipeline
 
 app = Flask(__name__)
 CORS(app)
@@ -46,426 +47,169 @@ class FieldDefinition:
         self.options = options or []
 
 # --- The Form Generator Engine ---
+# In app4.py, replace the entire FormGenerator class with this:
+
 class FormGenerator:
     def __init__(self, fields_data, templates_data):
         field_definitions = [FieldDefinition(**data) for data in fields_data]
         self.field_map = {f.id: f for f in field_definitions}
-        self.fuzzy_map = {kw: f.id for f in field_definitions for kw in f.fuzzy_keywords}
+        self.fuzzy_map = {kw.lower(): f.id for f in field_definitions for kw in f.fuzzy_keywords}
         for field in field_definitions:
             self.fuzzy_map[field.label.lower()] = field.id
             
-        self.matcher = self._build_matcher(field_definitions)
         self.form_templates = self._resolve_template_aliases(templates_data)
 
-        self.template_keywords = {}
-        for template_id, template_data in self.form_templates.items():
-            if isinstance(template_data, dict):
-                # The template's name itself is a keyword (e.g., "job_application" -> "job application")
-                self.template_keywords[template_id.replace('_', ' ')] = template_id
-                # Add all seeds from the JSON file
-                for seed in template_data.get("seeds", []):
-                    self.template_keywords[seed.lower()] = template_id
+        model_path = "./FormGeneratorModel"
+        print(f"Loading fine-tuned model from: {model_path}")
+        try:
+            self.classifier = pipeline("token-classification", model=model_path, aggregation_strategy="simple")
+            print("Hugging Face model loaded successfully.")
+        except Exception as e:
+            print(f"FATAL: Could not load Hugging Face model. Error: {e}")
+            exit(1)
 
     def _resolve_template_aliases(self, templates):
-        # resolve all string aliases (e.g., "application": "job_application")
         resolved = {}
         for key, value in templates.items():
             while isinstance(value, str):
                 value = templates.get(value, {})
             resolved[key] = value
-        
-        # Ensring all templates have the required keys for consistency
         for key, value in resolved.items():
             if isinstance(value, dict):
                 if "fields" not in value: value["fields"] = []
                 if "seeds" not in value: value["seeds"] = []
         return resolved
 
-    def _build_matcher(self, field_definitions):
-        matcher = Matcher(nlp.vocab)
-        for field in field_definitions:
-            if field.patterns:
-                matcher.add(field.id, field.patterns)
+def process_prompt(self, prompt):
+    # --- STEP 1: AI MODEL ANALYSIS ---
+    entities = self.classifier(prompt)
+    print(f"Model Entities Found: {entities}")
 
-        # These patterns handle all common ways of expressing obligation.
-        matcher.add("ATTR_REQUIRED", [
-            [{"LOWER": "required"}], [{"LOWER": "mandatory"}], [{"LOWER": "compulsory"}], [{"LOWER": "essential"}],
-            [{"LOWER": "must"}, {"LEMMA": "be"}], [{"LOWER": "has"}, {"LOWER": "to"}, {"LEMMA": "be"}],
-            [{"LEMMA": "need"}, {"LOWER": "to"}, {"LEMMA": "be"}],
-            [{"LOWER": "not"}, {"LEMMA": "be", "OP": "?"}, {"LOWER": "optional"}],
-            [{"LEMMA": "be"}, {"LOWER": "not"}, {"LOWER": "optional"}],
-            [{"LOWER": "cannot"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
-            [{"LOWER": "can"}, {"LOWER": "n't"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
-        ])
-        matcher.add("ATTR_OPTIONAL", [
-            [{"LOWER": "optional"}],
-            [{"LOWER": "not"}, {"LEMMA": "be", "OP": "?"}, {"LOWER": "required"}],
-            [{"LEMMA": "be"}, {"LOWER": "not"}, {"LOWER": "required"}],
-            [{"LOWER": "not"}, {"LOWER": "mandatory"}],
-            [{"LEMMA": "can"}, {"LEMMA": "be"}, {"LOWER": "skipped"}],
-            [{"LOWER": "doesn't"}, {"LOWER": "have"}, {"LOWER": "to"}, {"LOWER": "be"}],
-        ])
-        matcher.add("ATTR_GLOBAL_ALL", [
-            [{"LOWER": "all"}, {"LOWER": "fields"}],
-            [{"LOWER": "every"}, {"LOWER": "field"}],
-        ])
-        matcher.add("LOGIC_NEGATION", [[{"LOWER": {"IN": ["except", "without", "not", "don't", "no"]}}]])
-        
-        # This is the single, unified quantifier rule that handles both generic and specific nouns
-        matcher.add("SMART_QUANTIFIER", [[
-            {"like_num": True},
-            {"POS": {"IN": ["ADJ", "NOUN"]}, "OP": "*"}, # Allow adjectives or nouns in between
-            {"LOWER": {"IN": [
-                "text", "number", "date", "file", "url", "checkbox", "radio", "textarea",
-                "reference", "references", "comment", "comments", "question", "questions", "option", "options"
-            ]}}
-        ]])
-        
-        matcher.add("LOGIC_NUMERIC_RANGE", [[{"like_num": True}, {"ORTH": "-", "OP": "?"}, {"like_num": True}], [{"like_num": True}, {"LOWER": "to"}, {"like_num": True}]])
-        matcher.add("LOGIC_OPTIONS", [[{"POS": "NOUN", "OP": "+"}, {"LOWER": "with"}, {"LOWER": {"IN": ["options", "choices"]}}, {"LOWER": {"IN": ["for", "of"]}, "OP": "?"}]])
-        return matcher
-    
-    def filter_overlapping_matches(self, matches):
-        """
-        Filters out shorter, overlapping matches to mimic a "greedy" behavior.
-        For example, if we have a match on "not required" (ATTR_OPTIONAL) and
-        another on just "not" (LOGIC_NEGATION), this will discard the shorter one.
-        """
-        if not matches:
-            return []
+    def get_field_id_from_word(word):
+        match_tuple = process.extractOne(word, self.fuzzy_map.keys(), score_cutoff=85)
+        return self.fuzzy_map.get(match_tuple[0]) if match_tuple else None
 
-        # Sort matches by start position, then by length (longest first)
-        sorted_matches = sorted(matches, key=lambda m: (m[1], -(m[2] - m[1])))
-        
-        filtered = []
-        last_end = -1
-        for match in sorted_matches:
-            _, start, end = match
-            # If the current match doesn't overlap with the last one we kept, add it.
-            if start >= last_end:
-                filtered.append(match)
-                last_end = end
-        return filtered
-    
-    def word_to_num(self, word):
-        num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10}
-        return num_map.get(word.lower())
+    # --- STEP 2: AGGREGATE BASE FIELDS ---
+    final_fields_map = {}
+    detected_template_names = []
 
-    def find_all_negated_nouns(self, doc, start_index):
-        nouns = []
-        for i in range(start_index, min(start_index + 8, len(doc))):
-            token = doc[i]
-            if token.pos_ == "VERB" and nouns: break
-            if token.pos_ == "NOUN":
-                compound_noun_span = doc[i:i+2] if i + 1 < len(doc) and doc[i+1].pos_ in ['NOUN', 'PROPN'] else doc[i:i+1]
-                if not any(compound_noun_span.text in n for n in nouns):
-                     nouns.append(compound_noun_span.text)
-        return nouns
-    
-    def post_process_name_fields(self, fields):
-        has_first = any(f['id'] == 'FIRST_NAME' for f in fields)
-        has_last = any(f['id'] == 'LAST_NAME' for f in fields)
-        if has_first and has_last:
-            return [f for f in fields if f['id'] != 'FULL_NAME']
-        return fields
+    for entity in entities:
+        if entity.get('entity_group') == 'FORM_TYPE':
+            match = process.extractOne(entity['word'], self.form_templates.keys(), score_cutoff=85)
+            if match:
+                template_id = match[0]
+                if template_id not in detected_template_names:
+                    detected_template_names.append(template_id)
+                    template_data = self.form_templates.get(template_id, {})
+                    for item in template_data.get("fields", []):
+                        field_id = item.get('id') if isinstance(item, dict) else item
+                        if self.field_map.get(field_id) and field_id not in final_fields_map:
+                            final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
+
+    field_entities = sorted([e for e in entities if e.get('entity_group') == 'FIELD_NAME'], key=lambda x: x['start'])
+    ordered_field_ids = []
+    for field_entity in field_entities:
+        field_id = get_field_id_from_word(field_entity['word'])
+        if field_id:
+            if field_id not in final_fields_map:
+                final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
+            if field_id not in ordered_field_ids:
+                 ordered_field_ids.append(field_id)
 
 
-    def process_prompt(self, prompt):
-        doc = nlp(prompt)
-        all_matches = self.matcher(doc)
-        all_matches = self.filter_overlapping_matches(all_matches)
+    # --- STEP 3: HANDLE DELETIONS (Directional Logic) ---
+    fields_to_remove = set()
+    negation_entities = [e for e in entities if e.get('entity_group') == 'NEGATION']
+    for neg_entity in negation_entities:
+        potential_targets = [fe for fe in field_entities if fe['start'] > neg_entity['end']]
+        if not potential_targets: continue
+        closest_field_entity = min(potential_targets, key=lambda fe: fe['start'] - neg_entity['end'])
+        field_id_to_remove = get_field_id_from_word(closest_field_entity['word'])
+        if field_id_to_remove: fields_to_remove.add(field_id_to_remove)
 
-        # --- Phase 1: Intent Extraction ---
-        attributes, quantities, dynamic_options, dynamic_ranges = [], {}, [], []
-        explicit_ids, excluded_ids, exception_ids = set(), set(), set()
-        global_attribute = None
-        
-        processed_token_indices = set()
+    for field_id in fields_to_remove:
+        final_fields_map.pop(field_id, None)
+        if field_id in ordered_field_ids: ordered_field_ids.remove(field_id)
 
-        for match_id, start, end in all_matches:
-            rule_id = nlp.vocab.strings[match_id]
-            span = doc[start:end]
-            processed_token_indices.update(range(start, end))
+    # --- STEP 4: HANDLE QUANTITIES ---
+    num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+    quantified_fields_info = {}
 
-            if rule_id.startswith("ATTR_"):
-                # Check for global attributes first
-                if rule_id == "ATTR_GLOBAL_ALL":
-                    # Find the actual attribute that follows, e.g., "all fields REQUIRED"
-                    following_token = doc[end] if end < len(doc) else None
-                    if following_token and following_token.lower_ == "required":
-                        global_attribute = "ATTR_REQUIRED"
-                    # Add more global checks if needed
-                else:
-                    attributes.append({"rule": rule_id, "pos": start, "span": span})
+    for field_entity in field_entities:
+        field_id_base = get_field_id_from_word(field_entity['word'])
+        if not field_id_base or field_id_base not in final_fields_map: continue
 
-            elif rule_id == "LOGIC_NEGATION" and span.text.lower() == "except":
-                # Find the noun following "except" to create an exception
-                for i in range(end, min(end + 4, len(doc))):
-                    token = doc[i]
-                    if token.pos_ == 'NOUN':
-                        target_match = process.extractOne(token.lemma_, self.fuzzy_map.keys(), score_cutoff=85)
-                        if target_match:
-                            exception_ids.add(self.fuzzy_map[target_match[0]])
-                        break # Found the noun, stop searching
+        relevant_quants = [e for e in entities if e.get('entity_group') == 'QUANTITY' and
+                           e['end'] < field_entity['start'] and (field_entity['start'] - e['end'] < 20)]
+        if relevant_quants:
+            quant_entity = min(relevant_quants, key=lambda x: field_entity['start'] - x['end'])
+            num_word = quant_entity['word'].lower()
+            num = int(num_word) if num_word.isdigit() else num_map.get(num_word, 1)
 
-            elif rule_id == "SMART_QUANTIFIER":
-                span = doc[start:end]
-                num_token = span[0]
-                num = self.word_to_num(num_token.text) or (int(num_token.text) if num_token.like_num else 1)
+            if num > 1:
+                original_field = final_fields_map.pop(field_id_base)
+                if field_id_base in ordered_field_ids: ordered_field_ids.remove(field_id_base)
                 
-                keyword_token = None
-                quantifier_keywords = {
-                    "text", "number", "date", "file", "url", "checkbox", "radio", "textarea",
-                    "reference", "references", "comment", "comments", "question", "questions", "option", "options"
-                }
-                for token in span:
-                    if token.lower_ in quantifier_keywords:
-                        keyword_token = token
-                        break
-                
-                if keyword_token:
-                    keyword = keyword_token.lemma_.lower()
-                    # STEP 1: Store the full match range (start, end) not just the position.
-                    quantities[keyword] = {"num": num, "start": start, "end": end}
+                quantified_fields_info[field_id_base] = []
+                for i in range(num):
+                    field_id = f"{field_id_base}_{i+1}"
+                    field_def = copy.deepcopy(original_field)
+                    field_def.id, field_def.label = field_id, f"{original_field.label} {i+1}"
+                    final_fields_map[field_id] = field_def
+                    quantified_fields_info[field_id_base].append(field_id)
 
-            elif rule_id in self.field_map:
-                explicit_ids.add((rule_id, start))
-            elif rule_id == "LOGIC_NEGATION":
-                window = doc[end: end + 5]
-                for n in range(1, 4):
-                    for i in range(len(window) - n + 1):
-                        phrase = window[i: i + n].text.lower()
-                        target_match = process.extractOne(phrase, self.fuzzy_map.keys(), score_cutoff=90)
-                        if target_match:
-                            excluded_ids.add(self.fuzzy_map[target_match[0]])
-            elif rule_id in self.field_map:
-                explicit_ids.add((rule_id, start))
-            elif rule_id == "LOGIC_NUMERIC_RANGE":
-                nums = [int(token.text) for token in doc[start:end] if token.like_num]
-                if len(nums) == 2:
-                    dynamic_ranges.append({"min": min(nums), "max": max(nums), "pos": start})
-            elif rule_id.startswith("ATTR_"):
-                attributes.append({"rule": rule_id, "pos": start})
-            elif rule_id == "LOGIC_OPTIONS":
-                subject_end_token_index = next((i for i in range(start, end) if doc[i].lower_ == "with"), None)
-                if not subject_end_token_index:
-                    continue
-                subject_phrase = doc[start:subject_end_token_index].text
-                options_text_span = doc[end:]
-                options_list = [opt.strip().replace("'", "").title() for part in options_text_span.text.split(' and ') for opt in part.split(',') if opt.strip()]
-                final_options = [opt for opt in options_list if not any(verb in opt.lower() for verb in [' is ', ' are ', ' make ', ' add '])]
-                if subject_phrase and final_options:
-                    dynamic_options.append({"subject": subject_phrase, "options": final_options})
+    # --- STEP 5: GENERALIZED ATTRIBUTE ASSIGNMENT (THE FINAL FIX) ---
+    attribute_entities = [e for e in entities if e.get('entity_group') == 'ATTRIBUTE']
+    ordinal_map = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "former": 1, "latter": -1}
 
-        # --- Phase 2: Field Generation ---
-
-        def create_field_entry(field_def, source, confidence, pos=None):
-            entry = {
-                "id": field_def.id,
-                "label": field_def.label,
-                "type": field_def.type,
-                "source": source,
-                "confidence": confidence,
-                "validation": dict(field_def.validation),
-                "options": field_def.options  # <-- This line was missing
-            }
-            if pos is not None:
-                entry['pos'] = pos
-            return entry
-
-        final_fields_map = {}
-
-        # Step 1: Template Detection (Highest Priority)
-        prompt_lower = prompt.lower()
-        detected_template_name = "custom"
-        best_match_score = 0
-        best_template_id = None
-
-        for template_name, data in self.form_templates.items():
-            # Create a list of all possible keywords for this template
-            all_seeds = [template_name.replace('_', ' ')]
-            if isinstance(data, dict) and "seeds" in data:
-                all_seeds.extend(data.get("seeds", []))
-
-            # Check if any seed word is present in the prompt
-            for seed in all_seeds:
-                if seed in prompt_lower:
-                    # Prioritize longer, more specific matches
-                    score = 90 + len(seed)
-                    if score > best_match_score:
-                        best_match_score = score
-                        best_template_id = template_name
-
-        if best_template_id:
-            detected_template_name = best_template_id
-            template_data = self.form_templates.get(best_template_id, {})
-            # Resolve aliases (e.g., "application" -> "job_application")
-            while isinstance(template_data, str):
-                template_data = self.form_templates.get(template_data, {})
-
-            template_field_ids = template_data.get("fields", [])
-            for item in template_field_ids:
-                field_id = item.get('id') if isinstance(item, dict) else item
-                if field_id not in excluded_ids and self.field_map.get(field_id):
-                    overrides = item.get('validation', {}) if isinstance(item, dict) else {}
-                    field_def = self.field_map[field_id]
-                    new_field = create_field_entry(field_def, "template", 0.90)
-                    new_field['validation'].update(overrides)
-                    final_fields_map[field_id] = new_field
-
-        # Step 1.5: Handle Dynamic Options to claim their subjects before generic quantifiers
-        subjects_handled_by_dynamic_options = set()
-        for i, dopt in enumerate(dynamic_options):
-            field_id = f"DYNAMIC_SELECT_{i+1}"
-            dynamic_field_def = FieldDefinition(
-                id=field_id,
-                label=dopt['subject'].title(),
-                type='select',
-                options=dopt['options']
-            )
-            final_fields_map[field_id] = create_field_entry(dynamic_field_def, "dynamic_options", 1.0)
-            if dopt['subject']:
-                last_word = dopt['subject'].split()[-1].lower()
-                singular_word = last_word.rstrip('s')
-                subjects_handled_by_dynamic_options.add(singular_word)
-                subjects_handled_by_dynamic_options.add(f"{singular_word}s")
-                # Also add the word 'option' to the set since it triggered this
-                subjects_handled_by_dynamic_options.add("option")
-                subjects_handled_by_dynamic_options.add("options")
-
-
-        # Step 2: Process Quantifiers (High Priority)
-        generic_types = ["text", "number", "date", "file", "url", "checkbox", "radio", "textarea", "option"]
-        quantified_field_ids = set()
-
-        for keyword, data in quantities.items():
-            if keyword in subjects_handled_by_dynamic_options:
-                continue
-
-            # STEP 2: Be PRECISE. Only mark the tokens of this specific match as processed.
-            processed_token_indices.update(range(data['start'], data['end']))
-
-            if keyword in generic_types:
-                for i in range(data['num']):
-                    field_id = f"GENERIC_{keyword.upper()}_{i+1}"
-                    field_type = 'checkbox' if keyword == 'option' else keyword
-                    generic_def = FieldDefinition(id=field_id, label=f"{keyword.title()} Field #{i+1}", type=field_type)
-                    # Use 'start' instead of 'pos' for consistency
-                    final_fields_map[field_id] = create_field_entry(generic_def, "generic_quantifier", 1.0, data['start'])
-            else:
-                target_match = process.extractOne(keyword, self.fuzzy_map.keys(), score_cutoff=88)
-                if target_match:
-                    field_id_base = self.fuzzy_map[target_match[0]]
-                    if field_id_base in self.field_map:
-                        quantified_field_ids.add(field_id_base)
-                        final_fields_map.pop(field_id_base, None)
-                        
-                        for i in range(data['num']):
-                            entry_id = f"{field_id_base}_{i+1}"
-                            entry_label = f"{self.field_map[field_id_base].label} #{i+1}"
-                            
-                            copied_def = copy.deepcopy(self.field_map[field_id_base])
-                            copied_def.id = entry_id
-                            copied_def.label = entry_label
-                            
-                            # Use 'start' instead of 'pos' for consistency
-                            final_fields_map[entry_id] = create_field_entry(copied_def, "quantifier", 0.95, data['start'])
+    for attr_entity in attribute_entities:
+        is_optional = "optional" in attr_entity['word'].lower() or "not" in attr_entity['word'].lower() or "don't" in attr_entity['word'].lower()
+        target_id = None
         
-        # Step 3: Add other explicitly mentioned fields (from specific matcher patterns)
-        for field_id, pos in explicit_ids:
-            if field_id not in final_fields_map and field_id not in excluded_ids:
-                final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "matcher", 1.0, pos)
-
-        # Step 4: Intelligent Noun Chunk Fallback Scan
-        if not best_template_id:
-            for chunk in doc.noun_chunks:
-                if any(token.i in processed_token_indices for token in chunk):
-                    continue
-
-                target_match = process.extractOne(chunk.lemma_, self.fuzzy_map.keys(), score_cutoff=88)
-                if target_match:
-                    field_id = self.fuzzy_map[target_match[0]]
-                    if field_id in quantified_field_ids:
-                        continue
-                    
-                    if field_id not in final_fields_map and field_id in self.field_map:
-                        final_fields_map[field_id] = create_field_entry(self.field_map[field_id], "noun_chunk_scan", 0.85, chunk.start)
-                        processed_token_indices.update(range(chunk.start, chunk.end))
-
-        # The final list of fields is the values from our map
-        final_fields = list(final_fields_map.values())
-
-
-        # --- Phase 3 & 4: Cleanup and Attribute Application ---
-
-        # Step A: Apply all base and default validations FIRST.
-        # This sets a baseline for every field.
-        for field in final_fields:
-            val = field.setdefault("validation", {})
-            
-            type_defaults = {
-                "textarea": {"maxLength": 1000}, "text": {"maxLength": 255},
-                "password": {"minLength": 8}
-            }
-            defaults = type_defaults.get(field["type"], {})
-            for key, default_val in defaults.items():
-                val.setdefault(key, default_val)
-            
-            # Apply defaults from the field's definition in fields.json
-            base_id = field.get('id', '').split('_')[0]
-            base_field_def = self.field_map.get(base_id)
-            if base_field_def:
-                for key, base_val in base_field_def.validation.items():
-                    val.setdefault(key, base_val)
-
-            # Apply the final "required: false" default if no other required rule has been set
-            val.setdefault('required', False)
-
-        # Remove any fields that were meant to be excluded
-        final_fields = [f for f in final_fields if f['id'] not in excluded_ids]
-
-        # Step B: NOW, appling  the user's specific commands, which will OVERWRITE the defaults.
-        def find_target_id_for_attribute(attr_pos, doc):
-            search_window_start = max(0, attr_pos - 5)
-            window = doc[search_window_start:attr_pos]
-            for token in reversed(window):
-                if token.pos_ in ['NOUN', 'PROPN']:
-                    target_match = process.extractOne(token.lemma_, self.fuzzy_map.keys(), score_cutoff=85)
-                    if target_match:
-                        return self.fuzzy_map[target_match[0]]
-            return None
-
-        # appply required/optional attributes
-        for attr in attributes:
-            target_id = find_target_id_for_attribute(attr['pos'], doc)
-            if not target_id:
-                continue
-            
-            fields_to_modify = [f for f in final_fields if f['id'].startswith(target_id)]
-            for field in fields_to_modify:
-                if attr['rule'] == 'ATTR_REQUIRED':
-                    field['validation']['required'] = True
-                elif attr['rule'] == 'ATTR_OPTIONAL':
-                    field['validation']['required'] = False
+        # Priority 1: Check for explicit ordinals/positionals
+        search_window = prompt[max(0, attr_entity['start'] - 25): attr_entity['end'] + 25].lower()
+        ordinal_found = None
+        for word, index in ordinal_map.items():
+            if word in search_window:
+                ordinal_found = index
+                break
         
-        # Apply dynamic numeric ranges
-        for drange in dynamic_ranges:
-            applicable_fields = [f for f in final_fields if f.get('type') in ['number', 'range'] and 'pos' in f]
-            if applicable_fields:
-                target_field = min(applicable_fields, key=lambda f: abs(f['pos'] - drange['pos']))
-                # OVERWRITE existing validation with the new range info
-                target_field['validation'].update({'min': drange['min'], 'max': drange['max']})
-                target_field['type'] = 'range'
-                target_field['label'] = f"{target_field.get('label', 'Rating').split(' (')[0]} ({drange['min']}-{drange['max']})"
-
-        # Step C: Final structural cleanup
-        final_fields = self.post_process_name_fields(final_fields)
+        # Link positional to the ordered list of mentioned fields
+        if ordinal_found and ordered_field_ids:
+            if ordinal_found == -1: # Handle "latter"
+                target_id = ordered_field_ids[-1]
+            elif ordinal_found > 0 and ordinal_found <= len(ordered_field_ids):
+                target_id = ordered_field_ids[ordinal_found - 1]
         
-        # Remove the temporary 'pos' key from all fields before returning
-        for field in final_fields:
-            field.pop('pos', None)
+        # Priority 2: Fallback to proximity-based linking
+        if not target_id:
+            if not field_entities: continue
+            closest_field_entity = min(field_entities, key=lambda fe: abs(fe['start'] - attr_entity['start']))
+            target_id = get_field_id_from_word(closest_field_entity['word'])
 
-        return final_fields, detected_template_name
+        # Apply the modification
+        if target_id and target_id in final_fields_map:
+            final_fields_map[target_id].validation['required'] = not is_optional
+        elif target_id in quantified_fields_info: # Apply to all quantified fields if base is targeted
+             for q_id in quantified_fields_info[target_id]:
+                 if q_id in final_fields_map:
+                     final_fields_map[q_id].validation['required'] = not is_optional
+
+
+    # --- STEP 6: FINAL CLEANUP & ASSEMBLY ---
+    if 'PASSWORD' not in final_fields_map and 'CONFIRM_PASSWORD' in final_fields_map:
+        final_fields_map.pop('CONFIRM_PASSWORD')
+
+    final_fields = [
+        {"id": f.id, "label": f.label, "type": f.type, "validation": f.validation, "options": f.options}
+        for f in final_fields_map.values()
+    ]
+
+    # Ensure final field order respects the prompt's mention order where possible
+    final_ordered_fields = sorted(final_fields, key=lambda x: ordered_field_ids.index(x['id']) if x['id'] in ordered_field_ids else len(ordered_field_ids))
+
+    final_template = detected_template_names[0] if detected_template_names else "custom"
+    return final_ordered_fields, final_template
 
     
 # --- Main Application Setup ---

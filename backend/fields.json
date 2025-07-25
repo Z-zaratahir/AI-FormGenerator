@@ -43,7 +43,7 @@
       [{"LOWER": "mobile"}],
       [{"LOWER": "telephone"}]
     ],
-    "fuzzy_keywords": ["phone", "mobile", "telephone", "contact info", "contact number"],
+    "fuzzy_keywords": ["phone", "mobile", "telephone", "contact info", "contact number", "cell number"],
     "validation": {"required": false, "rule": "phone_number"}
   },
   {
@@ -99,7 +99,11 @@
     "id": "PORTFOLIO_LINK", "label": "Portfolio Link", "type": "url", "patterns": [[{"LOWER": "portfolio"}]], "fuzzy_keywords": ["portfolio", "work"], "validation": {"rule": "url"}
   },
   {
-    "id": "RESUME_UPLOAD", "label": "Upload Resume", "type": "file", "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]], "fuzzy_keywords": ["resume", "cv"],
+    "id": "RESUME_UPLOAD",
+    "label": "Upload Resume",
+    "type": "file",
+    "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]],
+    "fuzzy_keywords": ["resume", "cv", "resume upload", "qualifications"],
     "validation": {"required": true, "fileTypes": ["pdf", "docx"], "maxSizeMB": 5}
   },
   {
@@ -1981,5 +1985,91 @@
     "fuzzy_keywords": ["donate organs"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
+  }  ,{
+    "id": "T_SHIRT_SIZE",
+    "label": "T-Shirt Size",
+    "type": "select",
+    "fuzzy_keywords": ["t-shirt size", "shirt size", "shirt preference"],
+    "options": ["Small", "Medium", "Large", "X-Large", "XX-Large"]
+  },
+  {
+    "id": "USER_ID",
+    "label": "User ID",
+    "type": "text",
+    "fuzzy_keywords": ["user's id", "user id", "userid", "member id", "participant id"],
+    "validation": { "rule": "alphanumeric" }
+  },
+  {
+    "id": "STUDENT_NAME",
+    "label": "Student Name",
+    "type": "text",
+    "fuzzy_keywords": ["student's name", "student name", "pupil name"],
+    "validation": { "rule": "alphabetic" }
+  },
+  {
+    "id": "PARENT_NAME",
+    "label": "Parent/Guardian Name",
+    "type": "text",
+    "fuzzy_keywords": ["parent's name", "parent name", "guardian name"],
+    "validation": { "rule": "alphabetic" }
+  },
+  {
+    "id": "CONSENT_CHECKBOX",
+    "label": "I provide my consent",
+    "type": "checkbox",
+    "fuzzy_keywords": ["consent", "permission slip", "agreement checkbox", "consent form"],
+    "validation": { "mustBeChecked": true }
+  },
+  {
+    "id": "PAYMENT_DETAILS",
+    "label": "Payment Details",
+    "type": "fieldset",
+    "fuzzy_keywords": ["payment details", "payment info", "credit card info"]
+  },
+  {
+    "id": "TEAM_NAME",
+    "label": "Team Name",
+    "type": "text",
+    "fuzzy_keywords": ["team name", "group name", "squad name"]
+  },
+  {
+    "id": "PROJECT_PROPOSAL",
+    "label": "Project Proposal",
+    "type": "file",
+    "fuzzy_keywords": ["project proposal", "proposal upload", "project submission"],
+    "validation": { "fileTypes": ["pdf", "docx"], "maxSizeMB": 10 }
+  },
+  {
+    "id": "ACCOMMODATIONS",
+    "label": "Special Accommodations",
+    "type": "textarea",
+    "fuzzy_keywords": ["special accommodations", "accessibility needs", "special requirements"]
+  },
+  {
+    "id": "ABSTRACT",
+    "label": "Abstract",
+    "type": "textarea",
+    "fuzzy_keywords": ["abstract", "summary", "brief description"],
+    "validation": { "maxLength": 2000 }
+  },
+  {
+    "id": "VIDEO_DEMO",
+    "label": "Video Demonstration",
+    "type": "url",
+    "fuzzy_keywords": ["video demonstration", "video link", "demo video"],
+    "validation": { "rule": "url" }
+  },
+  {
+    "id": "PLOT_SIZE",
+    "label": "Plot Size",
+    "type": "select",
+    "fuzzy_keywords": ["plot size", "garden size"],
+    "options": ["Small (4x4)", "Medium (8x8)", "Large (12x12)"]
+  },
+  {
+    "id": "ELECTRICITY_REQUIRED",
+    "label": "Do you require electricity?",
+    "type": "checkbox",
+    "fuzzy_keywords": ["electricity", "power access", "electrical hookup"]
   }
 ]
