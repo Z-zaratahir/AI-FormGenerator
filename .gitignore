@@ -3,3 +3,7 @@ node_modules/
 .env
 __pycache__/
 *.pyc
+FormGeneratorModel/
+form-generator-model-temp/
+.vscode/
+.idea/

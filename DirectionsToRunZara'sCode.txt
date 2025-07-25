@@ -1,0 +1,35 @@
+======================================
+AI FORM GENERATOR - QUICK GUIDE
+======================================
+
+--------------------
+TO RUN THE APP (Daily Use)
+--------------------
+1. Activate environment: .\.venv\Scripts\Activate
+2. Run the app:        python app4.py
+
+
+--------------------
+TO MAKE THE AI SMARTER (Run only when you update data)
+--------------------
+You must do these 3 steps in order.
+
+STEP 1: UPDATE THE TEXTBOOK
+   - Add new examples to the `TrainingData.json` file.
+
+STEP 2: CLEAN THE TEXTBOOK
+   - Run this command in the terminal:
+     python ValidateAndFixDataset.py
+
+STEP 3: TRAIN THE AI
+   - Run this command in the terminal to train the model:
+     python TrainingModel.py
+
+
+--------------------
+FILE CHEAT SHEET
+--------------------
+- app4.py          -> RUN THIS to use the form generator.
+- TrainingData.json  -> EDIT THIS to teach the AI new things.
+- TrainingModel.py   -> RUN THIS to create the AI brain.
+- FormGeneratorModel/  -> This IS the AI brain. Do not edit.
