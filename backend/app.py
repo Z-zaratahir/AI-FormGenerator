@@ -143,6 +143,7 @@ class FormGenerator:
     
     def post_process_name_fields(self, fields):
         has_first = any(f['id'] == 'FIRST_NAME' for f in fields)
+        
         has_last = any(f['id'] == 'LAST_NAME' for f in fields)
         if has_first and has_last:
             return [f for f in fields if f['id'] != 'FULL_NAME']
@@ -182,7 +183,7 @@ class FormGenerator:
                     
                     num = 1
                     quantity_entity = min([e for e in entities if e['entity_group'] == 'QUANTITY' and e['start'] < entity['start']], 
-                                          key=lambda x: entity['start'] - x['start'], default=None)
+                                        key=lambda x: entity['start'] - x['start'], default=None)
                     
                     if quantity_entity and (entity['start'] - quantity_entity['end'] < 15):
                         num_word = quantity_entity['word'].lower()
@@ -203,7 +204,7 @@ class FormGenerator:
         for entity in entities:
             if entity['entity_group'] == 'NEGATION':
                 target_field_entity = min([e for e in entities if e['entity_group'] == 'FIELD_NAME' and e['start'] >= entity['end']], 
-                                          key=lambda x: x['start'], default=None)
+                                        key=lambda x: x['start'], default=None)
                 if target_field_entity:
                     match = process.extractOne(target_field_entity['word'], self.fuzzy_map.keys(), score_cutoff=80)
                     if match:
@@ -214,7 +215,7 @@ class FormGenerator:
         for entity in entities:
             if entity['entity_group'] == 'ATTRIBUTE':
                 target_field_entity = min([e for e in entities if e['entity_group'] == 'FIELD_NAME' and abs(e['start'] - entity['start']) < 40], 
-                                          key=lambda x: abs(x['start'] - entity['start']), default=None)
+                                        key=lambda x: abs(x['start'] - entity['start']), default=None)
                 if target_field_entity:
                     match = process.extractOne(target_field_entity['word'], self.fuzzy_map.keys(), score_cutoff=80)
                     if match:

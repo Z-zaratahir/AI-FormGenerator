@@ -80,136 +80,136 @@ class FormGenerator:
                 if "seeds" not in value: value["seeds"] = []
         return resolved
 
-def process_prompt(self, prompt):
-    # --- STEP 1: AI MODEL ANALYSIS ---
-    entities = self.classifier(prompt)
-    print(f"Model Entities Found: {entities}")
+    def process_prompt(self, prompt):
+        # --- STEP 1: AI MODEL ANALYSIS ---
+        entities = self.classifier(prompt)
+        print(f"Model Entities Found: {entities}")
 
-    def get_field_id_from_word(word):
-        match_tuple = process.extractOne(word, self.fuzzy_map.keys(), score_cutoff=85)
-        return self.fuzzy_map.get(match_tuple[0]) if match_tuple else None
+        def get_field_id_from_word(word):
+            match_tuple = process.extractOne(word, self.fuzzy_map.keys(), score_cutoff=85)
+            return self.fuzzy_map.get(match_tuple[0]) if match_tuple else None
 
-    # --- STEP 2: AGGREGATE BASE FIELDS ---
-    final_fields_map = {}
-    detected_template_names = []
+        # --- STEP 2: AGGREGATE BASE FIELDS ---
+        final_fields_map = {}
+        detected_template_names = []
 
-    for entity in entities:
-        if entity.get('entity_group') == 'FORM_TYPE':
-            match = process.extractOne(entity['word'], self.form_templates.keys(), score_cutoff=85)
-            if match:
-                template_id = match[0]
-                if template_id not in detected_template_names:
-                    detected_template_names.append(template_id)
-                    template_data = self.form_templates.get(template_id, {})
-                    for item in template_data.get("fields", []):
-                        field_id = item.get('id') if isinstance(item, dict) else item
-                        if self.field_map.get(field_id) and field_id not in final_fields_map:
-                            final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
+        for entity in entities:
+            if entity.get('entity_group') == 'FORM_TYPE':
+                match = process.extractOne(entity['word'], self.form_templates.keys(), score_cutoff=85)
+                if match:
+                    template_id = match[0]
+                    if template_id not in detected_template_names:
+                        detected_template_names.append(template_id)
+                        template_data = self.form_templates.get(template_id, {})
+                        for item in template_data.get("fields", []):
+                            field_id = item.get('id') if isinstance(item, dict) else item
+                            if self.field_map.get(field_id) and field_id not in final_fields_map:
+                                final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
 
-    field_entities = sorted([e for e in entities if e.get('entity_group') == 'FIELD_NAME'], key=lambda x: x['start'])
-    ordered_field_ids = []
-    for field_entity in field_entities:
-        field_id = get_field_id_from_word(field_entity['word'])
-        if field_id:
-            if field_id not in final_fields_map:
-                final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
-            if field_id not in ordered_field_ids:
-                 ordered_field_ids.append(field_id)
-
-
-    # --- STEP 3: HANDLE DELETIONS (Directional Logic) ---
-    fields_to_remove = set()
-    negation_entities = [e for e in entities if e.get('entity_group') == 'NEGATION']
-    for neg_entity in negation_entities:
-        potential_targets = [fe for fe in field_entities if fe['start'] > neg_entity['end']]
-        if not potential_targets: continue
-        closest_field_entity = min(potential_targets, key=lambda fe: fe['start'] - neg_entity['end'])
-        field_id_to_remove = get_field_id_from_word(closest_field_entity['word'])
-        if field_id_to_remove: fields_to_remove.add(field_id_to_remove)
-
-    for field_id in fields_to_remove:
-        final_fields_map.pop(field_id, None)
-        if field_id in ordered_field_ids: ordered_field_ids.remove(field_id)
-
-    # --- STEP 4: HANDLE QUANTITIES ---
-    num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
-    quantified_fields_info = {}
-
-    for field_entity in field_entities:
-        field_id_base = get_field_id_from_word(field_entity['word'])
-        if not field_id_base or field_id_base not in final_fields_map: continue
-
-        relevant_quants = [e for e in entities if e.get('entity_group') == 'QUANTITY' and
-                           e['end'] < field_entity['start'] and (field_entity['start'] - e['end'] < 20)]
-        if relevant_quants:
-            quant_entity = min(relevant_quants, key=lambda x: field_entity['start'] - x['end'])
-            num_word = quant_entity['word'].lower()
-            num = int(num_word) if num_word.isdigit() else num_map.get(num_word, 1)
-
-            if num > 1:
-                original_field = final_fields_map.pop(field_id_base)
-                if field_id_base in ordered_field_ids: ordered_field_ids.remove(field_id_base)
-                
-                quantified_fields_info[field_id_base] = []
-                for i in range(num):
-                    field_id = f"{field_id_base}_{i+1}"
-                    field_def = copy.deepcopy(original_field)
-                    field_def.id, field_def.label = field_id, f"{original_field.label} {i+1}"
-                    final_fields_map[field_id] = field_def
-                    quantified_fields_info[field_id_base].append(field_id)
-
-    # --- STEP 5: GENERALIZED ATTRIBUTE ASSIGNMENT (THE FINAL FIX) ---
-    attribute_entities = [e for e in entities if e.get('entity_group') == 'ATTRIBUTE']
-    ordinal_map = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "former": 1, "latter": -1}
-
-    for attr_entity in attribute_entities:
-        is_optional = "optional" in attr_entity['word'].lower() or "not" in attr_entity['word'].lower() or "don't" in attr_entity['word'].lower()
-        target_id = None
-        
-        # Priority 1: Check for explicit ordinals/positionals
-        search_window = prompt[max(0, attr_entity['start'] - 25): attr_entity['end'] + 25].lower()
-        ordinal_found = None
-        for word, index in ordinal_map.items():
-            if word in search_window:
-                ordinal_found = index
-                break
-        
-        # Link positional to the ordered list of mentioned fields
-        if ordinal_found and ordered_field_ids:
-            if ordinal_found == -1: # Handle "latter"
-                target_id = ordered_field_ids[-1]
-            elif ordinal_found > 0 and ordinal_found <= len(ordered_field_ids):
-                target_id = ordered_field_ids[ordinal_found - 1]
-        
-        # Priority 2: Fallback to proximity-based linking
-        if not target_id:
-            if not field_entities: continue
-            closest_field_entity = min(field_entities, key=lambda fe: abs(fe['start'] - attr_entity['start']))
-            target_id = get_field_id_from_word(closest_field_entity['word'])
-
-        # Apply the modification
-        if target_id and target_id in final_fields_map:
-            final_fields_map[target_id].validation['required'] = not is_optional
-        elif target_id in quantified_fields_info: # Apply to all quantified fields if base is targeted
-             for q_id in quantified_fields_info[target_id]:
-                 if q_id in final_fields_map:
-                     final_fields_map[q_id].validation['required'] = not is_optional
+        field_entities = sorted([e for e in entities if e.get('entity_group') == 'FIELD_NAME'], key=lambda x: x['start'])
+        ordered_field_ids = []
+        for field_entity in field_entities:
+            field_id = get_field_id_from_word(field_entity['word'])
+            if field_id:
+                if field_id not in final_fields_map:
+                    final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
+                if field_id not in ordered_field_ids:
+                    ordered_field_ids.append(field_id)
 
 
-    # --- STEP 6: FINAL CLEANUP & ASSEMBLY ---
-    if 'PASSWORD' not in final_fields_map and 'CONFIRM_PASSWORD' in final_fields_map:
-        final_fields_map.pop('CONFIRM_PASSWORD')
+        # --- STEP 3: HANDLE DELETIONS (Directional Logic) ---
+        fields_to_remove = set()
+        negation_entities = [e for e in entities if e.get('entity_group') == 'NEGATION']
+        for neg_entity in negation_entities:
+            potential_targets = [fe for fe in field_entities if fe['start'] > neg_entity['end']]
+            if not potential_targets: continue
+            closest_field_entity = min(potential_targets, key=lambda fe: fe['start'] - neg_entity['end'])
+            field_id_to_remove = get_field_id_from_word(closest_field_entity['word'])
+            if field_id_to_remove: fields_to_remove.add(field_id_to_remove)
 
-    final_fields = [
-        {"id": f.id, "label": f.label, "type": f.type, "validation": f.validation, "options": f.options}
-        for f in final_fields_map.values()
-    ]
+        for field_id in fields_to_remove:
+            final_fields_map.pop(field_id, None)
+            if field_id in ordered_field_ids: ordered_field_ids.remove(field_id)
 
-    # Ensure final field order respects the prompt's mention order where possible
-    final_ordered_fields = sorted(final_fields, key=lambda x: ordered_field_ids.index(x['id']) if x['id'] in ordered_field_ids else len(ordered_field_ids))
+        # --- STEP 4: HANDLE QUANTITIES ---
+        num_map = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+        quantified_fields_info = {}
 
-    final_template = detected_template_names[0] if detected_template_names else "custom"
-    return final_ordered_fields, final_template
+        for field_entity in field_entities:
+            field_id_base = get_field_id_from_word(field_entity['word'])
+            if not field_id_base or field_id_base not in final_fields_map: continue
+
+            relevant_quants = [e for e in entities if e.get('entity_group') == 'QUANTITY' and
+                            e['end'] < field_entity['start'] and (field_entity['start'] - e['end'] < 20)]
+            if relevant_quants:
+                quant_entity = min(relevant_quants, key=lambda x: field_entity['start'] - x['end'])
+                num_word = quant_entity['word'].lower()
+                num = int(num_word) if num_word.isdigit() else num_map.get(num_word, 1)
+
+                if num > 1:
+                    original_field = final_fields_map.pop(field_id_base)
+                    if field_id_base in ordered_field_ids: ordered_field_ids.remove(field_id_base)
+                    
+                    quantified_fields_info[field_id_base] = []
+                    for i in range(num):
+                        field_id = f"{field_id_base}_{i+1}"
+                        field_def = copy.deepcopy(original_field)
+                        field_def.id, field_def.label = field_id, f"{original_field.label} {i+1}"
+                        final_fields_map[field_id] = field_def
+                        quantified_fields_info[field_id_base].append(field_id)
+
+        # --- STEP 5: GENERALIZED ATTRIBUTE ASSIGNMENT (THE FINAL FIX) ---
+        attribute_entities = [e for e in entities if e.get('entity_group') == 'ATTRIBUTE']
+        ordinal_map = {"first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5, "former": 1, "latter": -1}
+
+        for attr_entity in attribute_entities:
+            is_optional = "optional" in attr_entity['word'].lower() or "not" in attr_entity['word'].lower() or "don't" in attr_entity['word'].lower()
+            target_id = None
+            
+            # Priority 1: Check for explicit ordinals/positionals
+            search_window = prompt[max(0, attr_entity['start'] - 25): attr_entity['end'] + 25].lower()
+            ordinal_found = None
+            for word, index in ordinal_map.items():
+                if word in search_window:
+                    ordinal_found = index
+                    break
+            
+            # Link positional to the ordered list of mentioned fields
+            if ordinal_found and ordered_field_ids:
+                if ordinal_found == -1: # Handle "latter"
+                    target_id = ordered_field_ids[-1]
+                elif ordinal_found > 0 and ordinal_found <= len(ordered_field_ids):
+                    target_id = ordered_field_ids[ordinal_found - 1]
+            
+            # Priority 2: Fallback to proximity-based linking
+            if not target_id:
+                if not field_entities: continue
+                closest_field_entity = min(field_entities, key=lambda fe: abs(fe['start'] - attr_entity['start']))
+                target_id = get_field_id_from_word(closest_field_entity['word'])
+
+            # Apply the modification
+            if target_id and target_id in final_fields_map:
+                final_fields_map[target_id].validation['required'] = not is_optional
+            elif target_id in quantified_fields_info: # Apply to all quantified fields if base is targeted
+                for q_id in quantified_fields_info[target_id]:
+                    if q_id in final_fields_map:
+                        final_fields_map[q_id].validation['required'] = not is_optional
+
+
+        # --- STEP 6: FINAL CLEANUP & ASSEMBLY ---
+        if 'PASSWORD' not in final_fields_map and 'CONFIRM_PASSWORD' in final_fields_map:
+            final_fields_map.pop('CONFIRM_PASSWORD')
+
+        final_fields = [
+            {"id": f.id, "label": f.label, "type": f.type, "validation": f.validation, "options": f.options}
+            for f in final_fields_map.values()
+        ]
+
+        # Ensure final field order respects the prompt's mention order where possible
+        final_ordered_fields = sorted(final_fields, key=lambda x: ordered_field_ids.index(x['id']) if x['id'] in ordered_field_ids else len(ordered_field_ids))
+
+        final_template = detected_template_names[0] if detected_template_names else "custom"
+        return final_ordered_fields, final_template
 
     
 # --- Main Application Setup ---
