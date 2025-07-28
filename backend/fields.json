@@ -8,19 +8,19 @@
       [{"LOWER": "person"}, {"LOWER": "'s"}, {"LOWER": "name"}],
       [{"LOWER": "name"}]
     ],
-    "fuzzy_keywords": ["name", "person", "recipient", "full name", "your name"],
+    "fuzzy_keywords": ["name", "person", "recipient", "full name", "your name", "participant name", "attendee name", "applicant name", "contact name", "customer name", "client name"],
     "validation": {"required": true, "minLength": 3, "rule": "alphabetic"}
   },
   {
-    "id": "FIRST_NAME", "label": "First Name", "type": "text", "patterns": [[{"LOWER": "first"}, {"LOWER": "name"}], [{"LOWER": "given"}, {"LOWER": "name"}]], "fuzzy_keywords": ["firstname"],
+    "id": "FIRST_NAME", "label": "First Name", "type": "text", "patterns": [[{"LOWER": "first"}, {"LOWER": "name"}], [{"LOWER": "given"}, {"LOWER": "name"}]], "fuzzy_keywords": ["firstname", "first name", "given name", "forename"],
     "validation": {"required": true, "minLength": 2, "rule": "alphabetic"}
   },
   {
-    "id": "LAST_NAME", "label": "Last Name", "type": "text", "patterns": [[{"LOWER": "last"}, {"LOWER": "name"}], [{"LOWER": "family"}, {"LOWER": "name"}]], "fuzzy_keywords": ["lastname", "surname"],
+    "id": "LAST_NAME", "label": "Last Name", "type": "text", "patterns": [[{"LOWER": "last"}, {"LOWER": "name"}], [{"LOWER": "family"}, {"LOWER": "name"}]], "fuzzy_keywords": ["lastname", "surname", "last name", "family name"],
     "validation": {"required": true, "minLength": 2, "rule": "alphabetic"}
   },
   {
-    "id": "ROLL_NO", "label": "Roll Number", "type": "text", "patterns": [[{"LOWER": "roll"}, {"LOWER": "number"}], [{"LOWER": "roll"}, {"LOWER": "no"}]], "fuzzy_keywords": ["roll number", "student id"],
+    "id": "ROLL_NO", "label": "Roll Number", "type": "text", "patterns": [[{"LOWER": "roll"}, {"LOWER": "number"}], [{"LOWER": "roll"}, {"LOWER": "no"}]], "fuzzy_keywords": ["roll number", "student id", "student number", "registration number", "enrollment number", "student no"],
     "validation": {"rule": "alphanumeric"}
   },
   {
@@ -31,7 +31,7 @@
       [{"LEMMA": "email"}],
       [{"LOWER": "e-mail"}]
     ],
-    "fuzzy_keywords": ["email", "e-mail", "emial", "contact info", "contact information"],
+    "fuzzy_keywords": ["email", "e-mail", "emial", "contact info", "contact information", "email address", "electronic mail", "contact email"],
     "validation": {"required": true, "rule": "email_format"}
   },
   {
@@ -43,7 +43,7 @@
       [{"LOWER": "mobile"}],
       [{"LOWER": "telephone"}]
     ],
-    "fuzzy_keywords": ["phone", "mobile", "telephone", "contact info", "contact number", "cell number"],
+    "fuzzy_keywords": ["phone", "mobile", "telephone", "contact info", "contact number", "cell number", "phone number", "mobile number", "telephone number", "cell phone", "contact phone"],
     "validation": {"required": false, "rule": "phone_number"}
   },
   {
@@ -54,121 +54,121 @@
       [{"LOWER": "address"}],
       [{"LOWER": "street"}, {"LOWER": "address"}]
     ],
-    "fuzzy_keywords": ["address", "street", "location", "mailing address", "physical address"],
+    "fuzzy_keywords": ["address", "street", "location", "mailing address", "physical address", "street address", "home address", "full address", "residence address"],
     "validation": { "maxLength": 300 }
   },
   {
-    "id": "CITY", "label": "City", "type": "text", "patterns": [[{"LOWER": "city"}]], "fuzzy_keywords": ["city", "town"], "validation": {}
+    "id": "CITY", "label": "City", "type": "text", "patterns": [[{"LOWER": "city"}]], "fuzzy_keywords": ["city", "town", "municipality", "hometown"], "validation": {}
   },
   {
-    "id": "STATE", "label": "State / Province", "type": "text", "patterns": [[{"LOWER": "state"}], [{"LOWER": "province"}]], "fuzzy_keywords": ["state", "province"], "validation": {}
+    "id": "STATE", "label": "State / Province", "type": "text", "patterns": [[{"LOWER": "state"}], [{"LOWER": "province"}]], "fuzzy_keywords": ["state", "province", "state/province", "region", "territory"], "validation": {}
   },
   {
-    "id": "ZIP_CODE", "label": "ZIP / Postal Code", "type": "text", "patterns": [[{"LOWER": {"IN": ["zip", "postal"]}}, {"LOWER": "code"}]], "fuzzy_keywords": ["zip", "postalcode"], "validation": {}
+    "id": "ZIP_CODE", "label": "ZIP / Postal Code", "type": "text", "patterns": [[{"LOWER": {"IN": ["zip", "postal"]}}, {"LOWER": "code"}]], "fuzzy_keywords": ["zip", "postalcode", "zip code", "postal code", "postcode"], "validation": {}
   },
   {
-    "id": "COUNTRY", "label": "Country", "type": "select", "patterns": [[{"LEMMA": "country"}]], "fuzzy_keywords": ["country", "nation"], "validation": {}
+    "id": "COUNTRY", "label": "Country", "type": "select", "patterns": [[{"LEMMA": "country"}]], "fuzzy_keywords": ["country", "nation", "country of residence", "nationality"], "validation": {}
   },
   {
-    "id": "DATE_OF_BIRTH", "label": "Date of Birth", "type": "date", "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]], "fuzzy_keywords": ["dob", "birthday", "birth date", "date of birth"], "validation": {}
+    "id": "DATE_OF_BIRTH", "label": "Date of Birth", "type": "date", "patterns": [[{"LOWER": "date"}, {"LOWER": "of"}, {"LOWER": "birth"}], [{"LOWER": "dob"}]], "fuzzy_keywords": ["dob", "birthday", "birth date", "date of birth", "birthdate"], "validation": {}
   },
   {
-    "id": "USERNAME", "label": "Username", "type": "text", "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]], "fuzzy_keywords": ["username", "user", "userid"],
+    "id": "USERNAME", "label": "Username", "type": "text", "patterns": [[{"LOWER": "username"}], [{"LOWER": "user"}, {"LOWER": "name"}]], "fuzzy_keywords": ["username", "user", "userid", "user name", "login name", "screen name", "handle"],
     "validation": {"required": true, "minLength": 4, "maxLength": 20}
   },
   {
-    "id": "PASSWORD", "label": "Password", "type": "password", "patterns": [[{"LOWER": "password"}]], "fuzzy_keywords": ["password", "passcode"],
+    "id": "PASSWORD", "label": "Password", "type": "password", "patterns": [[{"LOWER": "password"}]], "fuzzy_keywords": ["password", "passcode", "secret code", "access code", "pass phrase"],
     "validation": {"required": true, "minLength": 8, "rule": "password_strength"}
   },
   {
-    "id": "CONFIRM_PASSWORD", "label": "Confirm Password", "type": "password", "patterns": [[{"LOWER": "confirm"}, {"LOWER": "password"}]], "fuzzy_keywords": ["confirm password"],
+    "id": "CONFIRM_PASSWORD", "label": "Confirm Password", "type": "password", "patterns": [[{"LOWER": "confirm"}, {"LOWER": "password"}]], "fuzzy_keywords": ["confirm password", "re-enter password", "verify password", "password confirmation"],
     "validation": {"required": true, "matches": "PASSWORD"}
   },
   {
-    "id": "COMPANY_NAME", "label": "Company Name", "type": "text", "patterns": [[{"LOWER": "company"}]], "fuzzy_keywords": ["company", "organization"], "validation": {}
+    "id": "COMPANY_NAME", "label": "Company Name", "type": "text", "patterns": [[{"LOWER": "company"}]], "fuzzy_keywords": ["company", "organization", "company name", "organization name", "employer", "business name"], "validation": {}
   },
   {
-    "id": "JOB_TITLE", "label": "Job Title", "type": "text", "patterns": [[{"LOWER": "job"}, {"LOWER": "title"}]], "fuzzy_keywords": ["job title", "role", "position"], "validation": {}
+    "id": "JOB_TITLE", "label": "Job Title", "type": "text", "patterns": [[{"LOWER": "job"}, {"LOWER": "title"}]], "fuzzy_keywords": ["job title", "role", "position", "occupation", "designation"], "validation": {}
   },
    {
     "id": "WEBSITE_URL", "label": "Website URL", "type": "url", "patterns": [[{"LOWER": "website"}], [{"LOWER": "url"}]],
-    "fuzzy_keywords": ["website", "url", "site", "link"],
+    "fuzzy_keywords": ["website", "url", "site", "link", "website address", "web address", "homepage", "personal site"],
     "validation": {"required": false, "rule": "url"}
   },
   {
-    "id": "PORTFOLIO_LINK", "label": "Portfolio Link", "type": "url", "patterns": [[{"LOWER": "portfolio"}]], "fuzzy_keywords": ["portfolio", "work"], "validation": {"rule": "url"}
+    "id": "PORTFOLIO_LINK", "label": "Portfolio Link", "type": "url", "patterns": [[{"LOWER": "portfolio"}]], "fuzzy_keywords": ["portfolio", "work", "portfolio link", "work samples", "design portfolio", "github"], "validation": {"rule": "url"}
   },
   {
     "id": "RESUME_UPLOAD",
     "label": "Upload Resume",
     "type": "file",
     "patterns": [[{"LOWER": {"IN": ["resume", "cv"]}}]],
-    "fuzzy_keywords": ["resume", "cv", "resume upload", "qualifications"],
+    "fuzzy_keywords": ["resume", "cv", "resume upload", "qualifications", "curriculum vitae", "upload resume", "upload cv", "attach resume"],
     "validation": {"required": true, "fileTypes": ["pdf", "docx"], "maxSizeMB": 5}
   },
   {
-    "id": "COVER_LETTER", "label": "Cover Letter", "type": "textarea", "patterns": [[{"LOWER": "cover"}, {"LOWER": "letter"}]], "fuzzy_keywords": ["cover letter"], "validation": {}
+    "id": "COVER_LETTER", "label": "Cover Letter", "type": "textarea", "patterns": [[{"LOWER": "cover"}, {"LOWER": "letter"}]], "fuzzy_keywords": ["cover letter", "letter of intent", "application letter"], "validation": {}
   },
   {
-    "id": "LINKEDIN_URL", "label": "LinkedIn URL", "type": "url", "patterns": [[{"LOWER": "linkedin"}]], "fuzzy_keywords": ["linkedin", "linkedin profile"],
+    "id": "LINKEDIN_URL", "label": "LinkedIn URL", "type": "url", "patterns": [[{"LOWER": "linkedin"}]], "fuzzy_keywords": ["linkedin", "linkedin profile", "linkedin url", "linkedin link"],
     "validation": {"rule": "url"}
   },
   {
-    "id": "START_DATE", "label": "Available Start Date", "type": "date", "patterns": [[{"LOWER": "start"}, {"LOWER": "date"}]], "fuzzy_keywords": ["start date"], "validation": {}
+    "id": "START_DATE", "label": "Available Start Date", "type": "date", "patterns": [[{"LOWER": "start"}, {"LOWER": "date"}]], "fuzzy_keywords": ["start date", "availability date", "date available", "earliest start"], "validation": {}
   },
   {
-    "id": "SALARY_EXPECTATION", "label": "Salary Expectation", "type": "text", "patterns": [[{"LOWER": "salary"}]], "fuzzy_keywords": ["salary", "compensation"], "validation": {}
+    "id": "SALARY_EXPECTATION", "label": "Salary Expectation", "type": "text", "patterns": [[{"LOWER": "salary"}]], "fuzzy_keywords": ["salary", "compensation", "salary expectation", "desired salary", "pay rate", "expected compensation"], "validation": {}
   },
   {
-    "id": "REFERENCE", "label": "References", "type": "textarea", "patterns": [[{"LOWER": "references"}], [{"LOWER": "reference"}]], "fuzzy_keywords": ["references", "reference"], "validation": {}
+    "id": "REFERENCE", "label": "References", "type": "textarea", "patterns": [[{"LOWER": "references"}], [{"LOWER": "reference"}]], "fuzzy_keywords": ["references", "reference", "professional references", "contact references"], "validation": {}
   },
   {
-    "id": "PARTICIPANT_NAME", "label": "Participant Name", "type": "text", "patterns": [[{"LOWER": "participant"}, {"LOWER": "name"}]], "fuzzy_keywords": ["participant"],
+    "id": "PARTICIPANT_NAME", "label": "Participant Name", "type": "text", "patterns": [[{"LOWER": "participant"}, {"LOWER": "name"}]], "fuzzy_keywords": ["participant", "participant name", "attendee", "registrant"],
     "validation": {"rule": "alphabetic"}
   },
   {
-    "id": "EVENT_NAME", "label": "Event Name", "type": "text", "patterns": [[{"LOWER": "event"}, {"LOWER": "name"}]], "fuzzy_keywords": ["event name"], "validation": {}
+    "id": "EVENT_NAME", "label": "Event Name", "type": "text", "patterns": [[{"LOWER": "event"}, {"LOWER": "name"}]], "fuzzy_keywords": ["event name", "name of event", "conference name", "workshop title"], "validation": {}
   },
   {
-    "id": "EVENT_DATE", "label": "Event Date", "type": "date", "patterns": [[{"LOWER": "event"}, {"LOWER": "date"}]], "fuzzy_keywords": ["event date"], "validation": {}
+    "id": "EVENT_DATE", "label": "Event Date", "type": "date", "patterns": [[{"LOWER": "event"}, {"LOWER": "date"}]], "fuzzy_keywords": ["event date", "date of event", "conference date"], "validation": {}
   },
   {
-    "id": "EVENT_TIME", "label": "Event Time", "type": "time", "patterns": [[{"LOWER": "event"}, {"LOWER": "time"}]], "fuzzy_keywords": ["event time"], "validation": {}
+    "id": "EVENT_TIME", "label": "Event Time", "type": "time", "patterns": [[{"LOWER": "event"}, {"LOWER": "time"}]], "fuzzy_keywords": ["event time", "time of event", "start time"], "validation": {}
   },
   {
-    "id": "REPORTER_NAME", "label": "Reporter Name", "type": "text", "patterns": [[{"LOWER": "reporter"}, {"LOWER": "name"}]], "fuzzy_keywords": ["reporter"], "validation": {"rule": "alphabetic"}
+    "id": "REPORTER_NAME", "label": "Reporter Name", "type": "text", "patterns": [[{"LOWER": "reporter"}, {"LOWER": "name"}]], "fuzzy_keywords": ["reporter", "reporter name", "submitted by", "your name"], "validation": {"rule": "alphabetic"}
   },
   {
-    "id": "ISSUE_TYPE", "label": "Issue Type", "type": "text", "patterns": [[{"LOWER": "issue"}, {"LOWER": "type"}]], "fuzzy_keywords": ["issue type"], "validation": {}
+    "id": "ISSUE_TYPE", "label": "Issue Type", "type": "text", "patterns": [[{"LOWER": "issue"}, {"LOWER": "type"}]], "fuzzy_keywords": ["issue type", "type of issue", "category", "bug type"], "validation": {}
   },
   {
-    "id": "DESCRIPTION", "label": "Description", "type": "textarea", "patterns": [[{"LOWER": "description"}]], "fuzzy_keywords": ["description", "details"], "validation": {}
+    "id": "DESCRIPTION", "label": "Description", "type": "textarea", "patterns": [[{"LOWER": "description"}]], "fuzzy_keywords": ["description", "details", "detailed description", "more information", "explanation"], "validation": {}
   },
   {
     "id": "BIO",
     "label": "Bio",
     "type": "textarea",
     "patterns": [[{"LOWER": "bio"}], [{"LOWER": "biography"}]],
-    "fuzzy_keywords": ["bio", "biography", "about me", "profile summary"],
+    "fuzzy_keywords": ["bio", "biography", "about me", "profile summary", "personal summary", "about yourself", "short bio"],
     "validation": { "maxLength": 500 }
   },
   {
-    "id": "SCREENSHOT_UPLOAD", "label": "Upload Screenshot", "type": "file", "patterns": [[{"LOWER": "screenshot"}]], "fuzzy_keywords": ["screenshot", "screen shot"],
+    "id": "SCREENSHOT_UPLOAD", "label": "Upload Screenshot", "type": "file", "patterns": [[{"LOWER": "screenshot"}]], "fuzzy_keywords": ["screenshot", "screen shot", "upload screenshot", "attach screenshot", "error image"],
     "validation": {"fileTypes": ["png", "jpg"], "maxSizeMB": 2}
   },
   {
-    "id": "PRIORITY", "label": "Priority", "type": "select", "patterns": [[{"LOWER": "priority"}]], "fuzzy_keywords": ["priority"],
+    "id": "PRIORITY", "label": "Priority", "type": "select", "patterns": [[{"LOWER": "priority"}]], "fuzzy_keywords": ["priority", "priority level", "urgency", "severity"],
     "options": ["Low", "Medium", "High"],
     "validation": {}
   },
   {
-    "id": "SUBJECT", "label": "Subject", "type": "text", "patterns": [[{"LOWER": "subject"}]], "fuzzy_keywords": ["subject", "topic"], "validation": {}
+    "id": "SUBJECT", "label": "Subject", "type": "text", "patterns": [[{"LOWER": "subject"}]], "fuzzy_keywords": ["subject", "topic", "subject line", "inquiry topic", "message subject"], "validation": {}
   },
   {
-    "id": "MESSAGE", "label": "Message", "type": "textarea", "patterns": [[{"LOWER": "message"}]], "fuzzy_keywords": ["message", "body"], "validation": {}
+    "id": "MESSAGE", "label": "Message", "type": "textarea", "patterns": [[{"LOWER": "message"}]], "fuzzy_keywords": ["message", "body", "message body", "your message", "text body"], "validation": {}
   },
   {
-    "id": "RATING", "label": "Rating", "type": "number", "patterns": [[{"LEMMA": "rate"}],[{"LOWER": "rating"}],[{"LOWER": "ratings"}], [{"LOWER": "score"}]], "fuzzy_keywords": ["rating", "score"],
+    "id": "RATING", "label": "Rating", "type": "number", "patterns": [[{"LEMMA": "rate"}],[{"LOWER": "rating"}],[{"LOWER": "ratings"}], [{"LOWER": "score"}]], "fuzzy_keywords": ["rating", "score", "star rating", "how would you rate", "satisfaction score"],
     "validation": {"min": 1, "max": 5}
   },
   {
@@ -179,22 +179,22 @@
       [{"LEMMA": "comment"}],
       [{"LEMMA": "remark"}]
     ],
-    "fuzzy_keywords": ["comment", "comments", "feedback", "remarks", "additional information", "notes"],
+    "fuzzy_keywords": ["comment", "comments", "feedback", "remarks", "additional information", "notes", "additional comments", "any other feedback", "your thoughts"],
     "validation": {}
   },
   {
-    "id": "SUGGESTION", "label": "Your Suggestion", "type": "textarea", "patterns": [[{"LOWER": "suggestion"}]], "fuzzy_keywords": ["suggestion", "idea"], "validation": {}
+    "id": "SUGGESTION", "label": "Your Suggestion", "type": "textarea", "patterns": [[{"LOWER": "suggestion"}]], "fuzzy_keywords": ["suggestion", "idea", "your suggestion", "new idea", "recommendation"], "validation": {}
   },
   {
-    "id": "SHORT_ANSWER", "label": "Short Answer", "type": "textarea", "patterns": [[{"LOWER": "short"}, {"LOWER": "answer"}]], "fuzzy_keywords": ["short answer"],
+    "id": "SHORT_ANSWER", "label": "Short Answer", "type": "textarea", "patterns": [[{"LOWER": "short"}, {"LOWER": "answer"}]], "fuzzy_keywords": ["short answer", "brief response", "short response"],
     "validation": {"maxLength": 250}
   },
   {
-    "id": "TERMS_AND_CONDITIONS", "label": "I agree to the Terms and Conditions", "type": "checkbox", "patterns": [[{"LOWER": "terms"}]], "fuzzy_keywords": ["terms", "agreement"],
+    "id": "TERMS_AND_CONDITIONS", "label": "I agree to the Terms and Conditions", "type": "checkbox", "patterns": [[{"LOWER": "terms"}]], "fuzzy_keywords": ["terms", "agreement", "terms and conditions", "T&C", "user agreement", "terms of use", "TOS"],
     "validation": {"mustBeChecked": true}
   },
   {
-    "id": "EMERGENCY_CONTACT", "label": "Emergency Contact", "type": "text", "patterns": [[{"LOWER": "emergency"}, {"LOWER": "contact"}]], "fuzzy_keywords": ["emergency contact"], "validation": {}
+    "id": "EMERGENCY_CONTACT", "label": "Emergency Contact", "type": "text", "patterns": [[{"LOWER": "emergency"}, {"LOWER": "contact"}]], "fuzzy_keywords": ["emergency contact", "emergency contact info", "in case of emergency", "ICE contact"], "validation": {}
   },
   {
     "id": "HEAR_ABOUT_US",
@@ -204,18 +204,18 @@
       [{"LOWER": "hear"}, {"LOWER": "about"}],
       [{"LOWER": "source"}]
     ],
-    "fuzzy_keywords": ["source", "referral", "hear about us"],
+    "fuzzy_keywords": ["source", "referral", "hear about us", "how did you find us", "referral source"],
     "options": ["Search Engine (Google, Bing, etc.)", "Social Media", "Friend or Colleague", "Advertisement", "Other"],
     "validation": {}
   },
   {
-    "id": "GENERIC_RADIO", "label": "Choice", "type": "radio", "patterns": [[{"LOWER": "radio"}]], "fuzzy_keywords": ["radio"], "validation": {}
+    "id": "GENERIC_RADIO", "label": "Choice", "type": "radio", "patterns": [[{"LOWER": "radio"}]], "fuzzy_keywords": ["radio", "radio button", "radio group", "single choice", "select one"], "validation": {}
   },
   {
-    "id": "GENERIC_CHECKBOX", "label": "Option", "type": "checkbox", "patterns": [[{"LOWER": "checkbox"}]], "fuzzy_keywords": ["checkbox"], "validation": {}
+    "id": "GENERIC_CHECKBOX", "label": "Option", "type": "checkbox", "patterns": [[{"LOWER": "checkbox"}]], "fuzzy_keywords": ["checkbox", "checkboxes", "check box", "multiple choice", "select all that apply"], "validation": {}
   },
   {
-    "id": "GENERIC_FILE_UPLOAD", "label": "File Upload", "type": "file", "patterns": [[{"LOWER": "file"}, {"LOWER": "upload"}], [{"LOWER": "attachment"}]], "fuzzy_keywords": ["upload", "attachment"], "validation": {}
+    "id": "GENERIC_FILE_UPLOAD", "label": "File Upload", "type": "file", "patterns": [[{"LOWER": "file"}, {"LOWER": "upload"}], [{"LOWER": "attachment"}]], "fuzzy_keywords": ["upload", "attachment", "file upload", "attach file", "document upload"], "validation": {}
   },
   {
     "id": "GENDER",
@@ -226,7 +226,7 @@
       [{"LOWER": "male"}],
       [{"LOWER": "female"}]
     ],
-    "fuzzy_keywords": ["gender", "male or female"],
+    "fuzzy_keywords": ["gender", "male or female", "sex"],
     "options": ["Male", "Female", "Other", "Prefer not to say"],
     "validation": {
       "required": true
@@ -240,7 +240,7 @@
       [{"LOWER": "available"}],
       [{"LOWER": "availability"}]
     ],
-    "fuzzy_keywords": ["availability", "when", "schedule"],
+    "fuzzy_keywords": ["availability", "when", "schedule", "available times", "preferred schedule", "your availability"],
     "validation": {
       "required": false
     }
@@ -253,52 +253,52 @@
       [{"LOWER": "education"}],
       [{"LOWER": "qualification"}]
     ],
-    "fuzzy_keywords": ["education", "degree", "qualification"],
+    "fuzzy_keywords": ["education", "degree", "qualification", "highest education", "level of education", "academic background"],
     "options": ["High School", "Associate Degree", "Bachelor's Degree", "Master's Degree", "Doctorate (PhD)"],
     "validation": {
       "required": true
     }
   },
   {
-    "id": "TIME_SLOT", "label": "Time Slot", "type": "time", "patterns": [[{"LOWER": "time"}], [{"LOWER": "slot"}]], "fuzzy_keywords": ["time", "slot", "schedule", "available"],
+    "id": "TIME_SLOT", "label": "Time Slot", "type": "time", "patterns": [[{"LOWER": "time"}], [{"LOWER": "slot"}]], "fuzzy_keywords": ["time", "slot", "schedule", "available", "time slot", "appointment time", "preferred time", "available slot"],
     "validation": { "required": false }
   },
   {
-    "id": "SATISFACTION_RATING", "label": "Satisfaction", "type": "range", "patterns": [[{"LOWER": "satisfaction"}]], "fuzzy_keywords": ["satisfaction", "happy", "pleased"],
+    "id": "SATISFACTION_RATING", "label": "Satisfaction", "type": "range", "patterns": [[{"LOWER": "satisfaction"}]], "fuzzy_keywords": ["satisfaction", "happy", "pleased", "satisfaction level", "how happy are you", "rate your experience"],
     "validation": { "min": 1, "max": 5 }
   },
   {
-    "id": "GENERIC_QUESTION", "label": "Question", "type": "textarea", "patterns": [[{"LOWER": "question"}]], "fuzzy_keywords": ["question", "inquiry", "ask"],
+    "id": "GENERIC_QUESTION", "label": "Question", "type": "textarea", "patterns": [[{"LOWER": "question"}]], "fuzzy_keywords": ["question", "inquiry", "ask", "your question", "query", "ask a question"],
     "validation": { "maxLength": 1000 }
   },
   {
     "id": "CREDIT_CARD_NUMBER", "label": "Credit Card Number", "type": "text", "patterns": [[{ "LOWER": "credit" }, { "LOWER": "card" }], [{ "LOWER": "card" }, { "LOWER": "number" }]],
-    "fuzzy_keywords": ["credit card", "card number"],
+    "fuzzy_keywords": ["credit card", "card number", "credit card number", "cc number"],
     "validation": { "required": true, "rule": "credit_card_format" }
   },
   {
     "id": "CARD_EXPIRY_DATE", "label": "Card Expiry (MM/YY)", "type": "text", "patterns": [[{ "LOWER": "expiration" }], [{ "LOWER": "expiry" }]],
-    "fuzzy_keywords": ["expiry date", "mm/yy"],
+    "fuzzy_keywords": ["expiry date", "mm/yy", "expiration date", "exp date", "valid thru"],
     "validation": { "required": true, "rule": "expiry_format" }
   },
   {
     "id": "CVV_CODE", "label": "CVV/CVC", "type": "text", "patterns": [[{ "LOWER": "cvv" }], [{ "LOWER": "cvc" }]],
-    "fuzzy_keywords": ["card verification code", "cvc", "security code"],
+    "fuzzy_keywords": ["card verification code", "cvc", "security code", "cvv", "cvv2", "card security code"],
     "validation": { "required": true, "minLength": 3, "maxLength": 4 }
   },
   {
     "id": "BILLING_ADDRESS", "label": "Billing Address", "type": "textarea", "patterns": [[{ "LOWER": "billing" }, { "LOWER": "address" }]],
-    "fuzzy_keywords": ["billing address"],
+    "fuzzy_keywords": ["billing address", "address for billing"],
     "validation": { "required": true }
   },
   {
     "id": "DISCOUNT_CODE", "label": "Discount/Promo Code", "type": "text", "patterns": [[{ "LOWER": "discount" }], [{ "LOWER": "promo" }]],
-    "fuzzy_keywords": ["discount", "promo code"],
+    "fuzzy_keywords": ["discount", "promo code", "discount code", "promotion code", "coupon code", "voucher code"],
     "validation": { "maxLength": 20 }
   },
   {
     "id": "GIFT_CARD_CODE", "label": "Gift Card", "type": "text", "patterns": [[{ "LOWER": "gift" }, { "LOWER": "card" }]],
-    "fuzzy_keywords": ["gift card"],
+    "fuzzy_keywords": ["gift card", "gift card number", "gift certificate"],
     "validation": { "maxLength": 20 }
   },
   {
@@ -372,7 +372,7 @@
   },
   {
   "id": "CAPTCHA_FIELD", "label": "CAPTCHA", "type": "text", "patterns": [],
-  "fuzzy_keywords": ["captcha", "security text", "anti bot"],
+  "fuzzy_keywords": ["captcha", "security text", "anti bot", "human verification", "are you a robot"],
   "validation": {
     "required": true,
     "rule": "captcha"
@@ -381,32 +381,32 @@
   {
     "id": "SKILL_MATRIX", "label": "Rate Your Skills",
     "type": "matrix",
-    "fuzzy_keywords": ["skill", "expertise", "rate yourself"]
+    "fuzzy_keywords": ["skill", "expertise", "rate yourself", "skills matrix", "competency evaluation"]
   },
   {
   "id": "RANGE_SLIDER", "label": "Select a Range", "type": "range",
-  "fuzzy_keywords": ["range", "slider", "adjust value"],
+  "fuzzy_keywords": ["range", "slider", "adjust value", "range input", "value slider"],
   "validation": { "min": 0, "max": 10, "step": 1 }
   },
     {
     "id": "DIETARY_RESTRICTIONS", "label": "Dietary Restrictions", "type": "textarea", "patterns": [[{"LOWER": "dietary"}]],
-    "fuzzy_keywords": ["dietary", "diet", "allergies", "food restrictions"], "validation": { "maxLength": 500 }
+    "fuzzy_keywords": ["dietary", "diet", "allergies", "food restrictions", "dietary needs", "food preferences"], "validation": { "maxLength": 500 }
   },
   {
     "id": "PARENT_CONTACT", "label": "Parent/Guardian Contact", "type": "text",
-    "fuzzy_keywords": ["parent contact", "parent", "guardian"], "validation": { "rule": "phone_number" }
+    "fuzzy_keywords": ["parent contact", "parent", "guardian", "guardian contact info", "parent's phone"], "validation": { "rule": "phone_number" }
   },
   {
     "id": "MEDICAL_NOTES", "label": "Medical Notes", "type": "textarea",
-    "fuzzy_keywords": ["medical notes", "medical", "health info"], "validation": { "maxLength": 1000 }
+    "fuzzy_keywords": ["medical notes", "medical", "health info", "health conditions", "medical information"], "validation": { "maxLength": 1000 }
   },
   {
     "id": "ORDER_ID", "label": "Order ID", "type": "text", "patterns": [[{"LOWER": "order"}]],
-    "fuzzy_keywords": ["order id", "order number", "confirmation number"], "validation": { "rule": "alphanumeric" }
+    "fuzzy_keywords": ["order id", "order number", "confirmation number", "booking id", "reference number"], "validation": { "rule": "alphanumeric" }
   },
   {
     "id": "DEPARTMENT", "label": "Department", "type": "select", "patterns": [[{"LOWER": "department"}]],
-    "fuzzy_keywords": ["department", "team"], "options": ["Sales", "Support", "Marketing", "Engineering", "Human Resources"]
+    "fuzzy_keywords": ["department", "team", "division", "work group"], "options": ["Sales", "Support", "Marketing", "Engineering", "Human Resources"]
   },
   {
     "id": "ADDRESS_LINE_2",
@@ -416,7 +416,7 @@
         [{"LOWER": "address"}, {"LOWER": "line"}, {"LIKE_NUM": true}],
         [{"LOWER": "apt"}], [{"LOWER": "suite"}]
     ],
-    "fuzzy_keywords": ["apt", "suite", "unit", "building", "address 2"],
+    "fuzzy_keywords": ["apt", "suite", "unit", "building", "address 2", "apartment number", "address line two"],
     "validation": { "required": false }
   },
   {
@@ -426,7 +426,7 @@
     "patterns": [
         [{"LOWER": "membership"}]
     ],
-    "fuzzy_keywords": ["membership", "plan", "tier", "subscription level"],
+    "fuzzy_keywords": ["membership", "plan", "tier", "subscription level", "membership plan", "subscription type"],
     "options": ["Bronze", "Silver", "Gold", "Platinum"],
     "validation": { "required": true }
   },
@@ -437,7 +437,7 @@
     "patterns": [
         [{"LEMMA": "attend"}]
     ],
-    "fuzzy_keywords": ["attending", "attendance", "rsvp choice"],
+    "fuzzy_keywords": ["attending", "attendance", "rsvp choice", "will you attend"],
     "options": ["Yes", "No", "Maybe"],
     "validation": { "required": true }
   },
@@ -449,7 +449,7 @@
         [{"LOWER": "number"}, {"LOWER": "of"}, {"LEMMA": "attendee"}],
         [{"LOWER": "number"}, {"LOWER": "of"}, {"LEMMA": "guest"}]
     ],
-    "fuzzy_keywords": ["number of attendees", "number of guests", "party size"],
+    "fuzzy_keywords": ["number of attendees", "number of guests", "party size", "headcount", "plus one"],
     "validation": { "min": 1 }
   },
   {
@@ -460,7 +460,7 @@
         [{"LEMMA": "image"}],
         [{"LOWER": "photo"}]
     ],
-    "fuzzy_keywords": ["image", "photo", "picture", "upload photo"],
+    "fuzzy_keywords": ["image", "photo", "picture", "upload photo", "attach image"],
     "validation": { "fileTypes": ["jpg", "jpeg", "png", "gif"], "maxSizeMB": 5 }
   },
   {
@@ -470,7 +470,7 @@
     "patterns": [
         [{"LEMMA": "video"}]
     ],
-    "fuzzy_keywords": ["video", "movie", "recording", "upload video"],
+    "fuzzy_keywords": ["video", "movie", "recording", "upload video", "attach video"],
     "validation": { "fileTypes": ["mp4", "mov", "avi"], "maxSizeMB": 50 }
   },
   {
@@ -481,7 +481,7 @@
         [{"LOWER": "terms"}, {"LOWER": "of"}, {"LOWER": "service"}],
         [{"LOWER": "tos"}]
     ],
-    "fuzzy_keywords": ["terms of service", "tos", "user agreement"],
+    "fuzzy_keywords": ["terms of service", "tos", "user agreement", "service agreement"],
     "validation": { "mustBeChecked": true }
   },
   {
@@ -491,7 +491,7 @@
     "patterns": [
         [{"LOWER": "privacy"}, {"LOWER": "policy"}]
     ],
-    "fuzzy_keywords": ["privacy policy"],
+    "fuzzy_keywords": ["privacy policy", "data policy"],
     "validation": { "mustBeChecked": true }
   },
     {
@@ -502,7 +502,7 @@
       [{"LOWER": "passport"}, {"LOWER": "number"}],
       [{"LOWER": "travel"}, {"LOWER": "document"}]
     ],
-    "fuzzy_keywords": ["passport", "travel doc", "passport id"],
+    "fuzzy_keywords": ["passport", "travel doc", "passport id", "passport no"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -512,7 +512,7 @@
     "patterns": [
       [{"LOWER": "visa"}, {"LOWER": "number"}]
     ],
-    "fuzzy_keywords": ["visa", "immigration doc"],
+    "fuzzy_keywords": ["visa", "immigration doc", "visa id"],
     "validation": {"rule": "alphanumeric"}
   },
   {
@@ -522,7 +522,7 @@
     "patterns": [
       [{"LOWER": "social"}, {"LOWER": "media"}]
     ],
-    "fuzzy_keywords": ["facebook", "twitter", "instagram", "social profile"],
+    "fuzzy_keywords": ["facebook", "twitter", "instagram", "social profile", "social link"],
     "validation": {"rule": "url"}
   },
   {
@@ -532,7 +532,7 @@
     "patterns": [
       [{"LOWER": "bank"}, {"LOWER": "account"}]
     ],
-    "fuzzy_keywords": ["account number", "bank details"],
+    "fuzzy_keywords": ["account number", "bank details", "bank account no"],
     "validation": {"required": true, "rule": "numeric"}
   },
   {
@@ -542,7 +542,7 @@
     "patterns": [
       [{"LOWER": "routing"}, {"LOWER": "number"}]
     ],
-    "fuzzy_keywords": ["aba number", "bank routing"],
+    "fuzzy_keywords": ["aba number", "bank routing", "routing transit number"],
     "validation": {"required": true, "rule": "numeric"}
   },
   {
@@ -552,7 +552,7 @@
     "patterns": [
       [{"LOWER": "tax"}, {"LOWER": "id"}]
     ],
-    "fuzzy_keywords": ["tin", "tax number", "employer id"],
+    "fuzzy_keywords": ["tin", "tax number", "employer id", "tax id"],
     "validation": {"rule": "alphanumeric"}
   },
   {
@@ -562,7 +562,7 @@
     "patterns": [
       [{"LOWER": "vehicle"}, {"LOWER": "make"}]
     ],
-    "fuzzy_keywords": ["car brand", "auto manufacturer"],
+    "fuzzy_keywords": ["car brand", "auto manufacturer", "vehicle manufacturer", "make"],
     "validation": {"required": true}
   },
   {
@@ -572,7 +572,7 @@
     "patterns": [
       [{"LOWER": "vehicle"}, {"LOWER": "model"}]
     ],
-    "fuzzy_keywords": ["car model", "auto type"],
+    "fuzzy_keywords": ["car model", "auto type", "model"],
     "validation": {"required": true}
   },
   {
@@ -582,7 +582,7 @@
     "patterns": [
       [{"LOWER": "license"}, {"LOWER": "plate"}]
     ],
-    "fuzzy_keywords": ["plate number", "registration plate"],
+    "fuzzy_keywords": ["plate number", "registration plate", "license plate", "car tag"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -593,7 +593,7 @@
       [{"LOWER": "vin"}],
       [{"LOWER": "vehicle"}, {"LOWER": "id"}]
     ],
-    "fuzzy_keywords": ["vin number", "chassis number"],
+    "fuzzy_keywords": ["vin number", "chassis number", "vehicle identification number"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -603,7 +603,7 @@
     "patterns": [
       [{"LOWER": "insurance"}, {"LOWER": "policy"}]
     ],
-    "fuzzy_keywords": ["policy number", "insurance id"],
+    "fuzzy_keywords": ["policy number", "insurance id", "insurance policy number"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -613,7 +613,7 @@
     "patterns": [
       [{"LOWER": "medical"}, {"LOWER": "insurance"}]
     ],
-    "fuzzy_keywords": ["health insurance", "member id"],
+    "fuzzy_keywords": ["health insurance", "member id", "insurance card number"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -623,7 +623,7 @@
     "patterns": [
       [{"LOWER": "prescription"}, {"LOWER": "number"}]
     ],
-    "fuzzy_keywords": ["rx number", "medication script"],
+    "fuzzy_keywords": ["rx number", "medication script", "prescription id"],
     "validation": {"required": true, "rule": "alphanumeric"}
   },
   {
@@ -633,7 +633,7 @@
     "patterns": [
       [{"LOWER": "allergies"}]
     ],
-    "fuzzy_keywords": ["allergy info", "medical allergies"],
+    "fuzzy_keywords": ["allergy info", "medical allergies", "known allergies"],
     "validation": {"required": true}
   },
   {
@@ -643,7 +643,7 @@
     "patterns": [
       [{"LOWER": "current"}, {"LOWER": "medications"}]
     ],
-    "fuzzy_keywords": ["meds", "prescriptions"],
+    "fuzzy_keywords": ["meds", "prescriptions", "current meds"],
     "validation": {"required": true}
   },
   {
@@ -653,7 +653,7 @@
     "patterns": [
       [{"LOWER": "blood"}, {"LOWER": "type"}]
     ],
-    "fuzzy_keywords": ["blood group"],
+    "fuzzy_keywords": ["blood group", "blood type"],
     "options": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
     "validation": {"required": true}
   },
@@ -664,7 +664,7 @@
     "patterns": [
       [{"LOWER": "height"}]
     ],
-    "fuzzy_keywords": ["tall", "stature"],
+    "fuzzy_keywords": ["tall", "stature", "how tall"],
     "validation": {"required": true, "min": 100, "max": 250}
   },
   {
@@ -674,7 +674,7 @@
     "patterns": [
       [{"LOWER": "weight"}]
     ],
-    "fuzzy_keywords": ["mass", "body weight"],
+    "fuzzy_keywords": ["mass", "body weight", "how much do you weigh"],
     "validation": {"required": true, "min": 30, "max": 200}
   },
   {
@@ -684,7 +684,7 @@
     "patterns": [
       [{"LOWER": "occupation"}]
     ],
-    "fuzzy_keywords": ["job", "profession"],
+    "fuzzy_keywords": ["job", "profession", "occupation"],
     "validation": {"required": true}
   },
   {
@@ -694,7 +694,7 @@
     "patterns": [
       [{"LOWER": "employer"}]
     ],
-    "fuzzy_keywords": ["company", "workplace"],
+    "fuzzy_keywords": ["company", "workplace", "current employer"],
     "validation": {"required": true}
   },
   {
@@ -704,7 +704,7 @@
     "patterns": [
       [{"LOWER": "employment"}, {"LOWER": "status"}]
     ],
-    "fuzzy_keywords": ["job status", "work situation"],
+    "fuzzy_keywords": ["job status", "work situation", "employment status"],
     "options": ["Employed", "Self-Employed", "Unemployed", "Retired", "Student"],
     "validation": {"required": true}
   },
@@ -715,7 +715,7 @@
     "patterns": [
       [{"LOWER": "annual"}, {"LOWER": "income"}]
     ],
-    "fuzzy_keywords": ["yearly salary", "earnings"],
+    "fuzzy_keywords": ["yearly salary", "earnings", "annual income"],
     "validation": {"required": true, "min": 0}
   },
   {
@@ -725,7 +725,7 @@
     "patterns": [
       [{"LOWER": "marital"}, {"LOWER": "status"}]
     ],
-    "fuzzy_keywords": ["relationship status", "married"],
+    "fuzzy_keywords": ["relationship status", "married", "marital status"],
     "options": ["Single", "Married", "Divorced", "Widowed", "Separated"],
     "validation": {"required": true}
   },
@@ -736,7 +736,7 @@
     "patterns": [
       [{"LOWER": "number"}, {"LOWER": "of"}, {"LOWER": "dependents"}]
     ],
-    "fuzzy_keywords": ["dependents", "children"],
+    "fuzzy_keywords": ["dependents", "children", "number of children"],
     "validation": {"required": true, "min": 0}
   },
   {
@@ -746,7 +746,7 @@
     "patterns": [
       [{"LOWER": "housing"}, {"LOWER": "status"}]
     ],
-    "fuzzy_keywords": ["living situation", "residence"],
+    "fuzzy_keywords": ["living situation", "residence", "housing type"],
     "options": ["Own", "Rent", "Live with Family", "Other"],
     "validation": {"required": true}
   },
@@ -757,7 +757,7 @@
     "patterns": [
       [{"LOWER": "monthly"}, {"LOWER": "rent"}]
     ],
-    "fuzzy_keywords": ["housing payment", "mortgage"],
+    "fuzzy_keywords": ["housing payment", "mortgage", "rent payment"],
     "validation": {"min": 0}
   },
   {
@@ -767,7 +767,7 @@
     "patterns": [
       [{"LOWER": "vehicle"}, {"LOWER": "year"}]
     ],
-    "fuzzy_keywords": ["car year", "model year"],
+    "fuzzy_keywords": ["car year", "model year", "year of manufacture"],
     "validation": {"required": true, "min": 1900, "max": 2025}
   },
   {
@@ -777,7 +777,7 @@
     "patterns": [
       [{"LOWER": "mileage"}]
     ],
-    "fuzzy_keywords": ["odometer", "vehicle miles"],
+    "fuzzy_keywords": ["odometer", "vehicle miles", "mileage"],
     "validation": {"min": 0}
   },
   {
@@ -787,7 +787,7 @@
     "patterns": [
       [{"LOWER": "property"}, {"LOWER": "value"}]
     ],
-    "fuzzy_keywords": ["home value", "appraisal"],
+    "fuzzy_keywords": ["home value", "appraisal", "estimated value"],
     "validation": {"min": 0}
   },
   {
@@ -797,7 +797,7 @@
     "patterns": [
       [{"LOWER": "loan"}, {"LOWER": "amount"}]
     ],
-    "fuzzy_keywords": ["borrowing", "mortgage amount"],
+    "fuzzy_keywords": ["borrowing", "mortgage amount", "loan amount"],
     "validation": {"required": true, "min": 0}
   },
   {
@@ -807,7 +807,7 @@
     "patterns": [
       [{"LOWER": "down"}, {"LOWER": "payment"}]
     ],
-    "fuzzy_keywords": ["deposit", "initial payment"],
+    "fuzzy_keywords": ["deposit", "initial payment", "down payment"],
     "validation": {"min": 0}
   },
   {
@@ -817,7 +817,7 @@
     "patterns": [
       [{"LOWER": "interest"}, {"LOWER": "rate"}]
     ],
-    "fuzzy_keywords": ["apr", "loan rate"],
+    "fuzzy_keywords": ["apr", "loan rate", "interest rate"],
     "validation": {"min": 0, "max": 100}
   },
   {
@@ -827,7 +827,7 @@
     "patterns": [
       [{"LOWER": "loan"}, {"LOWER": "term"}]
     ],
-    "fuzzy_keywords": ["duration", "repayment period"],
+    "fuzzy_keywords": ["duration", "repayment period", "loan term"],
     "validation": {"required": true, "min": 1, "max": 30}
   },
   {
@@ -837,7 +837,7 @@
     "patterns": [
       [{"LOWER": "credit"}, {"LOWER": "score"}]
     ],
-    "fuzzy_keywords": ["fico", "credit rating"],
+    "fuzzy_keywords": ["fico", "credit rating", "credit score"],
     "validation": {"min": 300, "max": 850}
   },
   {
@@ -847,7 +847,7 @@
     "patterns": [
       [{"LOWER": "bank"}, {"LOWER": "name"}]
     ],
-    "fuzzy_keywords": ["financial institution"],
+    "fuzzy_keywords": ["financial institution", "bank name"],
     "validation": {"required": true}
   },
   {
@@ -857,7 +857,7 @@
     "patterns": [
       [{"LOWER": "account"}, {"LOWER": "type"}]
     ],
-    "fuzzy_keywords": ["bank account type"],
+    "fuzzy_keywords": ["bank account type", "account type"],
     "options": ["Checking", "Savings", "Investment", "Retirement"],
     "validation": {"required": true}
   },
@@ -868,7 +868,7 @@
     "patterns": [
       [{"LOWER": "beneficiary"}]
     ],
-    "fuzzy_keywords": ["recipient", "inheritor"],
+    "fuzzy_keywords": ["recipient", "inheritor", "beneficiary"],
     "validation": {"required": true}
   },
   {
@@ -878,7 +878,7 @@
     "patterns": [
       [{"LOWER": "beneficiary"}, {"LOWER": "relationship"}]
     ],
-    "fuzzy_keywords": ["family relationship"],
+    "fuzzy_keywords": ["family relationship", "relationship to beneficiary"],
     "validation": {"required": true}
   },
   {
@@ -888,7 +888,7 @@
     "patterns": [
       [{"LOWER": "investment"}, {"LOWER": "amount"}]
     ],
-    "fuzzy_keywords": ["contribution", "deposit amount"],
+    "fuzzy_keywords": ["contribution", "deposit amount", "investment amount"],
     "validation": {"required": true, "min": 0}
   },
   {
@@ -898,7 +898,7 @@
     "patterns": [
       [{"LOWER": "risk"}, {"LOWER": "tolerance"}]
     ],
-    "fuzzy_keywords": ["investment risk"],
+    "fuzzy_keywords": ["investment risk", "risk tolerance", "risk profile"],
     "options": ["Conservative", "Moderate", "Aggressive"],
     "validation": {"required": true}
   },
@@ -909,7 +909,7 @@
     "patterns": [
       [{"LOWER": "investment"}, {"LOWER": "goal"}]
     ],
-    "fuzzy_keywords": ["financial goal"],
+    "fuzzy_keywords": ["financial goal", "investment objective"],
     "options": ["Retirement", "Education", "Wealth Building", "Other"],
     "validation": {"required": true}
   },
@@ -920,7 +920,7 @@
     "patterns": [
       [{"LOWER": "retirement"}, {"LOWER": "age"}]
     ],
-    "fuzzy_keywords": ["retire at"],
+    "fuzzy_keywords": ["retire at", "retirement age"],
     "validation": {"min": 50, "max": 100}
   },
   {
@@ -930,7 +930,7 @@
     "patterns": [
       [{"LOWER": "monthly"}, {"LOWER": "contribution"}]
     ],
-    "fuzzy_keywords": ["regular deposit"],
+    "fuzzy_keywords": ["regular deposit", "monthly savings"],
     "validation": {"min": 0}
   },
   {
@@ -940,7 +940,7 @@
     "patterns": [
       [{"LOWER": "total"}, {"LOWER": "assets"}]
     ],
-    "fuzzy_keywords": ["net worth"],
+    "fuzzy_keywords": ["net worth", "total assets"],
     "validation": {"min": 0}
   },
   {
@@ -950,7 +950,7 @@
     "patterns": [
       [{"LOWER": "total"}, {"LOWER": "liabilities"}]
     ],
-    "fuzzy_keywords": ["debts"],
+    "fuzzy_keywords": ["debts", "total debt"],
     "validation": {"min": 0}
   },
   {
@@ -960,7 +960,7 @@
     "patterns": [
       [{"LOWER": "financial"}, {"LOWER": "advisor"}]
     ],
-    "fuzzy_keywords": ["wealth manager"],
+    "fuzzy_keywords": ["wealth manager", "financial advisor"],
     "validation": {}
   },
   {
@@ -970,7 +970,7 @@
     "patterns": [
       [{"LOWER": "life"}, {"LOWER": "insurance"}, {"LOWER": "amount"}]
     ],
-    "fuzzy_keywords": ["death benefit"],
+    "fuzzy_keywords": ["death benefit", "life insurance coverage"],
     "validation": {"min": 0}
   },
   {
@@ -980,7 +980,7 @@
     "patterns": [
       [{"LOWER": "will"}]
     ],
-    "fuzzy_keywords": ["estate plan"],
+    "fuzzy_keywords": ["estate plan", "last will and testament"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
   },
@@ -991,7 +991,7 @@
     "patterns": [
       [{"LOWER": "trust"}]
     ],
-    "fuzzy_keywords": ["living trust"],
+    "fuzzy_keywords": ["living trust", "family trust"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
   },
@@ -1002,7 +1002,7 @@
     "patterns": [
       [{"LOWER": "power"}, {"LOWER": "of"}, {"LOWER": "attorney"}]
     ],
-    "fuzzy_keywords": ["poa"],
+    "fuzzy_keywords": ["poa", "power of attorney"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
   },
@@ -1013,7 +1013,7 @@
     "patterns": [
       [{"LOWER": "healthcare"}, {"LOWER": "proxy"}]
     ],
-    "fuzzy_keywords": ["medical proxy"],
+    "fuzzy_keywords": ["medical proxy", "healthcare directive"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
   },
@@ -1024,17 +1024,17 @@
     "patterns": [
       [{"LOWER": "funeral"}, {"LOWER": "preferences"}]
     ],
-    "fuzzy_keywords": ["burial wishes"],
+    "fuzzy_keywords": ["burial wishes", "end of life arrangements"],
     "validation": {}
   },
-    {
+  {
     "id": "PET_NAME",
     "label": "Pet's Name",
     "type": "text",
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "name"}]
     ],
-    "fuzzy_keywords": ["animal name", "dog name", "cat name"],
+    "fuzzy_keywords": ["animal name", "dog name", "cat name", "pet name"],
     "validation": {"maxLength": 50}
   },
   {
@@ -1044,7 +1044,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "type"}]
     ],
-    "fuzzy_keywords": ["animal type", "species"],
+    "fuzzy_keywords": ["animal type", "species", "kind of animal"],
     "options": ["Dog", "Cat", "Bird", "Fish", "Reptile", "Small Mammal", "Other"],
     "validation": {"required": true}
   },
@@ -1055,7 +1055,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "breed"}]
     ],
-    "fuzzy_keywords": ["dog breed", "cat breed"],
+    "fuzzy_keywords": ["dog breed", "cat breed", "breed of pet"],
     "validation": {"maxLength": 50}
   },
   {
@@ -1065,7 +1065,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "age"}]
     ],
-    "fuzzy_keywords": ["animal age"],
+    "fuzzy_keywords": ["animal age", "pet's age"],
     "validation": {"min": 0, "max": 30}
   },
   {
@@ -1075,7 +1075,7 @@
     "patterns": [
       [{"LOWER": "vet"}, {"LOWER": "name"}]
     ],
-    "fuzzy_keywords": ["animal doctor"],
+    "fuzzy_keywords": ["animal doctor", "veterinarian", "vet name"],
     "validation": {"rule": "alphabetic"}
   },
   {
@@ -1085,7 +1085,7 @@
     "patterns": [
       [{"LOWER": "microchip"}]
     ],
-    "fuzzy_keywords": ["pet id", "chip number"],
+    "fuzzy_keywords": ["pet id", "chip number", "microchip id"],
     "validation": {"rule": "alphanumeric"}
   },
   {
@@ -1095,7 +1095,7 @@
     "patterns": [
       [{"LOWER": "favorite"}, {"LOWER": "food"}]
     ],
-    "fuzzy_keywords": ["preferred meal", "likes to eat"],
+    "fuzzy_keywords": ["preferred meal", "likes to eat", "favorite food"],
     "validation": {"maxLength": 100}
   },
   {
@@ -1105,7 +1105,7 @@
     "patterns": [
       [{"LOWER": "food"}, {"LOWER": "allergies"}]
     ],
-    "fuzzy_keywords": ["dietary restrictions", "allergic to"],
+    "fuzzy_keywords": ["dietary restrictions", "allergic to", "food sensitivities"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1115,7 +1115,7 @@
     "patterns": [
       [{"LOWER": "vaccination"}, {"LOWER": "record"}]
     ],
-    "fuzzy_keywords": ["immunization history", "vet records"],
+    "fuzzy_keywords": ["immunization history", "vet records", "shot record"],
     "validation": {"fileTypes": ["pdf", "jpg", "png"], "maxSizeMB": 5}
   },
   {
@@ -1125,7 +1125,7 @@
     "patterns": [
       [{"LOWER": "last"}, {"LOWER": "vet"}, {"LOWER": "visit"}]
     ],
-    "fuzzy_keywords": ["recent checkup"],
+    "fuzzy_keywords": ["recent checkup", "last veterinarian visit"],
     "validation": {}
   },
   {
@@ -1135,7 +1135,7 @@
     "patterns": [
       [{"LOWER": "next"}, {"LOWER": "appointment"}]
     ],
-    "fuzzy_keywords": ["scheduled visit"],
+    "fuzzy_keywords": ["scheduled visit", "next vet appointment"],
     "validation": {}
   },
   {
@@ -1145,7 +1145,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "insurance"}]
     ],
-    "fuzzy_keywords": ["animal insurance"],
+    "fuzzy_keywords": ["animal insurance", "pet insurance"],
     "validation": {"maxLength": 50}
   },
   {
@@ -1155,7 +1155,7 @@
     "patterns": [
       [{"LOWER": "policy"}, {"LOWER": "number"}]
     ],
-    "fuzzy_keywords": ["insurance id"],
+    "fuzzy_keywords": ["insurance id", "policy no"],
     "validation": {"rule": "alphanumeric"}
   },
   {
@@ -1165,7 +1165,7 @@
     "patterns": [
       [{"LOWER": "secondary"}, {"LOWER": "emergency"}, {"LOWER": "contact"}]
     ],
-    "fuzzy_keywords": ["backup contact"],
+    "fuzzy_keywords": ["backup contact", "alternate contact"],
     "validation": {}
   },
   {
@@ -1175,7 +1175,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "description"}]
     ],
-    "fuzzy_keywords": ["animal appearance", "physical traits"],
+    "fuzzy_keywords": ["animal appearance", "physical traits", "description of pet"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1185,7 +1185,7 @@
     "patterns": [
       [{"LOWER": "distinctive"}, {"LOWER": "marks"}]
     ],
-    "fuzzy_keywords": ["unique features", "identifying marks"],
+    "fuzzy_keywords": ["unique features", "identifying marks", "scars or marks"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1195,7 +1195,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "photo"}]
     ],
-    "fuzzy_keywords": ["animal picture", "upload image"],
+    "fuzzy_keywords": ["animal picture", "upload image", "photo of pet"],
     "validation": {"fileTypes": ["jpg", "png"], "maxSizeMB": 2}
   },
   {
@@ -1205,7 +1205,7 @@
     "patterns": [
       [{"LOWER": "daily"}, {"LOWER": "routine"}]
     ],
-    "fuzzy_keywords": ["schedule", "typical day"],
+    "fuzzy_keywords": ["schedule", "typical day", "daily schedule"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1215,7 +1215,7 @@
     "patterns": [
       [{"LOWER": "behavior"}, {"LOWER": "notes"}]
     ],
-    "fuzzy_keywords": ["temperament", "personality"],
+    "fuzzy_keywords": ["temperament", "personality", "behavioral traits"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1225,7 +1225,7 @@
     "patterns": [
       [{"LOWER": "training"}, {"LOWER": "completed"}]
     ],
-    "fuzzy_keywords": ["commands known", "obedience"],
+    "fuzzy_keywords": ["commands known", "obedience", "tricks learned"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1235,7 +1235,7 @@
     "patterns": [
       [{"LOWER": "special"}, {"LOWER": "needs"}]
     ],
-    "fuzzy_keywords": ["medical needs", "disabilities"],
+    "fuzzy_keywords": ["medical needs", "disabilities", "special requirements"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1245,7 +1245,7 @@
     "patterns": [
       [{"LOWER": "medication"}, {"LOWER": "schedule"}]
     ],
-    "fuzzy_keywords": ["drug routine", "pill times"],
+    "fuzzy_keywords": ["drug routine", "pill times", "medication times"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1255,7 +1255,7 @@
     "patterns": [
       [{"LOWER": "exercise"}, {"LOWER": "requirements"}]
     ],
-    "fuzzy_keywords": ["activity needs", "walk schedule"],
+    "fuzzy_keywords": ["activity needs", "walk schedule", "exercise needs"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1265,7 +1265,7 @@
     "patterns": [
       [{"LOWER": "socialization"}]
     ],
-    "fuzzy_keywords": ["gets along with", "other pets"],
+    "fuzzy_keywords": ["gets along with", "other pets", "animal friends"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1275,7 +1275,7 @@
     "patterns": [
       [{"LOWER": "grooming"}, {"LOWER": "needs"}]
     ],
-    "fuzzy_keywords": ["bathing", "brushing"],
+    "fuzzy_keywords": ["bathing", "brushing", "grooming schedule"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1285,7 +1285,7 @@
     "patterns": [
       [{"LOWER": "boarding"}, {"LOWER": "preferences"}]
     ],
-    "fuzzy_keywords": ["kennel needs", "pet sitting"],
+    "fuzzy_keywords": ["kennel needs", "pet sitting", "boarding info"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1295,7 +1295,7 @@
     "patterns": [
       [{"LOWER": "favorite"}, {"LOWER": "toys"}]
     ],
-    "fuzzy_keywords": ["preferred playthings"],
+    "fuzzy_keywords": ["preferred playthings", "favorite toys"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1305,7 +1305,7 @@
     "patterns": [
       [{"LOWER": "feeding"}, {"LOWER": "schedule"}]
     ],
-    "fuzzy_keywords": ["meal times", "food routine"],
+    "fuzzy_keywords": ["meal times", "food routine", "feeding times"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1315,7 +1315,7 @@
     "patterns": [
       [{"LOWER": "treat"}, {"LOWER": "preferences"}]
     ],
-    "fuzzy_keywords": ["snack likes", "reward foods"],
+    "fuzzy_keywords": ["snack likes", "reward foods", "favorite treats"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1325,7 +1325,7 @@
     "patterns": [
       [{"LOWER": "leash"}, {"LOWER": "requirements"}]
     ],
-    "fuzzy_keywords": ["walking equipment"],
+    "fuzzy_keywords": ["walking equipment", "leash type", "harness"],
     "validation": {"maxLength": 100}
   },
   {
@@ -1335,7 +1335,7 @@
     "patterns": [
       [{"LOWER": "crate"}, {"LOWER": "trained"}]
     ],
-    "fuzzy_keywords": ["kennel trained"],
+    "fuzzy_keywords": ["kennel trained", "crate trained"],
     "options": ["Yes", "No", "Sometimes"],
     "validation": {"required": true}
   },
@@ -1346,7 +1346,7 @@
     "patterns": [
       [{"LOWER": "house"}, {"LOWER": "trained"}]
     ],
-    "fuzzy_keywords": ["potty trained"],
+    "fuzzy_keywords": ["potty trained", "housebroken"],
     "options": ["Yes", "No", "Mostly"],
     "validation": {"required": true}
   },
@@ -1357,7 +1357,7 @@
     "patterns": [
       [{"LOWER": "barking"}, {"LOWER": "habits"}]
     ],
-    "fuzzy_keywords": ["vocalization"],
+    "fuzzy_keywords": ["vocalization", "barking"],
     "options": ["Quiet", "Moderate", "Frequent", "Only when necessary"],
     "validation": {"required": true}
   },
@@ -1368,7 +1368,7 @@
     "patterns": [
       [{"LOWER": "chewing"}, {"LOWER": "habits"}]
     ],
-    "fuzzy_keywords": ["destructive chewing"],
+    "fuzzy_keywords": ["destructive chewing", "chewing behavior"],
     "options": ["None", "Occasional", "Frequent", "Only appropriate items"],
     "validation": {"required": true}
   },
@@ -1379,7 +1379,7 @@
     "patterns": [
       [{"LOWER": "digging"}, {"LOWER": "habits"}]
     ],
-    "fuzzy_keywords": ["yard digging"],
+    "fuzzy_keywords": ["yard digging", "digging behavior"],
     "options": ["None", "Occasional", "Frequent"],
     "validation": {"required": true}
   },
@@ -1390,7 +1390,7 @@
     "patterns": [
       [{"LOWER": "escape"}, {"LOWER": "attempts"}]
     ],
-    "fuzzy_keywords": ["runaway"],
+    "fuzzy_keywords": ["runaway", "escape artist"],
     "options": ["Never", "Rarely", "Sometimes", "Frequently"],
     "validation": {"required": true}
   },
@@ -1401,7 +1401,7 @@
     "patterns": [
       [{"LOWER": "car"}, {"LOWER": "ride"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["travel behavior"],
+    "fuzzy_keywords": ["travel behavior", "car behavior"],
     "options": ["Calm", "Anxious", "Excited", "Gets carsick"],
     "validation": {"required": true}
   },
@@ -1412,7 +1412,7 @@
     "patterns": [
       [{"LOWER": "vet"}, {"LOWER": "visit"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["doctor behavior"],
+    "fuzzy_keywords": ["doctor behavior", "vet behavior"],
     "options": ["Calm", "Nervous", "Aggressive", "Fearful"],
     "validation": {"required": true}
   },
@@ -1423,7 +1423,7 @@
     "patterns": [
       [{"LOWER": "grooming"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["bath behavior"],
+    "fuzzy_keywords": ["bath behavior", "grooming behavior"],
     "options": ["Calm", "Nervous", "Aggressive", "Fearful"],
     "validation": {"required": true}
   },
@@ -1434,7 +1434,7 @@
     "patterns": [
       [{"LOWER": "children"}, {"LOWER": "reaction"}]
     ],
-    "fuzzy_keywords": ["kids behavior"],
+    "fuzzy_keywords": ["kids behavior", "reaction to kids"],
     "options": ["Loves them", "Tolerant", "Nervous", "Aggressive"],
     "validation": {"required": true}
   },
@@ -1445,7 +1445,7 @@
     "patterns": [
       [{"LOWER": "stranger"}, {"LOWER": "reaction"}]
     ],
-    "fuzzy_keywords": ["new people"],
+    "fuzzy_keywords": ["new people", "reaction to strangers"],
     "options": ["Friendly", "Reserved", "Nervous", "Aggressive"],
     "validation": {"required": true}
   },
@@ -1456,7 +1456,7 @@
     "patterns": [
       [{"LOWER": "other"}, {"LOWER": "pets"}, {"LOWER": "reaction"}]
     ],
-    "fuzzy_keywords": ["animal interaction"],
+    "fuzzy_keywords": ["animal interaction", "reaction to other animals"],
     "options": ["Friendly", "Dominant", "Submissive", "Aggressive"],
     "validation": {"required": true}
   },
@@ -1467,7 +1467,7 @@
     "patterns": [
       [{"LOWER": "noise"}, {"LOWER": "reaction"}]
     ],
-    "fuzzy_keywords": ["thunder", "fireworks"],
+    "fuzzy_keywords": ["thunder", "fireworks", "loud sounds"],
     "options": ["Calm", "Anxious", "Fearful", "No reaction"],
     "validation": {"required": true}
   },
@@ -1478,7 +1478,7 @@
     "patterns": [
       [{"LOWER": "water"}, {"LOWER": "reaction"}]
     ],
-    "fuzzy_keywords": ["swimming"],
+    "fuzzy_keywords": ["swimming", "baths"],
     "options": ["Loves it", "Tolerates it", "Avoids it", "Fearful"],
     "validation": {"required": true}
   },
@@ -1489,7 +1489,7 @@
     "patterns": [
       [{"LOWER": "carrier"}, {"LOWER": "comfort"}]
     ],
-    "fuzzy_keywords": ["kennel comfort"],
+    "fuzzy_keywords": ["kennel comfort", "carrier behavior"],
     "options": ["Very comfortable", "Tolerates it", "Resists", "Panics"],
     "validation": {"required": true}
   },
@@ -1500,7 +1500,7 @@
     "patterns": [
       [{"LOWER": "leash"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["walking behavior"],
+    "fuzzy_keywords": ["walking behavior", "on-leash behavior"],
     "options": ["Walks nicely", "Pulls", "Lags behind", "Reactive"],
     "validation": {"required": true}
   },
@@ -1511,7 +1511,7 @@
     "patterns": [
       [{"LOWER": "off"}, {"LOWER": "leash"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["recall"],
+    "fuzzy_keywords": ["recall", "off-leash recall"],
     "options": ["Comes when called", "Wanders but returns", "Runs away", "Stays close"],
     "validation": {"required": true}
   },
@@ -1522,7 +1522,7 @@
     "patterns": [
       [{"LOWER": "dog"}, {"LOWER": "park"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["social behavior"],
+    "fuzzy_keywords": ["social behavior", "dog park interaction"],
     "options": ["Plays well", "Dominant", "Submissive", "Avoids others"],
     "validation": {"required": true}
   },
@@ -1533,7 +1533,7 @@
     "patterns": [
       [{"LOWER": "home"}, {"LOWER": "alone"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["separation"],
+    "fuzzy_keywords": ["separation", "separation anxiety"],
     "options": ["Calm", "Anxious", "Destructive", "Vocal"],
     "validation": {"required": true}
   },
@@ -1544,7 +1544,7 @@
     "patterns": [
       [{"LOWER": "nighttime"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["sleep habits"],
+    "fuzzy_keywords": ["sleep habits", "sleeping arrangements"],
     "options": ["Sleeps through night", "Restless", "Needs bathroom", "Vocal"],
     "validation": {"required": true}
   },
@@ -1555,7 +1555,7 @@
     "patterns": [
       [{"LOWER": "mealtime"}, {"LOWER": "behavior"}]
     ],
-    "fuzzy_keywords": ["food aggression"],
+    "fuzzy_keywords": ["food aggression", "feeding behavior"],
     "options": ["Calm", "Excited", "Protective", "Needs space"],
     "validation": {"required": true}
   },
@@ -1566,7 +1566,7 @@
     "patterns": [
       [{"LOWER": "toy"}, {"LOWER": "aggression"}]
     ],
-    "fuzzy_keywords": ["resource guarding"],
+    "fuzzy_keywords": ["resource guarding", "toy possessiveness"],
     "options": ["None", "Mild", "Moderate", "Severe"],
     "validation": {"required": true}
   },
@@ -1577,7 +1577,7 @@
     "patterns": [
       [{"LOWER": "bed"}, {"LOWER": "aggression"}]
     ],
-    "fuzzy_keywords": ["territorial"],
+    "fuzzy_keywords": ["territorial", "space guarding"],
     "options": ["None", "Mild", "Moderate", "Severe"],
     "validation": {"required": true}
   },
@@ -1588,7 +1588,7 @@
     "patterns": [
       [{"LOWER": "training"}, {"LOWER": "methods"}]
     ],
-    "fuzzy_keywords": ["positive reinforcement", "clicker"],
+    "fuzzy_keywords": ["positive reinforcement", "clicker", "training approach"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1598,7 +1598,7 @@
     "patterns": [
       [{"LOWER": "training"}, {"LOWER": "goals"}]
     ],
-    "fuzzy_keywords": ["working on"],
+    "fuzzy_keywords": ["working on", "training objectives"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1608,7 +1608,7 @@
     "patterns": [
       [{"LOWER": "challenging"}, {"LOWER": "behaviors"}]
     ],
-    "fuzzy_keywords": ["problem behaviors"],
+    "fuzzy_keywords": ["problem behaviors", "behavioral issues"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1618,7 +1618,7 @@
     "patterns": [
       [{"LOWER": "reward"}, {"LOWER": "preferences"}]
     ],
-    "fuzzy_keywords": ["what motivates"],
+    "fuzzy_keywords": ["what motivates", "favorite rewards"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1628,7 +1628,7 @@
     "patterns": [
       [{"LOWER": "fear"}, {"LOWER": "responses"}]
     ],
-    "fuzzy_keywords": ["triggers"],
+    "fuzzy_keywords": ["triggers", "phobias"],
     "validation": {"maxLength": 300}
   },
   {
@@ -1638,7 +1638,7 @@
     "patterns": [
       [{"LOWER": "comfort"}, {"LOWER": "items"}]
     ],
-    "fuzzy_keywords": ["security blanket"],
+    "fuzzy_keywords": ["security blanket", "favorite blanket/toy"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1648,7 +1648,7 @@
     "patterns": [
       [{"LOWER": "vet"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["clinic number"],
+    "fuzzy_keywords": ["clinic number", "vet's phone"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1658,7 +1658,7 @@
     "patterns": [
       [{"LOWER": "vet"}, {"LOWER": "address"}]
     ],
-    "fuzzy_keywords": ["clinic location"],
+    "fuzzy_keywords": ["clinic location", "vet's address"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1668,7 +1668,7 @@
     "patterns": [
       [{"LOWER": "alternate"}, {"LOWER": "vet"}]
     ],
-    "fuzzy_keywords": ["backup vet"],
+    "fuzzy_keywords": ["backup vet", "secondary vet"],
     "validation": {"maxLength": 100}
   },
   {
@@ -1678,7 +1678,7 @@
     "patterns": [
       [{"LOWER": "emergency"}, {"LOWER": "clinic"}]
     ],
-    "fuzzy_keywords": ["after hours vet"],
+    "fuzzy_keywords": ["after hours vet", "emergency vet"],
     "validation": {"maxLength": 100}
   },
   {
@@ -1688,7 +1688,7 @@
     "patterns": [
       [{"LOWER": "emergency"}, {"LOWER": "clinic"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["emergency number"],
+    "fuzzy_keywords": ["emergency number", "emergency vet phone"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1698,7 +1698,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "sitter"}]
     ],
-    "fuzzy_keywords": ["dog walker"],
+    "fuzzy_keywords": ["dog walker", "pet sitter"],
     "validation": {"rule": "alphabetic"}
   },
   {
@@ -1708,7 +1708,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "sitter"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["sitter contact"],
+    "fuzzy_keywords": ["sitter contact", "pet sitter's number"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1718,7 +1718,7 @@
     "patterns": [
       [{"LOWER": "boarding"}, {"LOWER": "facility"}]
     ],
-    "fuzzy_keywords": ["kennel name"],
+    "fuzzy_keywords": ["kennel name", "boarding kennel"],
     "validation": {"maxLength": 100}
   },
   {
@@ -1728,7 +1728,7 @@
     "patterns": [
       [{"LOWER": "boarding"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["kennel contact"],
+    "fuzzy_keywords": ["kennel contact", "boarding number"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1738,7 +1738,7 @@
     "patterns": [
       [{"LOWER": "groomer"}]
     ],
-    "fuzzy_keywords": ["grooming salon"],
+    "fuzzy_keywords": ["grooming salon", "groomer"],
     "validation": {"rule": "alphabetic"}
   },
   {
@@ -1748,7 +1748,7 @@
     "patterns": [
       [{"LOWER": "groomer"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["grooming contact"],
+    "fuzzy_keywords": ["grooming contact", "groomer's number"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1758,7 +1758,7 @@
     "patterns": [
       [{"LOWER": "trainer"}]
     ],
-    "fuzzy_keywords": ["obedience instructor"],
+    "fuzzy_keywords": ["obedience instructor", "dog trainer"],
     "validation": {"rule": "alphabetic"}
   },
   {
@@ -1768,7 +1768,7 @@
     "patterns": [
       [{"LOWER": "trainer"}, {"LOWER": "phone"}]
     ],
-    "fuzzy_keywords": ["training contact"],
+    "fuzzy_keywords": ["training contact", "trainer's number"],
     "validation": {"rule": "phone_number"}
   },
   {
@@ -1778,7 +1778,7 @@
     "patterns": [
       [{"LOWER": "pet"}, {"LOWER": "weight"}]
     ],
-    "fuzzy_keywords": ["animal weight"],
+    "fuzzy_keywords": ["animal weight", "current weight"],
     "validation": {"min": 1, "max": 200}
   },
   {
@@ -1788,7 +1788,7 @@
     "patterns": [
       [{"LOWER": "ideal"}, {"LOWER": "weight"}]
     ],
-    "fuzzy_keywords": ["target weight"],
+    "fuzzy_keywords": ["target weight", "ideal pet weight"],
     "validation": {"min": 1, "max": 200}
   },
   {
@@ -1798,7 +1798,7 @@
     "patterns": [
       [{"LOWER": "body"}, {"LOWER": "condition"}, {"LOWER": "score"}]
     ],
-    "fuzzy_keywords": ["bcs"],
+    "fuzzy_keywords": ["bcs", "body score"],
     "validation": {"min": 1, "max": 9}
   },
   {
@@ -1808,7 +1808,7 @@
     "patterns": [
       [{"LOWER": "last"}, {"LOWER": "weigh"}, {"LOWER": "in"}]
     ],
-    "fuzzy_keywords": ["weight check"],
+    "fuzzy_keywords": ["weight check", "last weighed"],
     "validation": {}
   },
   {
@@ -1818,7 +1818,7 @@
     "patterns": [
       [{"LOWER": "food"}, {"LOWER": "brand"}]
     ],
-    "fuzzy_keywords": ["kibble brand"],
+    "fuzzy_keywords": ["kibble brand", "food brand"],
     "validation": {"maxLength": 50}
   },
   {
@@ -1828,7 +1828,7 @@
     "patterns": [
       [{"LOWER": "food"}, {"LOWER": "type"}]
     ],
-    "fuzzy_keywords": ["kibble", "wet food"],
+    "fuzzy_keywords": ["kibble", "wet food", "dry food", "raw food"],
     "validation": {"maxLength": 50}
   },
   {
@@ -1838,7 +1838,7 @@
     "patterns": [
       [{"LOWER": "food"}, {"LOWER": "amount"}]
     ],
-    "fuzzy_keywords": ["portion size"],
+    "fuzzy_keywords": ["portion size", "feeding amount"],
     "validation": {"min": 0.25, "max": 10}
   },
   {
@@ -1848,7 +1848,7 @@
     "patterns": [
       [{"LOWER": "feeding"}, {"LOWER": "frequency"}]
     ],
-    "fuzzy_keywords": ["meals per day"],
+    "fuzzy_keywords": ["meals per day", "feeding times"],
     "options": ["Free feed", "1x daily", "2x daily", "3x daily", "4x daily"],
     "validation": {"required": true}
   },
@@ -1859,7 +1859,7 @@
     "patterns": [
       [{"LOWER": "treat"}, {"LOWER": "frequency"}]
     ],
-    "fuzzy_keywords": ["snacks per day"],
+    "fuzzy_keywords": ["snacks per day", "how many treats"],
     "options": ["None", "Rarely", "1-2 daily", "3-5 daily", "Many"],
     "validation": {"required": true}
   },
@@ -1870,7 +1870,7 @@
     "patterns": [
       [{"LOWER": "human"}, {"LOWER": "food"}]
     ],
-    "fuzzy_keywords": ["table scraps"],
+    "fuzzy_keywords": ["table scraps", "people food"],
     "options": ["Never", "Rarely", "Occasionally", "Frequently"],
     "validation": {"required": true}
   },
@@ -1881,7 +1881,7 @@
     "patterns": [
       [{"LOWER": "water"}, {"LOWER": "source"}]
     ],
-    "fuzzy_keywords": ["drinking water"],
+    "fuzzy_keywords": ["drinking water", "water bowl"],
     "options": ["Bowl", "Fountain", "Automatic dispenser", "Other"],
     "validation": {"required": true}
   },
@@ -1892,7 +1892,7 @@
     "patterns": [
       [{"LOWER": "supplements"}]
     ],
-    "fuzzy_keywords": ["vitamins", "joint care"],
+    "fuzzy_keywords": ["vitamins", "joint care", "dietary supplements"],
     "validation": {"maxLength": 200}
   },
   {
@@ -1902,7 +1902,7 @@
     "patterns": [
       [{"LOWER": "medical"}, {"LOWER": "history"}]
     ],
-    "fuzzy_keywords": ["health history"],
+    "fuzzy_keywords": ["health history", "past medical issues"],
     "validation": {"maxLength": 1000}
   },
   {
@@ -1912,7 +1912,7 @@
     "patterns": [
       [{"LOWER": "surgeries"}]
     ],
-    "fuzzy_keywords": ["operations"],
+    "fuzzy_keywords": ["operations", "past surgeries"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1922,17 +1922,7 @@
     "patterns": [
       [{"LOWER": "chronic"}, {"LOWER": "conditions"}]
     ],
-    "fuzzy_keywords": ["ongoing health"],
-    "validation": {"maxLength": 500}
-  },
-  {
-    "id": "CURRENT_MEDS",
-    "label": "Current Medications",
-    "type": "textarea",
-    "patterns": [
-      [{"LOWER": "current"}, {"LOWER": "medications"}]
-    ],
-    "fuzzy_keywords": ["prescriptions"],
+    "fuzzy_keywords": ["ongoing health", "chronic illness"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1942,7 +1932,7 @@
     "patterns": [
       [{"LOWER": "past"}, {"LOWER": "medications"}]
     ],
-    "fuzzy_keywords": ["previous prescriptions"],
+    "fuzzy_keywords": ["previous prescriptions", "past meds"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1952,7 +1942,7 @@
     "patterns": [
       [{"LOWER": "vaccination"}, {"LOWER": "history"}]
     ],
-    "fuzzy_keywords": ["immunization record"],
+    "fuzzy_keywords": ["immunization record", "vaccination dates"],
     "validation": {"maxLength": 500}
   },
   {
@@ -1962,7 +1952,7 @@
     "patterns": [
       [{"LOWER": "last"}, {"LOWER": "flea"}, {"LOWER": "treatment"}]
     ],
-    "fuzzy_keywords": ["parasite prevention"],
+    "fuzzy_keywords": ["parasite prevention", "flea and tick"],
     "validation": {}
   },
   {
@@ -1972,7 +1962,7 @@
     "patterns": [
       [{"LOWER": "last"}, {"LOWER": "deworming"}]
     ],
-    "fuzzy_keywords": ["worm treatment"],
+    "fuzzy_keywords": ["worm treatment", "dewormer date"],
     "validation": {}
   },
   {
@@ -1982,94 +1972,2383 @@
     "patterns": [
       [{"LOWER": "organ"}, {"LOWER": "donor"}]
     ],
-    "fuzzy_keywords": ["donate organs"],
+    "fuzzy_keywords": ["donate organs", "organ donation"],
     "options": ["Yes", "No"],
     "validation": {"required": true}
-  }  ,{
+  },
+  {
     "id": "T_SHIRT_SIZE",
     "label": "T-Shirt Size",
     "type": "select",
-    "fuzzy_keywords": ["t-shirt size", "shirt size", "shirt preference"],
+    "fuzzy_keywords": ["t-shirt size", "shirt size", "shirt preference", "tshirt size"],
     "options": ["Small", "Medium", "Large", "X-Large", "XX-Large"]
   },
   {
     "id": "USER_ID",
     "label": "User ID",
     "type": "text",
-    "fuzzy_keywords": ["user's id", "user id", "userid", "member id", "participant id"],
+    "fuzzy_keywords": ["user's id", "user id", "userid", "member id", "participant id", "account id"],
     "validation": { "rule": "alphanumeric" }
   },
   {
     "id": "STUDENT_NAME",
     "label": "Student Name",
     "type": "text",
-    "fuzzy_keywords": ["student's name", "student name", "pupil name"],
+    "fuzzy_keywords": ["student's name", "student name", "pupil name", "student"],
     "validation": { "rule": "alphabetic" }
   },
   {
     "id": "PARENT_NAME",
     "label": "Parent/Guardian Name",
     "type": "text",
-    "fuzzy_keywords": ["parent's name", "parent name", "guardian name"],
+    "fuzzy_keywords": ["parent's name", "parent name", "guardian name", "parental contact"],
     "validation": { "rule": "alphabetic" }
   },
   {
     "id": "CONSENT_CHECKBOX",
     "label": "I provide my consent",
     "type": "checkbox",
-    "fuzzy_keywords": ["consent", "permission slip", "agreement checkbox", "consent form"],
+    "fuzzy_keywords": ["consent", "permission slip", "agreement checkbox", "consent form", "i agree"],
     "validation": { "mustBeChecked": true }
   },
   {
     "id": "PAYMENT_DETAILS",
     "label": "Payment Details",
     "type": "fieldset",
-    "fuzzy_keywords": ["payment details", "payment info", "credit card info"]
+    "fuzzy_keywords": ["payment details", "payment info", "credit card info", "billing information"]
   },
   {
     "id": "TEAM_NAME",
     "label": "Team Name",
     "type": "text",
-    "fuzzy_keywords": ["team name", "group name", "squad name"]
+    "fuzzy_keywords": ["team name", "group name", "squad name", "clan name"]
   },
   {
     "id": "PROJECT_PROPOSAL",
     "label": "Project Proposal",
     "type": "file",
-    "fuzzy_keywords": ["project proposal", "proposal upload", "project submission"],
+    "fuzzy_keywords": ["project proposal", "proposal upload", "project submission", "document submission"],
     "validation": { "fileTypes": ["pdf", "docx"], "maxSizeMB": 10 }
   },
   {
     "id": "ACCOMMODATIONS",
     "label": "Special Accommodations",
     "type": "textarea",
-    "fuzzy_keywords": ["special accommodations", "accessibility needs", "special requirements"]
+    "fuzzy_keywords": ["special accommodations", "accessibility needs", "special requirements", "special requests"]
   },
   {
     "id": "ABSTRACT",
     "label": "Abstract",
     "type": "textarea",
-    "fuzzy_keywords": ["abstract", "summary", "brief description"],
+    "fuzzy_keywords": ["abstract", "summary", "brief description", "executive summary"],
     "validation": { "maxLength": 2000 }
   },
   {
     "id": "VIDEO_DEMO",
     "label": "Video Demonstration",
     "type": "url",
-    "fuzzy_keywords": ["video demonstration", "video link", "demo video"],
+    "fuzzy_keywords": ["video demonstration", "video link", "demo video", "youtube link", "vimeo link"],
     "validation": { "rule": "url" }
   },
   {
     "id": "PLOT_SIZE",
     "label": "Plot Size",
     "type": "select",
-    "fuzzy_keywords": ["plot size", "garden size"],
+    "fuzzy_keywords": ["plot size", "garden size", "allotment size"],
     "options": ["Small (4x4)", "Medium (8x8)", "Large (12x12)"]
   },
   {
     "id": "ELECTRICITY_REQUIRED",
     "label": "Do you require electricity?",
     "type": "checkbox",
-    "fuzzy_keywords": ["electricity", "power access", "electrical hookup"]
+    "fuzzy_keywords": ["electricity", "power access", "electrical hookup", "power outlet"]
+  },
+  {
+    "id": "GENERIC_FORM",
+    "label": "Generic Form",
+    "type": "form",
+    "fuzzy_keywords": ["form", "page", "thing", "way to collect", "way to submit", "entry form"]
+  },
+  {
+    "id": "BUTTON",
+    "label": "Button",
+    "type": "button",
+    "fuzzy_keywords": ["button", "submit", "cancel", "reset", "send", "register", "login button"]
+  },
+  {
+    "id": "MAP",
+    "label": "Map",
+    "type": "map",
+    "fuzzy_keywords": ["map", "location preview", "map widget"]
+  },
+  {
+    "id": "PROGRESS_BAR",
+    "label": "Progress Bar",
+    "type": "progress_bar",
+    "fuzzy_keywords": ["progress bar", "stepper", "progress indicator"]
+  },
+  {
+    "id": "HEADER",
+    "label": "Header",
+    "type": "heading",
+    "fuzzy_keywords": ["header", "form title", "page title"]
+  },
+  {
+    "id": "FOOTER",
+    "label": "Footer",
+    "type": "paragraph",
+    "fuzzy_keywords": ["footer", "disclaimer", "fine print"]
+  },
+  {
+    "id": "QUANTITY_SELECTOR",
+    "label": "Quantity",
+    "type": "number",
+    "fuzzy_keywords": ["quantity", "number of items", "amount"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "YEAR",
+    "label": "Year",
+    "type": "number",
+    "fuzzy_keywords": ["year", "model year"],
+    "validation": {"rule": "year_format"}
+  },
+  {
+    "id": "GENERIC_DROPDOWN",
+    "label": "Dropdown",
+    "type": "select",
+    "fuzzy_keywords": ["dropdown", "select menu", "selector", "picker"]
+  },
+  {
+    "id": "PASSWORD_STRENGTH",
+    "label": "Password Strength",
+    "type": "ui_element",
+    "fuzzy_keywords": ["password strength", "strength meter", "strength indicator"]
+  },
+  {
+    "id": "CHARACTER_COUNTER",
+    "label": "Character Counter",
+    "type": "ui_element",
+    "fuzzy_keywords": ["character counter", "word count", "character count"]
+  },
+  {
+    "id": "AUTOCOMPLETE_ADDRESS",
+    "label": "Address Autocomplete",
+    "type": "text",
+    "fuzzy_keywords": ["autocomplete address", "address lookup"]
+  },
+  {
+    "id": "CURRENCY_INPUT",
+    "label": "Amount",
+    "type": "number",
+    "fuzzy_keywords": ["currency input", "price", "monetary amount"]
+  },
+  {
+    "id": "USERNAME_AVAILABILITY",
+    "label": "Username",
+    "type": "text",
+    "fuzzy_keywords": ["username availability", "check username", "unique username"]
+  },
+  {
+    "id": "MULTI_FILE_UPLOAD",
+    "label": "Upload Files",
+    "type": "file",
+    "fuzzy_keywords": ["multi-file upload", "multiple files", "upload multiple"]
+  },
+  {
+    "id": "DYNAMIC_FIELDS",
+    "label": "Dynamic Fields",
+    "type": "logic",
+    "fuzzy_keywords": ["dynamic field", "add another", "add more"]
+  },
+  {
+    "id": "VIDEO_PREVIEW",
+    "label": "Video Preview",
+    "type": "ui_element",
+    "fuzzy_keywords": ["video preview", "youtube embed"]
+  },
+  {
+    "id": "GENERIC_LINK",
+    "label": "Link",
+    "type": "url",
+    "fuzzy_keywords": ["link", "url", "web link"]
+  },
+  {
+    "id": "GENERIC_DATE",
+    "label": "Date",
+    "type": "date",
+    "fuzzy_keywords": ["date", "date field"]
+  },
+  {
+    "id": "MEAL_PREFERENCE",
+    "label": "Meal Preference",
+    "type": "select",
+    "fuzzy_keywords": ["meal preference", "meal choice", "food choice", "meal selection"],
+    "options": ["Chicken", "Beef", "Fish", "Vegetarian", "Vegan"]
+  },
+  {
+    "id": "SKILL_SETS",
+    "label": "Skill Sets",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["skill sets", "skills", "technical skills", "abilities"]
+  },
+  {
+    "id": "YEARS_OF_EXPERIENCE",
+    "label": "Years of Experience",
+    "type": "number",
+    "fuzzy_keywords": ["years of experience", "experience level"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "HOURLY_RATE",
+    "label": "Hourly Rate",
+    "type": "number",
+    "fuzzy_keywords": ["hourly rate", "rate per hour"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "LIABILITY_WAIVER",
+    "label": "I agree to the liability waiver",
+    "type": "checkbox",
+    "fuzzy_keywords": ["liability waiver", "waiver agreement"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "SPOILER_WARNING",
+    "label": "Contains Spoilers",
+    "type": "checkbox",
+    "fuzzy_keywords": ["spoiler warning", "spoiler alert"]
+  },
+  {
+    "id": "ERROR_LOGS",
+    "label": "Error Logs",
+    "type": "file",
+    "fuzzy_keywords": ["error logs", "console logs", "log file"]
+  },
+  {
+    "id": "WRITING_SAMPLES",
+    "label": "Writing Samples",
+    "type": "file",
+    "fuzzy_keywords": ["writing samples", "writing portfolio"]
+  },
+  {
+    "id": "HEADSHOTS",
+    "label": "Headshots",
+    "type": "file",
+    "fuzzy_keywords": ["headshots", "profile photo", "professional photo"]
+  },
+  {
+    "id": "GAMER_TAG",
+    "label": "Gamer Tag",
+    "type": "text",
+    "fuzzy_keywords": ["gamer tag", "gamertag", "in-game name"]
+  },
+  {
+    "id": "DISCORD_HANDLE",
+    "label": "Discord Handle",
+    "type": "text",
+    "fuzzy_keywords": ["discord handle", "discord name", "discord"]
+  },
+  {
+    "id": "INITIALS",
+    "label": "Initials",
+    "type": "text",
+    "fuzzy_keywords": ["initials", "middle initial"]
+  },
+  {
+    "id": "API_KEY",
+    "label": "API Key",
+    "type": "password",
+    "fuzzy_keywords": ["api key", "access token", "secret key"]
+  },
+  {
+    "id": "LOGIN",
+    "label": "Login",
+    "type": "fieldset",
+    "fuzzy_keywords": ["login", "sign in", "log in", "authentication"]
+  },
+  {
+    "id": "CONTACT_DETAILS",
+    "label": "Contact Details",
+    "type": "fieldset",
+    "fuzzy_keywords": ["contact details", "contact info", "contact information"]
+  },
+  {
+    "id": "PAYMENT_METHOD",
+    "label": "Payment Method",
+    "type": "select",
+    "fuzzy_keywords": ["payment method", "how to pay", "payment option"],
+    "options": ["Credit Card", "PayPal", "Bank Transfer"]
+  },
+  {
+    "id": "DELIVERY_OPTIONS",
+    "label": "Delivery Options",
+    "type": "radio",
+    "fuzzy_keywords": ["delivery options", "shipping method"],
+    "options": ["Standard Shipping", "Express Shipping", "Overnight Shipping"]
+  },
+  {
+    "id": "NEWSLETTER_SUBSCRIBE",
+    "label": "Subscribe to Newsletter",
+    "type": "checkbox",
+    "fuzzy_keywords": ["newsletter", "subscribe", "mailing list"]
+  },
+  {
+    "id": "COUNTRY_OF_ORIGIN",
+    "label": "Country of Origin",
+    "type": "select",
+    "fuzzy_keywords": ["country of origin", "birth country"]
+  },
+  {
+    "id": "LANGUAGE_SPOKEN",
+    "label": "Languages Spoken",
+    "type": "tags",
+    "fuzzy_keywords": ["languages spoken", "language", "mother tongue"]
+  },
+  {
+    "id": "SECURITY_QUESTION",
+    "label": "Security Question",
+    "type": "select",
+    "fuzzy_keywords": ["security question", "secret question"]
+  },
+  {
+    "id": "SECURITY_ANSWER",
+    "label": "Security Answer",
+    "type": "text",
+    "fuzzy_keywords": ["security answer", "secret answer"]
+  },
+  {
+    "id": "GUEST_COUNT",
+    "label": "Guest Count",
+    "type": "number",
+    "fuzzy_keywords": ["guest count", "number of guests", "party size"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "SPECIAL_REQUESTS",
+    "label": "Special Requests",
+    "type": "textarea",
+    "fuzzy_keywords": ["special requests", "additional requests", "special instructions"]
+  },
+  {
+    "id": "PREFERRED_CONTACT_METHOD",
+    "label": "Preferred Contact Method",
+    "type": "radio",
+    "fuzzy_keywords": ["preferred contact method", "best way to contact"],
+    "options": ["Email", "Phone", "Text Message"]
+  },
+  {
+    "id": "EVENT_TYPE",
+    "label": "Event Type",
+    "type": "select",
+    "fuzzy_keywords": ["event type", "type of event"],
+    "options": ["Wedding", "Birthday", "Corporate", "Conference", "Other"]
+  },
+  {
+    "id": "BUDGET",
+    "label": "Budget",
+    "type": "number",
+    "fuzzy_keywords": ["budget", "estimated cost", "price range"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "FEEDBACK_TYPE",
+    "label": "Feedback Type",
+    "type": "radio",
+    "fuzzy_keywords": ["feedback type", "type of feedback"],
+    "options": ["Compliment", "Complaint", "Suggestion", "Question"]
+  },
+  {
+    "id": "HOW_SATISFIED",
+    "label": "How satisfied are you?",
+    "type": "range",
+    "fuzzy_keywords": ["how satisfied", "satisfaction level"]
+  },
+  {
+    "id": "RECOMMENDATION_LIKELIHOOD",
+    "label": "How likely are you to recommend us?",
+    "type": "range",
+    "fuzzy_keywords": ["recommendation likelihood", "net promoter score", "nps"]
+  },
+  {
+    "id": "PRODUCT_INTEREST",
+    "label": "Product of Interest",
+    "type": "select",
+    "fuzzy_keywords": ["product interest", "interested in"]
+  },
+  {
+    "id": "REASON_FOR_CONTACT",
+    "label": "Reason for Contact",
+    "type": "select",
+    "fuzzy_keywords": ["reason for contact", "reason for contacting", "inquiry reason"],
+    "options": ["Sales Inquiry", "Support Request", "General Question", "Partnership"]
+  },
+  {
+    "id": "UPLOAD_ID",
+    "label": "Upload ID",
+    "type": "file",
+    "fuzzy_keywords": ["upload id", "id card", "photo id", "proof of identity"]
+  },
+  {
+    "id": "UPLOAD_PROOF_OF_ADDRESS",
+    "label": "Upload Proof of Address",
+    "type": "file",
+    "fuzzy_keywords": ["proof of address", "address proof", "utility bill"]
+  },
+  {
+    "id": "PREFERRED_PRONOUNS",
+    "label": "Preferred Pronouns",
+    "type": "select",
+    "fuzzy_keywords": ["preferred pronouns", "pronouns"],
+    "options": ["He/Him", "She/Her", "They/Them", "Other"]
+  },
+  {
+    "id": "EMERGENCY_CONTACT_RELATIONSHIP",
+    "label": "Relationship to Emergency Contact",
+    "type": "text",
+    "fuzzy_keywords": ["emergency contact relationship", "relationship"]
+  },
+  {
+    "id": "PASSPORT_EXPIRATION",
+    "label": "Passport Expiration Date",
+    "type": "date",
+    "fuzzy_keywords": ["passport expiration", "passport expiry"]
+  },
+  {
+    "id": "NATIONALITY",
+    "label": "Nationality",
+    "type": "select",
+    "fuzzy_keywords": ["nationality", "citizenship"]
+  },
+  {
+    "id": "ETHNICITY",
+    "label": "Ethnicity",
+    "type": "select",
+    "fuzzy_keywords": ["ethnicity", "ethnic background"]
+  },
+  {
+    "id": "HIGHEST_DEGREE",
+    "label": "Highest Degree Earned",
+    "type": "text",
+    "fuzzy_keywords": ["highest degree", "degree earned"]
+  },
+  {
+    "id": "UNIVERSITY_NAME",
+    "label": "University Name",
+    "type": "text",
+    "fuzzy_keywords": ["university", "college", "alma mater"]
+  },
+  {
+    "id": "GRADUATION_YEAR",
+    "label": "Year of Graduation",
+    "type": "number",
+    "fuzzy_keywords": ["graduation year", "year graduated"]
+  },
+  {
+    "id": "GPA",
+    "label": "GPA",
+    "type": "number",
+    "fuzzy_keywords": ["gpa", "grade point average"]
+  },
+  {
+    "id": "VEHICLE_TYPE",
+    "label": "Vehicle Type",
+    "type": "select",
+    "fuzzy_keywords": ["vehicle type", "car type"],
+    "options": ["Sedan", "SUV", "Truck", "Van", "Motorcycle"]
+  },
+  {
+    "id": "NUMBER_OF_DOORS",
+    "label": "Number of Doors",
+    "type": "radio",
+    "fuzzy_keywords": ["number of doors", "doors"],
+    "options": ["2", "4"]
+  },
+  {
+    "id": "TRANSMISSION_TYPE",
+    "label": "Transmission Type",
+    "type": "radio",
+    "fuzzy_keywords": ["transmission", "gearbox"],
+    "options": ["Automatic", "Manual"]
+  },
+  {
+    "id": "FUEL_TYPE",
+    "label": "Fuel Type",
+    "type": "select",
+    "fuzzy_keywords": ["fuel type", "gas type"],
+    "options": ["Gasoline", "Diesel", "Electric", "Hybrid"]
+  },
+  {
+    "id": "PREFERRED_LANGUAGE",
+    "label": "Preferred Language",
+    "type": "select",
+    "fuzzy_keywords": ["preferred language", "language preference"]
+  },
+  {
+    "id": "REFERRAL_CODE",
+    "label": "Referral Code",
+    "type": "text",
+    "fuzzy_keywords": ["referral code", "friend code"]
+  },
+  {
+    "id": "BOOKING_REFERENCE",
+    "label": "Booking Reference",
+    "type": "text",
+    "fuzzy_keywords": ["booking reference", "confirmation code", "reservation number"]
+  },
+  {
+    "id": "CHECK_IN_DATE",
+    "label": "Check-in Date",
+    "type": "date",
+    "fuzzy_keywords": ["check-in date", "arrival date"]
+  },
+  {
+    "id": "CHECK_OUT_DATE",
+    "label": "Check-out Date",
+    "type": "date",
+    "fuzzy_keywords": ["check-out date", "departure date"]
+  },
+  {
+    "id": "NUMBER_OF_ADULTS",
+    "label": "Number of Adults",
+    "type": "number",
+    "fuzzy_keywords": ["number of adults", "adults"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "NUMBER_OF_CHILDREN",
+    "label": "Number of Children",
+    "type": "number",
+    "fuzzy_keywords": ["number of children", "children", "kids"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "ROOM_TYPE",
+    "label": "Room Type",
+    "type": "select",
+    "fuzzy_keywords": ["room type", "room preference"],
+    "options": ["Standard", "Deluxe", "Suite", "Family Room"]
+  },
+  {
+    "id": "FLIGHT_NUMBER",
+    "label": "Flight Number",
+    "type": "text",
+    "fuzzy_keywords": ["flight number", "flight no"]
+  },
+  {
+    "id": "DEPARTURE_AIRPORT",
+    "label": "Departure Airport",
+    "type": "text",
+    "fuzzy_keywords": ["departure airport", "origin", "from"]
+  },
+  {
+    "id": "ARRIVAL_AIRPORT",
+    "label": "Arrival Airport",
+    "type": "text",
+    "fuzzy_keywords": ["arrival airport", "destination", "to"]
+  },
+  {
+    "id": "NUMBER_OF_BAGS",
+    "label": "Number of Bags",
+    "type": "number",
+    "fuzzy_keywords": ["number of bags", "luggage", "checked bags"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "SEAT_PREFERENCE",
+    "label": "Seat Preference",
+    "type": "radio",
+    "fuzzy_keywords": ["seat preference", "seat choice"],
+    "options": ["Window", "Aisle", "Middle"]
+  },
+  {
+    "id": "PROJECT_NAME",
+    "label": "Project Name",
+    "type": "text",
+    "fuzzy_keywords": ["project name", "project title"]
+  },
+  {
+    "id": "PROJECT_DESCRIPTION",
+    "label": "Project Description",
+    "type": "textarea",
+    "fuzzy_keywords": ["project description", "project details", "project summary"]
+  },
+  {
+    "id": "PROJECT_DEADLINE",
+    "label": "Project Deadline",
+    "type": "date",
+    "fuzzy_keywords": ["project deadline", "due date", "completion date"]
+  },
+  {
+    "id": "PROJECT_BUDGET",
+    "label": "Project Budget",
+    "type": "number",
+    "fuzzy_keywords": ["project budget", "budget"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "DELIVERY_INSTRUCTIONS",
+    "label": "Delivery Instructions",
+    "type": "textarea",
+    "fuzzy_keywords": ["delivery instructions", "delivery notes", "special instructions"]
+  },
+  {
+    "id": "SHIPPING_ADDRESS",
+    "label": "Shipping Address",
+    "type": "textarea",
+    "fuzzy_keywords": ["shipping address", "delivery address"]
+  },
+  {
+    "id": "GIFT_MESSAGE",
+    "label": "Gift Message",
+    "type": "textarea",
+    "fuzzy_keywords": ["gift message", "gift note"]
+  },
+  {
+    "id": "EVENT_VENUE",
+    "label": "Event Venue",
+    "type": "text",
+    "fuzzy_keywords": ["event venue", "venue", "location"]
+  },
+  {
+    "id": "EVENT_ATTENDEES",
+    "label": "Number of Attendees",
+    "type": "number",
+    "fuzzy_keywords": ["event attendees", "guest count"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "EVENT_BUDGET",
+    "label": "Event Budget",
+    "type": "number",
+    "fuzzy_keywords": ["event budget", "budget"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "ORGANIZATION_TYPE",
+    "label": "Organization Type",
+    "type": "select",
+    "fuzzy_keywords": ["organization type", "company type"],
+    "options": ["For-Profit", "Non-Profit", "Government", "Education"]
+  },
+  {
+    "id": "NUMBER_OF_EMPLOYEES",
+    "label": "Number of Employees",
+    "type": "number",
+    "fuzzy_keywords": ["number of employees", "company size"]
+  },
+  {
+    "id": "ANNUAL_REVENUE",
+    "label": "Annual Revenue",
+    "type": "number",
+    "fuzzy_keywords": ["annual revenue", "yearly revenue"]
+  },
+  {
+    "id": "INDUSTRY",
+    "label": "Industry",
+    "type": "select",
+    "fuzzy_keywords": ["industry", "business sector"]
+  },
+  {
+    "id": "SURVEY_RESPONSE",
+    "label": "Your Response",
+    "type": "textarea",
+    "fuzzy_keywords": ["survey response", "your answer"]
+  },
+  {
+    "id": "CUSTOMER_ID",
+    "label": "Customer ID",
+    "type": "text",
+    "fuzzy_keywords": ["customer id", "customer number", "client id"]
+  },
+  {
+    "id": "TICKET_ID",
+    "label": "Ticket ID",
+    "type": "text",
+    "fuzzy_keywords": ["ticket id", "support ticket number", "case number"]
+  },
+  {
+    "id": "SERIAL_NUMBER",
+    "label": "Serial Number",
+    "type": "text",
+    "fuzzy_keywords": ["serial number", "product serial"]
+  },
+  {
+    "id": "PURCHASE_DATE",
+    "label": "Date of Purchase",
+    "type": "date",
+    "fuzzy_keywords": ["purchase date", "date of purchase"]
+  },
+  {
+    "id": "STORE_NAME",
+    "label": "Store Name",
+    "type": "text",
+    "fuzzy_keywords": ["store name", "purchased from", "retailer"]
+  },
+  {
+    "id": "REASON_FOR_RETURN",
+    "label": "Reason for Return",
+    "type": "select",
+    "fuzzy_keywords": ["reason for return", "return reason"],
+    "options": ["Wrong Size", "Wrong Item", "Defective", "Changed Mind", "Other"]
+  },
+  {
+    "id": "PREFERRED_APPOINTMENT_TIME",
+    "label": "Preferred Appointment Time",
+    "type": "datetime-local",
+    "fuzzy_keywords": ["preferred appointment time", "appointment time", "booking time"]
+  },
+  {
+    "id": "DOCTOR_NAME",
+    "label": "Doctor's Name",
+    "type": "text",
+    "fuzzy_keywords": ["doctor name", "physician name", "doctor"]
+  },
+  {
+    "id": "INSURANCE_PROVIDER",
+    "label": "Insurance Provider",
+    "type": "text",
+    "fuzzy_keywords": ["insurance provider", "insurance company"]
+  },
+  {
+    "id": "POLICYHOLDER_NAME",
+    "label": "Policyholder Name",
+    "type": "text",
+    "fuzzy_keywords": ["policyholder name", "primary insured"]
+  },
+  {
+    "id": "GROUP_NUMBER",
+    "label": "Group Number",
+    "type": "text",
+    "fuzzy_keywords": ["group number", "insurance group no"]
+  },
+  {
+    "id": "REFERRING_PHYSICIAN",
+    "label": "Referring Physician",
+    "type": "text",
+    "fuzzy_keywords": ["referring physician", "referring doctor"]
+  },
+  {
+    "id": "SYMPTOMS",
+    "label": "Symptoms",
+    "type": "textarea",
+    "fuzzy_keywords": ["symptoms", "describe your symptoms"]
+  },
+  {
+    "id": "MEDICAL_CONDITION",
+    "label": "Medical Condition",
+    "type": "text",
+    "fuzzy_keywords": ["medical condition", "diagnosis"]
+  },
+  {
+    "id": "DATE_OF_INJURY",
+    "label": "Date of Injury/Accident",
+    "type": "date",
+    "fuzzy_keywords": ["date of injury", "date of accident"]
+  },
+  {
+    "id": "HOW_INJURY_OCCURRED",
+    "label": "How did the injury occur?",
+    "type": "textarea",
+    "fuzzy_keywords": ["how injury occurred", "accident details"]
+  },
+  {
+    "id": "COURSE_NAME",
+    "label": "Course Name",
+    "type": "text",
+    "fuzzy_keywords": ["course name", "class name", "course title"]
+  },
+  {
+    "id": "COURSE_CODE",
+    "label": "Course Code",
+    "type": "text",
+    "fuzzy_keywords": ["course code", "course number", "class code"]
+  },
+  {
+    "id": "INSTRUCTOR_NAME",
+    "label": "Instructor Name",
+    "type": "text",
+    "fuzzy_keywords": ["instructor name", "teacher name", "professor name"]
+  },
+  {
+    "id": "SEMESTER",
+    "label": "Semester",
+    "type": "select",
+    "fuzzy_keywords": ["semester", "term"],
+    "options": ["Fall", "Spring", "Summer", "Winter"]
+  },
+  {
+    "id": "MAJOR_FIELD_OF_STUDY",
+    "label": "Major/Field of Study",
+    "type": "text",
+    "fuzzy_keywords": ["major", "field of study", "area of study"]
+  },
+  {
+    "id": "EXPECTED_GRADUATION_DATE",
+    "label": "Expected Graduation Date",
+    "type": "date",
+    "fuzzy_keywords": ["expected graduation date", "graduation date"]
+  },
+  {
+    "id": "TRANSCRIPT_UPLOAD",
+    "label": "Upload Transcript",
+    "type": "file",
+    "fuzzy_keywords": ["transcript upload", "academic transcript", "upload transcript"]
+  },
+  {
+    "id": "ESSAY_UPLOAD",
+    "label": "Upload Essay",
+    "type": "file",
+    "fuzzy_keywords": ["essay upload", "personal statement", "upload essay"]
+  },
+  {
+    "id": "RECOMMENDATION_LETTER",
+    "label": "Upload Letter of Recommendation",
+    "type": "file",
+    "fuzzy_keywords": ["recommendation letter", "letter of recommendation", "reference letter"]
+  },
+  {
+    "id": "GITHUB_URL",
+    "label": "GitHub Profile URL",
+    "type": "url",
+    "fuzzy_keywords": ["github", "github profile", "github url"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "DEMO_LINK",
+    "label": "Demo Link",
+    "type": "url",
+    "fuzzy_keywords": ["demo link", "live demo", "project demo"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "SOURCE_CODE_LINK",
+    "label": "Source Code Link",
+    "type": "url",
+    "fuzzy_keywords": ["source code link", "repository link", "code repository"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "OPERATING_SYSTEM",
+    "label": "Operating System",
+    "type": "select",
+    "fuzzy_keywords": ["operating system", "os"],
+    "options": ["Windows", "macOS", "Linux", "iOS", "Android"]
+  },
+  {
+    "id": "BROWSER_VERSION",
+    "label": "Browser and Version",
+    "type": "text",
+    "fuzzy_keywords": ["browser", "browser version"]
+  },
+  {
+    "id": "DEVICE_TYPE",
+    "label": "Device Type",
+    "type": "select",
+    "fuzzy_keywords": ["device type", "device"],
+    "options": ["Desktop", "Laptop", "Tablet", "Mobile"]
+  },
+  {
+    "id": "ERROR_MESSAGE",
+    "label": "Error Message",
+    "type": "textarea",
+    "fuzzy_keywords": ["error message", "error text"]
+  },
+  {
+    "id": "STEPS_TO_REPRODUCE",
+    "label": "Steps to Reproduce",
+    "type": "textarea",
+    "fuzzy_keywords": ["steps to reproduce", "how to reproduce"]
+  },
+  {
+    "id": "EXPECTED_BEHAVIOR",
+    "label": "Expected Behavior",
+    "type": "textarea",
+    "fuzzy_keywords": ["expected behavior", "what should happen"]
+  },
+  {
+    "id": "ACTUAL_BEHAVIOR",
+    "label": "Actual Behavior",
+    "type": "textarea",
+    "fuzzy_keywords": ["actual behavior", "what happened instead"]
+  },
+  {
+    "id": "CONSENT_TO_CONTACT",
+    "label": "I consent to be contacted about my feedback.",
+    "type": "checkbox",
+    "fuzzy_keywords": ["consent to contact", "follow-up permission"]
+  },
+  {
+    "id": "PASSWORD_HINT",
+    "label": "Password Hint",
+    "type": "text",
+    "fuzzy_keywords": ["password hint", "hint"]
+  },
+  {
+    "id": "TWO_FACTOR_CODE",
+    "label": "Two-Factor Authentication Code",
+    "type": "text",
+    "fuzzy_keywords": ["2fa code", "two-factor code", "authentication code"]
+  },
+  {
+    "id": "REFERRER_NAME",
+    "label": "Referrer's Name",
+    "type": "text",
+    "fuzzy_keywords": ["referrer name", "referred by"]
+  },
+  {
+    "id": "EVENT_LOCATION",
+    "label": "Event Location",
+    "type": "text",
+    "fuzzy_keywords": ["event location", "venue address"]
+  },
+  {
+    "id": "DRESS_CODE",
+    "label": "Dress Code",
+    "type": "text",
+    "fuzzy_keywords": ["dress code", "attire"]
+  },
+  {
+    "id": "GIFT_REGISTRY_LINK",
+    "label": "Gift Registry Link",
+    "type": "url",
+    "fuzzy_keywords": ["gift registry", "registry link", "wishlist"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "DONATION_AMOUNT",
+    "label": "Donation Amount",
+    "type": "number",
+    "fuzzy_keywords": ["donation amount", "donation"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "DONATION_FREQUENCY",
+    "label": "Donation Frequency",
+    "type": "radio",
+    "fuzzy_keywords": ["donation frequency", "give monthly"],
+    "options": ["One-Time", "Monthly", "Annually"]
+  },
+  {
+    "id": "DEDICATION",
+    "label": "In Honor/Memory of",
+    "type": "text",
+    "fuzzy_keywords": ["dedication", "in honor of", "in memory of"]
+  },
+  {
+    "id": "COMPANY_MATCHING",
+    "label": "My company offers gift matching",
+    "type": "checkbox",
+    "fuzzy_keywords": ["company matching", "gift matching"]
+  },
+  {
+    "id": "LANGUAGE_TO_TRANSLATE",
+    "label": "Language to Translate To",
+    "type": "select",
+    "fuzzy_keywords": ["translate to", "target language"]
+  },
+  {
+    "id": "DOCUMENT_TO_TRANSLATE",
+    "label": "Upload Document for Translation",
+    "type": "file",
+    "fuzzy_keywords": ["document to translate", "upload document"]
+  },
+  {
+    "id": "DEADLINE",
+    "label": "Deadline",
+    "type": "date",
+    "fuzzy_keywords": ["deadline", "due date"]
+  },
+  {
+    "id": "SHIPPING_METHOD",
+    "label": "Shipping Method",
+    "type": "select",
+    "fuzzy_keywords": ["shipping method", "delivery option"],
+    "options": ["Standard", "Expedited", "Overnight"]
+  },
+  {
+    "id": "TRACKING_NUMBER",
+    "label": "Tracking Number",
+    "type": "text",
+    "fuzzy_keywords": ["tracking number", "tracking id"]
+  },
+  {
+    "id": "ITEM_DESCRIPTION",
+    "label": "Item Description",
+    "type": "textarea",
+    "fuzzy_keywords": ["item description", "product description"]
+  },
+  {
+    "id": "ITEM_QUANTITY",
+    "label": "Item Quantity",
+    "type": "number",
+    "fuzzy_keywords": ["item quantity", "quantity"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "ITEM_PRICE",
+    "label": "Price Per Item",
+    "type": "number",
+    "fuzzy_keywords": ["item price", "price"],
+    "validation": {"min": 0}
+  },
+  {
+    "id": "SUBTOTAL",
+    "label": "Subtotal",
+    "type": "number",
+    "fuzzy_keywords": ["subtotal"]
+  },
+  {
+    "id": "TAX",
+    "label": "Tax",
+    "type": "number",
+    "fuzzy_keywords": ["tax", "sales tax"]
+  },
+  {
+    "id": "TOTAL_AMOUNT",
+    "label": "Total Amount",
+    "type": "number",
+    "fuzzy_keywords": ["total amount", "total"]
+  },
+  {
+    "id": "INVOICE_NUMBER",
+    "label": "Invoice Number",
+    "type": "text",
+    "fuzzy_keywords": ["invoice number", "invoice id"]
+  },
+  {
+    "id": "PAYMENT_TERMS",
+    "label": "Payment Terms",
+    "type": "text",
+    "fuzzy_keywords": ["payment terms", "terms"]
+  },
+  {
+    "id": "PREFERRED_COMMUNICATION",
+    "label": "Preferred Communication Channel",
+    "type": "select",
+    "fuzzy_keywords": ["preferred communication", "best way to communicate"],
+    "options": ["Email", "Phone", "Slack", "Microsoft Teams"]
+  },
+  {
+    "id": "PROJECT_TYPE",
+    "label": "Project Type",
+    "type": "select",
+    "fuzzy_keywords": ["project type", "type of project"],
+    "options": ["New Build", "Redesign", "Maintenance", "Consulting"]
+  },
+  {
+    "id": "CURRENT_WEBSITE",
+    "label": "Current Website URL",
+    "type": "url",
+    "fuzzy_keywords": ["current website", "existing site"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "COMPETITOR_WEBSITES",
+    "label": "Competitor Websites",
+    "type": "textarea",
+    "fuzzy_keywords": ["competitor websites", "competitors"]
+  },
+  {
+    "id": "DESIGN_INSPIRATION",
+    "label": "Design Inspiration",
+    "type": "textarea",
+    "fuzzy_keywords": ["design inspiration", "websites you like"]
+  },
+  {
+    "id": "TARGET_AUDIENCE",
+    "label": "Target Audience",
+    "type": "textarea",
+    "fuzzy_keywords": ["target audience", "target demographic"]
+  },
+  {
+    "id": "BRAND_GUIDELINES",
+    "label": "Upload Brand Guidelines",
+    "type": "file",
+    "fuzzy_keywords": ["brand guidelines", "style guide"]
+  },
+  {
+    "id": "MEETING_AGENDA",
+    "label": "Meeting Agenda",
+    "type": "textarea",
+    "fuzzy_keywords": ["meeting agenda", "agenda"]
+  },
+  {
+    "id": "MEETING_ATTENDEES",
+    "label": "Meeting Attendees",
+    "type": "tags",
+    "fuzzy_keywords": ["meeting attendees", "attendees"]
+  },
+  {
+    "id": "MEETING_LOCATION",
+    "label": "Meeting Location",
+    "type": "text",
+    "fuzzy_keywords": ["meeting location", "location"]
+  },
+  {
+    "id": "CONFERENCE_CALL_LINK",
+    "label": "Conference Call Link",
+    "type": "url",
+    "fuzzy_keywords": ["conference call link", "zoom link", "google meet"]
+  },
+  {
+    "id": "RSVP_DEADLINE",
+    "label": "RSVP Deadline",
+    "type": "date",
+    "fuzzy_keywords": ["rsvp deadline", "reply by"]
+  },
+  {
+    "id": "APPOINTMENT_TYPE",
+    "label": "Appointment Type",
+    "type": "select",
+    "fuzzy_keywords": ["appointment type", "type of appointment"],
+    "options": ["New Patient", "Follow-up", "Consultation", "Annual Check-up"]
+  },
+  {
+    "id": "REASON_FOR_VISIT",
+    "label": "Reason for Visit",
+    "type": "textarea",
+    "fuzzy_keywords": ["reason for visit", "reason for appointment"]
+  },
+  {
+    "id": "PREFERRED_DOCTOR",
+    "label": "Preferred Doctor",
+    "type": "select",
+    "fuzzy_keywords": ["preferred doctor", "doctor preference"]
+  },
+  {
+    "id": "NEWSLETTER_FREQUENCY",
+    "label": "Newsletter Frequency",
+    "type": "radio",
+    "fuzzy_keywords": ["newsletter frequency", "email frequency"],
+    "options": ["Daily", "Weekly", "Monthly"]
+  },
+  {
+    "id": "UNSUBSCRIBE_REASON",
+    "label": "Reason for Unsubscribing",
+    "type": "textarea",
+    "fuzzy_keywords": ["unsubscribe reason", "reason for leaving"]
+  },
+  {
+    "id": "CUSTOMER_SATISFACTION",
+    "label": "Overall, how satisfied are you?",
+    "type": "range",
+    "fuzzy_keywords": ["customer satisfaction", "overall satisfaction"],
+    "validation": {"min": 1, "max": 10}
+  },
+  {
+    "id": "EASE_OF_USE",
+    "label": "How easy was it to use our product/service?",
+    "type": "range",
+    "fuzzy_keywords": ["ease of use"],
+    "validation": {"min": 1, "max": 5}
+  },
+  {
+    "id": "CUSTOMER_SERVICE_RATING",
+    "label": "How would you rate our customer service?",
+    "type": "range",
+    "fuzzy_keywords": ["customer service rating", "support rating"],
+    "validation": {"min": 1, "max": 5}
+  },
+  {
+    "id": "PRODUCT_QUALITY_RATING",
+    "label": "How would you rate the quality of our product?",
+    "type": "range",
+    "fuzzy_keywords": ["product quality", "quality rating"],
+    "validation": {"min": 1, "max": 5}
+  },
+  {
+    "id": "IMPROVEMENT_SUGGESTIONS",
+    "label": "How can we improve?",
+    "type": "textarea",
+    "fuzzy_keywords": ["improvement suggestions", "suggestions for improvement"]
+  },
+  {
+    "id": "JOB_LOCATION",
+    "label": "Job Location",
+    "type": "text",
+    "fuzzy_keywords": ["job location", "work location"]
+  },
+  {
+    "id": "JOB_TYPE",
+    "label": "Job Type",
+    "type": "select",
+    "fuzzy_keywords": ["job type", "employment type"],
+    "options": ["Full-time", "Part-time", "Contract", "Internship", "Temporary"]
+  },
+  {
+    "id": "REMOTE_WORK_PREFERENCE",
+    "label": "Remote Work Preference",
+    "type": "select",
+    "fuzzy_keywords": ["remote work", "work from home"],
+    "options": ["Fully Remote", "Hybrid", "In-Office"]
+  },
+  {
+    "id": "WORK_AUTHORIZATION",
+    "label": "Are you authorized to work in this country?",
+    "type": "radio",
+    "fuzzy_keywords": ["work authorization", "work permit", "sponsorship"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "CRIMINAL_RECORD",
+    "label": "Have you ever been convicted of a felony?",
+    "type": "radio",
+    "fuzzy_keywords": ["criminal record", "felony conviction"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "DRIVING_RECORD",
+    "label": "Do you have a clean driving record?",
+    "type": "radio",
+    "fuzzy_keywords": ["driving record", "clean license"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "PROFESSIONAL_LICENSE",
+    "label": "Professional License/Certification",
+    "type": "text",
+    "fuzzy_keywords": ["professional license", "certification"]
+  },
+  {
+    "id": "LANGUAGE_PROFICIENCY",
+    "label": "Language Proficiency",
+    "type": "matrix",
+    "fuzzy_keywords": ["language proficiency", "language skills"]
+  },
+  {
+    "id": "SOFTWARE_PROFICIENCY",
+    "label": "Software Proficiency",
+    "type": "matrix",
+    "fuzzy_keywords": ["software proficiency", "software skills"]
+  },
+  {
+    "id": "HOBBIES",
+    "label": "Hobbies and Interests",
+    "type": "textarea",
+    "fuzzy_keywords": ["hobbies", "interests", "personal interests"]
+  },
+  {
+    "id": "PERSONAL_WEBSITE",
+    "label": "Personal Website/Blog",
+    "type": "url",
+    "fuzzy_keywords": ["personal website", "blog", "personal blog"],
+    "validation": {"rule": "url"}
+  },
+  {
+    "id": "EMERGENCY_CONTACT_PHONE",
+    "label": "Emergency Contact Phone",
+    "type": "tel",
+    "fuzzy_keywords": ["emergency contact phone", "emergency phone"],
+    "validation": {"rule": "phone_number"}
+  },
+  {
+    "id": "EVENT_DESCRIPTION",
+    "label": "Event Description",
+    "type": "textarea",
+    "fuzzy_keywords": ["event description", "event details"]
+  },
+  {
+    "id": "TARGET_COMPLETION_DATE",
+    "label": "Target Completion Date",
+    "type": "date",
+    "fuzzy_keywords": ["target completion date", "target date"]
+  },
+  {
+    "id": "BUDGET_RANGE",
+    "label": "Budget Range",
+    "type": "select",
+    "fuzzy_keywords": ["budget range", "estimated budget"],
+    "options": ["<$1,000", "$1,000 - $5,000", "$5,000 - $10,000", "$10,000+"]
+  },
+  {
+    "id": "PRIOR_EXPERIENCE",
+    "label": "Prior Experience",
+    "type": "textarea",
+    "fuzzy_keywords": ["prior experience", "relevant experience", "past work"]
+  },
+  {
+    "id": "COMPUTER_MODEL",
+    "label": "Computer Model",
+    "type": "text",
+    "fuzzy_keywords": ["computer model", "laptop model", "device model"]
+  },
+  {
+    "id": "ASSET_TAG",
+    "label": "Asset Tag Number",
+    "type": "text",
+    "fuzzy_keywords": ["asset tag", "asset number"]
+  },
+  {
+    "id": "ISSUE_SEVERITY",
+    "label": "Issue Severity",
+    "type": "select",
+    "fuzzy_keywords": ["issue severity", "severity level", "bug severity"],
+    "options": ["Critical", "High", "Medium", "Low"]
+  },
+  {
+    "id": "RENTAL_PERIOD",
+    "label": "Rental Period",
+    "type": "date_range",
+    "fuzzy_keywords": ["rental period", "rental dates"]
+  },
+  {
+    "id": "NUMBER_OF_ROOMS",
+    "label": "Number of Rooms",
+    "type": "number",
+    "fuzzy_keywords": ["number of rooms", "bedrooms"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "NUMBER_OF_BATHROOMS",
+    "label": "Number of Bathrooms",
+    "type": "number",
+    "fuzzy_keywords": ["number of bathrooms", "bathrooms"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "PETS_ALLOWED",
+    "label": "Pets Allowed?",
+    "type": "radio",
+    "fuzzy_keywords": ["pets allowed", "pet policy"],
+    "options": ["Yes", "No", "Cats Only", "Dogs Only"]
+  },
+  {
+    "id": "SECURITY_DEPOSIT",
+    "label": "Security Deposit Amount",
+    "type": "number",
+    "fuzzy_keywords": ["security deposit", "deposit"]
+  },
+  {
+    "id": "MOVE_IN_DATE",
+    "label": "Desired Move-in Date",
+    "type": "date",
+    "fuzzy_keywords": ["move-in date", "move in"]
+  },
+  {
+    "id": "CURRENT_ADDRESS",
+    "label": "Current Address",
+    "type": "textarea",
+    "fuzzy_keywords": ["current address", "previous address"]
+  },
+  {
+    "id": "LANDLORD_NAME",
+    "label": "Landlord Name",
+    "type": "text",
+    "fuzzy_keywords": ["landlord name", "previous landlord"]
+  },
+  {
+    "id": "LANDLORD_PHONE",
+    "label": "Landlord Phone Number",
+    "type": "tel",
+    "fuzzy_keywords": ["landlord phone", "landlord contact"]
+  },
+  {
+    "id": "REASON_FOR_MOVING",
+    "label": "Reason for Moving",
+    "type": "textarea",
+    "fuzzy_keywords": ["reason for moving", "why are you moving"]
+  },
+  {
+    "id": "HOUSEHOLD_INCOME",
+    "label": "Total Household Income",
+    "type": "number",
+    "fuzzy_keywords": ["household income", "total income"]
+  },
+  {
+    "id": "CREDIT_CHECK_CONSENT",
+    "label": "I consent to a credit check",
+    "type": "checkbox",
+    "fuzzy_keywords": ["credit check", "credit consent"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "BACKGROUND_CHECK_CONSENT",
+    "label": "I consent to a background check",
+    "type": "checkbox",
+    "fuzzy_keywords": ["background check", "background consent"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "VEHICLE_COLOR",
+    "label": "Vehicle Color",
+    "type": "text",
+    "fuzzy_keywords": ["vehicle color", "car color"]
+  },
+  {
+    "id": "INSURANCE_AGENT",
+    "label": "Insurance Agent",
+    "type": "text",
+    "fuzzy_keywords": ["insurance agent", "agent name"]
+  },
+  {
+    "id": "INCIDENT_DATE",
+    "label": "Date of Incident",
+    "type": "date",
+    "fuzzy_keywords": ["incident date", "date of accident"]
+  },
+  {
+    "id": "INCIDENT_LOCATION",
+    "label": "Location of Incident",
+    "type": "text",
+    "fuzzy_keywords": ["incident location", "location of accident"]
+  },
+  {
+    "id": "INCIDENT_DESCRIPTION",
+    "label": "Description of Incident",
+    "type": "textarea",
+    "fuzzy_keywords": ["incident description", "how it happened"]
+  },
+  {
+    "id": "POLICE_REPORT_NUMBER",
+    "label": "Police Report Number",
+    "type": "text",
+    "fuzzy_keywords": ["police report number", "report number"]
+  },
+  {
+    "id": "WITNESS_NAMES",
+    "label": "Witness Names",
+    "type": "textarea",
+    "fuzzy_keywords": ["witnesses", "witness names"]
+  },
+  {
+    "id": "TICKET_NUMBER",
+    "label": "Ticket/Citation Number",
+    "type": "text",
+    "fuzzy_keywords": ["ticket number", "citation number"]
+  },
+  {
+    "id": "PHOTO_OF_DAMAGE",
+    "label": "Upload Photos of Damage",
+    "type": "file",
+    "fuzzy_keywords": ["photo of damage", "damage photos"]
+  },
+  {
+    "id": "ESTIMATED_REPAIR_COST",
+    "label": "Estimated Repair Cost",
+    "type": "number",
+    "fuzzy_keywords": ["estimated cost", "repair estimate"]
+  },
+  {
+    "id": "BODY_SHOP_INFO",
+    "label": "Repair Shop Information",
+    "type": "textarea",
+    "fuzzy_keywords": ["body shop", "repair shop"]
+  },
+  {
+    "id": "PREFERRED_LANGUAGE_OF_INSTRUCTION",
+    "label": "Preferred Language of Instruction",
+    "type": "select",
+    "fuzzy_keywords": ["language of instruction", "course language"]
+  },
+  {
+    "id": "TUTORING_SUBJECT",
+    "label": "Subject for Tutoring",
+    "type": "text",
+    "fuzzy_keywords": ["tutoring subject", "subject"]
+  },
+  {
+    "id": "GRADE_LEVEL",
+    "label": "Grade Level",
+    "type": "text",
+    "fuzzy_keywords": ["grade level", "school grade"]
+  },
+  {
+    "id": "LEARNING_GOALS",
+    "label": "Learning Goals",
+    "type": "textarea",
+    "fuzzy_keywords": ["learning goals", "what to learn"]
+  },
+  {
+    "id": "SESSION_FREQUENCY",
+    "label": "Session Frequency",
+    "type": "select",
+    "fuzzy_keywords": ["session frequency", "how often"],
+    "options": ["Once a week", "Twice a week", "As needed"]
+  },
+  {
+    "id": "SESSION_DURATION",
+    "label": "Session Duration",
+    "type": "select",
+    "fuzzy_keywords": ["session duration", "how long"],
+    "options": ["30 minutes", "1 hour", "1.5 hours", "2 hours"]
+  },
+  {
+    "id": "PROJECT_FILES_UPLOAD",
+    "label": "Upload Project Files",
+    "type": "file",
+    "fuzzy_keywords": ["project files", "upload files"]
+  },
+  {
+    "id": "TEAM_MEMBERS",
+    "label": "Team Members",
+    "type": "tags",
+    "fuzzy_keywords": ["team members", "group members"]
+  },
+  {
+    "id": "EVENT_SPONSORSHIP_LEVEL",
+    "label": "Sponsorship Level",
+    "type": "radio",
+    "fuzzy_keywords": ["sponsorship level", "sponsorship tier"],
+    "options": ["Platinum", "Gold", "Silver", "Bronze"]
+  },
+  {
+    "id": "COMPANY_LOGO_UPLOAD",
+    "label": "Upload Company Logo",
+    "type": "file",
+    "fuzzy_keywords": ["company logo", "upload logo"]
+  },
+  {
+    "id": "SHIPPING_TRACKING_NUMBER",
+    "label": "Shipping Tracking Number",
+    "type": "text",
+    "fuzzy_keywords": ["shipping tracking number", "tracking number"]
+  },
+  {
+    "id": "DELIVERY_DATE",
+    "label": "Estimated Delivery Date",
+    "type": "date",
+    "fuzzy_keywords": ["delivery date", "estimated arrival"]
+  },
+  {
+    "id": "SIGNATURE_CONFIRMATION",
+    "label": "Signature Confirmation Required",
+    "type": "checkbox",
+    "fuzzy_keywords": ["signature confirmation", "require signature"]
+  },
+  {
+    "id": "ITEM_SKU",
+    "label": "Item SKU",
+    "type": "text",
+    "fuzzy_keywords": ["sku", "product code", "item number"]
+  },
+  {
+    "id": "ITEM_COLOR",
+    "label": "Item Color",
+    "type": "select",
+    "fuzzy_keywords": ["item color", "color"]
+  },
+  {
+    "id": "ITEM_SIZE",
+    "label": "Item Size",
+    "type": "select",
+    "fuzzy_keywords": ["item size", "size"]
+  },
+  {
+    "id": "TRAVEL_ITINERARY",
+    "label": "Travel Itinerary",
+    "type": "file",
+    "fuzzy_keywords": ["travel itinerary", "itinerary"]
+  },
+  {
+    "id": "TRAVEL_DATES",
+    "label": "Travel Dates",
+    "type": "date_range",
+    "fuzzy_keywords": ["travel dates", "trip dates"]
+  },
+  {
+    "id": "DESTINATION_CITY",
+    "label": "Destination City",
+    "type": "text",
+    "fuzzy_keywords": ["destination city", "destination"]
+  },
+  {
+    "id": "ACCOMMODATION_TYPE",
+    "label": "Accommodation Type",
+    "type": "select",
+    "fuzzy_keywords": ["accommodation type", "lodging"],
+    "options": ["Hotel", "Hostel", "Airbnb", "Vacation Rental"]
+  },
+  {
+    "id": "TRANSPORTATION_MODE",
+    "label": "Mode of Transportation",
+    "type": "select",
+    "fuzzy_keywords": ["transportation", "how are you travelling"],
+    "options": ["Flight", "Train", "Bus", "Car"]
+  },
+  {
+    "id": "TRAVEL_BUDGET",
+    "label": "Travel Budget",
+    "type": "number",
+    "fuzzy_keywords": ["travel budget", "trip budget"]
+  },
+  {
+    "id": "EMERGENCY_CONTACT_IN_COUNTRY",
+    "label": "In-Country Emergency Contact",
+    "type": "text",
+    "fuzzy_keywords": ["in-country contact", "local emergency contact"]
+  },
+  {
+    "id": "TRAVEL_INSURANCE",
+    "label": "Travel Insurance Policy Number",
+    "type": "text",
+    "fuzzy_keywords": ["travel insurance", "insurance policy"]
+  },
+  {
+    "id": "PASSPORT_COPY_UPLOAD",
+    "label": "Upload Passport Copy",
+    "type": "file",
+    "fuzzy_keywords": ["passport copy", "copy of passport"]
+  },
+  {
+    "id": "VISA_COPY_UPLOAD",
+    "label": "Upload Visa Copy",
+    "type": "file",
+    "fuzzy_keywords": ["visa copy", "copy of visa"]
+  },
+  {
+    "id": "MEDICAL_CONSENT",
+    "label": "Medical Treatment Consent",
+    "type": "checkbox",
+    "fuzzy_keywords": ["medical consent"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "PHOTO_RELEASE",
+    "label": "Photo/Video Release",
+    "type": "checkbox",
+    "fuzzy_keywords": ["photo release", "media release"]
+  },
+  {
+    "id": "CODE_OF_CONDUCT",
+    "label": "I agree to the Code of Conduct",
+    "type": "checkbox",
+    "fuzzy_keywords": ["code of conduct", "conduct agreement"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "CONFIDENTIALITY_AGREEMENT",
+    "label": "I agree to the Confidentiality Agreement",
+    "type": "checkbox",
+    "fuzzy_keywords": ["confidentiality agreement", "nda"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "SATISFACTION_SURVEY",
+    "label": "Customer Satisfaction Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["satisfaction survey", "feedback survey"]
+  },
+  {
+    "id": "DEMOGRAPHICS",
+    "label": "Demographics",
+    "type": "fieldset",
+    "fuzzy_keywords": ["demographics", "demographic information"]
+  },
+  {
+    "id": "PRODUCT_FEEDBACK",
+    "label": "Product Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["product feedback", "feedback about product"]
+  },
+  {
+    "id": "SERVICE_FEEDBACK",
+    "label": "Service Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["service feedback", "feedback about service"]
+  },
+  {
+    "id": "WEBSITE_FEEDBACK",
+    "label": "Website Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["website feedback", "feedback about website"]
+  },
+  {
+    "id": "EVENT_FEEDBACK",
+    "label": "Event Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["event feedback", "feedback about event"]
+  },
+  {
+    "id": "COURSE_EVALUATION",
+    "label": "Course Evaluation",
+    "type": "fieldset",
+    "fuzzy_keywords": ["course evaluation", "class feedback"]
+  },
+  {
+    "id": "EMPLOYEE_SATISFACTION",
+    "label": "Employee Satisfaction",
+    "type": "fieldset",
+    "fuzzy_keywords": ["employee satisfaction", "employee feedback"]
+  },
+  {
+    "id": "CANDIDATE_FEEDBACK",
+    "label": "Candidate Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["candidate feedback", "interview feedback"]
+  },
+  {
+    "id": "USER_RESEARCH_SURVEY",
+    "label": "User Research Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["user research", "ux research"]
+  },
+  {
+    "id": "MARKET_RESEARCH_SURVEY",
+    "label": "Market Research Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["market research", "market survey"]
+  },
+  {
+    "id": "COMMUNITY_POLL",
+    "label": "Community Poll",
+    "type": "fieldset",
+    "fuzzy_keywords": ["community poll", "poll", "vote"]
+  },
+  {
+    "id": "APPLICATION_FEE",
+    "label": "Application Fee",
+    "type": "number",
+    "fuzzy_keywords": ["application fee", "submission fee"]
+  },
+  {
+    "id": "DONATION_DEDICATION",
+    "label": "Dedication",
+    "type": "text",
+    "fuzzy_keywords": ["donation dedication", "in memory of"]
+  },
+  {
+    "id": "EVENT_TICKET_TYPE",
+    "label": "Ticket Type",
+    "type": "select",
+    "fuzzy_keywords": ["ticket type", "ticket level"],
+    "options": ["General Admission", "VIP", "Early Bird"]
+  },
+  {
+    "id": "NUMBER_OF_TICKETS",
+    "label": "Number of Tickets",
+    "type": "number",
+    "fuzzy_keywords": ["number of tickets", "how many tickets"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "PROMO_CODE_INPUT",
+    "label": "Promo Code",
+    "type": "text",
+    "fuzzy_keywords": ["promo code", "discount code"]
+  },
+  {
+    "id": "SESSION_SELECTION",
+    "label": "Session Selection",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["session selection", "workshop selection"]
+  },
+  {
+    "id": "WORKSHOP_CHOICE",
+    "label": "Workshop Choice",
+    "type": "radio",
+    "fuzzy_keywords": ["workshop choice", "select a workshop"]
+  },
+  {
+    "id": "DIETARY_PREFERENCES",
+    "label": "Dietary Preferences",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["dietary preferences", "food preferences"],
+    "options": ["Vegetarian", "Vegan", "Gluten-Free", "Nut-Free", "Dairy-Free"]
+  },
+  {
+    "id": "REFERRAL_SOURCE",
+    "label": "Referral Source",
+    "type": "text",
+    "fuzzy_keywords": ["referral source", "referred by"]
+  },
+  {
+    "id": "PREFERRED_COMMUNICATION_TIME",
+    "label": "Preferred Time to be Contacted",
+    "type": "select",
+    "fuzzy_keywords": ["preferred contact time", "best time to call"],
+    "options": ["Morning", "Afternoon", "Evening"]
+  },
+  {
+    "id": "PROJECT_TIMELINE",
+    "label": "Project Timeline",
+    "type": "select",
+    "fuzzy_keywords": ["project timeline", "timeline"],
+    "options": ["< 1 Month", "1-3 Months", "3-6 Months", "6+ Months"]
+  },
+  {
+    "id": "COMMUNICATION_PREFERENCES",
+    "label": "Communication Preferences",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["communication preferences", "how to contact"],
+    "options": ["Email Updates", "SMS Notifications", "Phone Calls"]
+  },
+  {
+    "id": "CUSTOMER_TYPE",
+    "label": "Customer Type",
+    "type": "radio",
+    "fuzzy_keywords": ["customer type", "are you a new customer"],
+    "options": ["New Customer", "Returning Customer"]
+  },
+  {
+    "id": "DELIVERY_TIME_PREFERENCE",
+    "label": "Preferred Delivery Time",
+    "type": "select",
+    "fuzzy_keywords": ["delivery time preference", "delivery time"],
+    "options": ["Morning (8am-12pm)", "Afternoon (12pm-5pm)", "Evening (5pm-9pm)"]
+  },
+  {
+    "id": "HOW_OFTEN_PURCHASE",
+    "label": "How often do you purchase this product?",
+    "type": "radio",
+    "fuzzy_keywords": ["purchase frequency"],
+    "options": ["Weekly", "Monthly", "Quarterly", "Yearly", "First time"]
+  },
+  {
+    "id": "FEEDBACK_CATEGORY",
+    "label": "Feedback Category",
+    "type": "select",
+    "fuzzy_keywords": ["feedback category", "category of feedback"],
+    "options": ["Product", "Service", "Website", "Shipping", "Other"]
+  },
+  {
+    "id": "ISSUE_CATEGORY",
+    "label": "Issue Category",
+    "type": "select",
+    "fuzzy_keywords": ["issue category", "type of problem"],
+    "options": ["Bug/Glitch", "Billing Issue", "Feature Request", "Usability Problem"]
+  },
+  {
+    "id": "PRIORITY_LEVEL",
+    "label": "Priority Level",
+    "type": "select",
+    "fuzzy_keywords": ["priority level", "urgency"],
+    "options": ["Low", "Medium", "High", "Urgent"]
+  },
+  {
+    "id": "AFFILIATION",
+    "label": "Affiliation",
+    "type": "text",
+    "fuzzy_keywords": ["affiliation", "organization"]
+  },
+  {
+    "id": "EVENT_WAIVER",
+    "label": "I agree to the Event Waiver",
+    "type": "checkbox",
+    "fuzzy_keywords": ["event waiver", "waiver"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "PHOTO_CONSENT",
+    "label": "I consent to have my photo taken",
+    "type": "checkbox",
+    "fuzzy_keywords": ["photo consent", "photo release"]
+  },
+  {
+    "id": "COVID_SYMPTOMS",
+    "label": "Are you experiencing any COVID-19 symptoms?",
+    "type": "radio",
+    "fuzzy_keywords": ["covid symptoms", "symptom check"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "VACCINATION_STATUS",
+    "label": "COVID-19 Vaccination Status",
+    "type": "select",
+    "fuzzy_keywords": ["vaccination status", "vaccine status"],
+    "options": ["Fully Vaccinated", "Partially Vaccinated", "Not Vaccinated", "Prefer not to say"]
+  },
+  {
+    "id": "TRAVEL_HISTORY",
+    "label": "Recent Travel History",
+    "type": "textarea",
+    "fuzzy_keywords": ["travel history", "recently traveled"]
+  },
+  {
+    "id": "PAYMENT_FREQUENCY",
+    "label": "Payment Frequency",
+    "type": "select",
+    "fuzzy_keywords": ["payment frequency", "billing cycle"],
+    "options": ["Monthly", "Quarterly", "Annually"]
+  },
+  {
+    "id": "AUTO_RENEWAL",
+    "label": "Auto-renew subscription?",
+    "type": "checkbox",
+    "fuzzy_keywords": ["auto-renewal", "auto renew"]
+  },
+  {
+    "id": "COUPON_CODE_FIELD",
+    "label": "Coupon Code",
+    "type": "text",
+    "fuzzy_keywords": ["coupon code", "promo code"]
+  },
+  {
+    "id": "GIFT_AID_DECLARATION",
+    "label": "Gift Aid Declaration",
+    "type": "checkbox",
+    "fuzzy_keywords": ["gift aid"]
+  },
+  {
+    "id": "JOB_REFERENCE_CONTACT",
+    "label": "Reference Contact Information",
+    "type": "textarea",
+    "fuzzy_keywords": ["reference contact", "reference details"]
+  },
+  {
+    "id": "AVAILABILITY_SCHEDULE",
+    "label": "Weekly Availability",
+    "type": "matrix",
+    "fuzzy_keywords": ["availability schedule", "weekly schedule"]
+  },
+  {
+    "id": "CLIENT_INDUSTRY",
+    "label": "Client's Industry",
+    "type": "text",
+    "fuzzy_keywords": ["client industry", "industry"]
+  },
+  {
+    "id": "PROJECT_GOALS",
+    "label": "Project Goals",
+    "type": "textarea",
+    "fuzzy_keywords": ["project goals", "objectives"]
+  },
+  {
+    "id": "KEY_DELIVERABLES",
+    "label": "Key Deliverables",
+    "type": "textarea",
+    "fuzzy_keywords": ["key deliverables", "deliverables"]
+  },
+  {
+    "id": "SUCCESS_METRICS",
+    "label": "Success Metrics",
+    "type": "textarea",
+    "fuzzy_keywords": ["success metrics", "kpis"]
+  },
+  {
+    "id": "STAKEHOLDERS",
+    "label": "Key Stakeholders",
+    "type": "tags",
+    "fuzzy_keywords": ["stakeholders", "key contacts"]
+  },
+  {
+    "id": "TECHNICAL_REQUIREMENTS",
+    "label": "Technical Requirements",
+    "type": "textarea",
+    "fuzzy_keywords": ["technical requirements", "tech specs"]
+  },
+  {
+    "id": "DESIGN_PREFERENCES",
+    "label": "Design Preferences",
+    "type": "textarea",
+    "fuzzy_keywords": ["design preferences", "look and feel"]
+  },
+  {
+    "id": "COMPETITIVE_ADVANTAGE",
+    "label": "What is your competitive advantage?",
+    "type": "textarea",
+    "fuzzy_keywords": ["competitive advantage", "unique selling proposition"]
+  },
+  {
+    "id": "MARKETING_CHANNELS",
+    "label": "Marketing Channels",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["marketing channels", "how do you market"],
+    "options": ["Social Media", "SEO", "PPC", "Email Marketing", "Content Marketing"]
+  },
+  {
+    "id": "PRIMARY_GOAL",
+    "label": "What is your primary goal?",
+    "type": "radio",
+    "fuzzy_keywords": ["primary goal", "main objective"]
+  },
+  {
+    "id": "SECONDARY_GOAL",
+    "label": "What is your secondary goal?",
+    "type": "radio",
+    "fuzzy_keywords": ["secondary goal", "other objective"]
+  },
+  {
+    "id": "ANYTHING_ELSE",
+    "label": "Anything else we should know?",
+    "type": "textarea",
+    "fuzzy_keywords": ["anything else", "additional comments"]
+  },
+  {
+    "id": "CONFIRMATION_EMAIL",
+    "label": "Send confirmation email?",
+    "type": "checkbox",
+    "fuzzy_keywords": ["confirmation email", "send confirmation"]
+  },
+  {
+    "id": "HOW_DID_YOU_HEAR",
+    "label": "How did you hear about us?",
+    "type": "select",
+    "fuzzy_keywords": ["how did you hear about us", "referral source"],
+    "options": ["Friend/Family", "Social Media", "Search Engine", "Advertisement", "Other"]
+  },
+  {
+    "id": "PREFERRED_LANGUAGE",
+    "label": "Preferred Language",
+    "type": "select",
+    "fuzzy_keywords": ["preferred language", "language"],
+    "options": ["English", "Spanish", "French", "German"]
+  },
+  {
+    "id": "DELIVERY_ADDRESS_SAME_AS_BILLING",
+    "label": "Delivery address is the same as billing",
+    "type": "checkbox",
+    "fuzzy_keywords": ["same as billing", "same address"]
+  },
+  {
+    "id": "COMPANY_SIZE",
+    "label": "Company Size",
+    "type": "select",
+    "fuzzy_keywords": ["company size", "number of employees"],
+    "options": ["1-10", "11-50", "51-200", "201-500", "500+"]
+  },
+  {
+    "id": "ANNUAL_TURNOVER",
+    "label": "Annual Turnover",
+    "type": "select",
+    "fuzzy_keywords": ["annual turnover", "revenue"],
+    "options": ["<$1M", "$1M - $5M", "$5M - $25M", "$25M+"]
+  },
+  {
+    "id": "SERVICE_INTEREST",
+    "label": "Services of Interest",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["services of interest", "interested in"],
+    "options": ["Web Design", "SEO", "Marketing", "Consulting"]
+  },
+  {
+    "id": "ATTACH_BRIEF",
+    "label": "Attach Project Brief",
+    "type": "file",
+    "fuzzy_keywords": ["attach brief", "project brief", "upload brief"]
+  },
+  {
+    "id": "EVENT_SPONSORSHIP",
+    "label": "Sponsorship Opportunities",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["sponsorship", "sponsorship opportunities"]
+  },
+  {
+    "id": "NEWSLETTER_SIGNUP",
+    "label": "Sign up for our newsletter",
+    "type": "checkbox",
+    "fuzzy_keywords": ["newsletter signup", "subscribe"]
+  },
+  {
+    "id": "TICKET_QUANTITY",
+    "label": "Ticket Quantity",
+    "type": "number",
+    "fuzzy_keywords": ["ticket quantity", "number of tickets"],
+    "validation": {"min": 1}
+  },
+  {
+    "id": "SEATING_PREFERENCE",
+    "label": "Seating Preference",
+    "type": "select",
+    "fuzzy_keywords": ["seating preference", "seat selection"],
+    "options": ["Front", "Middle", "Back", "Aisle", "Window"]
+  },
+  {
+    "id": "SPECIAL_ACCOMMODATION_NEEDS",
+    "label": "Special Accommodation Needs",
+    "type": "textarea",
+    "fuzzy_keywords": ["accommodation needs", "special needs"]
+  },
+  {
+    "id": "PARKING_REQUIRED",
+    "label": "Parking Required?",
+    "type": "radio",
+    "fuzzy_keywords": ["parking required", "need parking"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "CHILDCARE_REQUIRED",
+    "label": "Childcare Required?",
+    "type": "radio",
+    "fuzzy_keywords": ["childcare required", "need childcare"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "VOLUNTEER_AVAILABILITY",
+    "label": "Volunteer Availability",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["volunteer availability", "available to volunteer"],
+    "options": ["Morning Shift", "Afternoon Shift", "Evening Shift", "All Day"]
+  },
+  {
+    "id": "VOLUNTEER_AREA_PREFERENCE",
+    "label": "Preferred Volunteer Area",
+    "type": "select",
+    "fuzzy_keywords": ["volunteer area", "preferred area"],
+    "options": ["Registration", "Setup", "Tear-down", "Greeting", "Information Desk"]
+  },
+  {
+    "id": "EMERGENCY_MEDICAL_INFO",
+    "label": "Emergency Medical Information",
+    "type": "textarea",
+    "fuzzy_keywords": ["emergency medical info", "medical conditions"]
+  },
+  {
+    "id": "AUTHOR_BIO",
+    "label": "Author Bio",
+    "type": "textarea",
+    "fuzzy_keywords": ["author bio", "about the author"]
+  },
+  {
+    "id": "MANUSCRIPT_UPLOAD",
+    "label": "Upload Manuscript",
+    "type": "file",
+    "fuzzy_keywords": ["manuscript upload", "upload manuscript", "submit writing"]
+  },
+  {
+    "id": "BOOK_GENRE",
+    "label": "Book Genre",
+    "type": "select",
+    "fuzzy_keywords": ["book genre", "genre"],
+    "options": ["Fiction", "Non-Fiction", "Sci-Fi", "Fantasy", "Mystery", "Romance"]
+  },
+  {
+    "id": "WORD_COUNT",
+    "label": "Word Count",
+    "type": "number",
+    "fuzzy_keywords": ["word count", "manuscript length"]
+  },
+  {
+    "id": "AGENT_NAME",
+    "label": "Literary Agent Name",
+    "type": "text",
+    "fuzzy_keywords": ["agent name", "literary agent"]
+  },
+  {
+    "id": "QUERY_LETTER",
+    "label": "Query Letter",
+    "type": "textarea",
+    "fuzzy_keywords": ["query letter", "cover letter"]
+  },
+  {
+    "id": "SYNOPSIS",
+    "label": "Synopsis",
+    "type": "textarea",
+    "fuzzy_keywords": ["synopsis", "summary"]
+  },
+  {
+    "id": "PUBLISHING_HISTORY",
+    "label": "Publishing History",
+    "type": "textarea",
+    "fuzzy_keywords": ["publishing history", "previously published"]
+  },
+  {
+    "id": "CUSTOMER_ACCOUNT_NUMBER",
+    "label": "Customer Account Number",
+    "type": "text",
+    "fuzzy_keywords": ["customer account number", "account number"]
+  },
+  {
+    "id": "SERVICE_TYPE",
+    "label": "Type of Service",
+    "type": "select",
+    "fuzzy_keywords": ["service type", "type of service"]
+  },
+  {
+    "id": "ISSUE_DATE",
+    "label": "Date Issue Occurred",
+    "type": "date",
+    "fuzzy_keywords": ["issue date", "date of issue"]
+  },
+  {
+    "id": "PREFERRED_RESOLUTION",
+    "label": "Preferred Resolution",
+    "type": "textarea",
+    "fuzzy_keywords": ["preferred resolution", "desired outcome"]
+  },
+  {
+    "id": "PRODUCT_MODEL_NUMBER",
+    "label": "Product Model Number",
+    "type": "text",
+    "fuzzy_keywords": ["model number", "product model"]
+  },
+  {
+    "id": "WARRANTY_STATUS",
+    "label": "Warranty Status",
+    "type": "radio",
+    "fuzzy_keywords": ["warranty status", "in warranty"],
+    "options": ["In Warranty", "Out of Warranty", "Unsure"]
+  },
+  {
+    "id": "PROOF_OF_PURCHASE",
+    "label": "Upload Proof of Purchase",
+    "type": "file",
+    "fuzzy_keywords": ["proof of purchase", "receipt"]
+  },
+  {
+    "id": "SHIPPING_CARRIER",
+    "label": "Shipping Carrier",
+    "type": "select",
+    "fuzzy_keywords": ["shipping carrier", "carrier"],
+    "options": ["USPS", "UPS", "FedEx", "DHL"]
+  },
+  {
+    "id": "RETURN_REASON",
+    "label": "Reason for Return",
+    "type": "select",
+    "fuzzy_keywords": ["return reason", "reason for return"],
+    "options": ["Damaged", "Wrong Item", "No Longer Needed", "Poor Quality"]
+  },
+  {
+    "id": "ITEM_CONDITION",
+    "label": "Item Condition",
+    "type": "radio",
+    "fuzzy_keywords": ["item condition", "condition"],
+    "options": ["New", "Used", "Opened", "Damaged"]
+  },
+  {
+    "id": "REFUND_METHOD",
+    "label": "Refund Method",
+    "type": "radio",
+    "fuzzy_keywords": ["refund method", "refund preference"],
+    "options": ["Original Payment Method", "Store Credit", "Exchange"]
+  },
+  {
+    "id": "SURVEY_PARTICIPATION_CONSENT",
+    "label": "I consent to participate in this survey",
+    "type": "checkbox",
+    "fuzzy_keywords": ["survey consent", "consent to participate"],
+    "validation": {"mustBeChecked": true}
+  },
+  {
+    "id": "ANONYMOUS_SUBMISSION",
+    "label": "Submit Anonymously",
+    "type": "checkbox",
+    "fuzzy_keywords": ["anonymous submission", "submit anonymously"]
+  },
+  {
+    "id": "LIKERT_SCALE_AGREEMENT",
+    "label": "Please indicate your level of agreement",
+    "type": "matrix",
+    "fuzzy_keywords": ["likert scale", "level of agreement"],
+    "options": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
+  },
+  {
+    "id": "YES_NO_QUESTION",
+    "label": "Yes/No Question",
+    "type": "radio",
+    "fuzzy_keywords": ["yes/no", "yes or no"],
+    "options": ["Yes", "No"]
+  },
+  {
+    "id": "TRUE_FALSE_QUESTION",
+    "label": "True/False Question",
+    "type": "radio",
+    "fuzzy_keywords": ["true/false"],
+    "options": ["True", "False"]
+  },
+  {
+    "id": "MULTIPLE_CHOICE_QUESTION",
+    "label": "Multiple Choice Question",
+    "type": "radio",
+    "fuzzy_keywords": ["multiple choice"]
+  },
+  {
+    "id": "CHECKBOX_QUESTION",
+    "label": "Select All That Apply",
+    "type": "checkbox_group",
+    "fuzzy_keywords": ["select all that apply"]
+  },
+  {
+    "id": "RANKING_QUESTION",
+    "label": "Rank the following options",
+    "type": "matrix",
+    "fuzzy_keywords": ["ranking question", "rank order"]
+  },
+  {
+    "id": "OPEN_ENDED_FEEDBACK",
+    "label": "Open-Ended Feedback",
+    "type": "textarea",
+    "fuzzy_keywords": ["open-ended feedback", "additional thoughts"]
+  },
+  {
+    "id": "MEETING_FEEDBACK",
+    "label": "Meeting Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["meeting feedback", "feedback on meeting"]
+  },
+  {
+    "id": "PRESENTATION_FEEDBACK",
+    "label": "Presentation Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["presentation feedback", "feedback on presentation"]
+  },
+  {
+    "id": "TRAINING_EVALUATION",
+    "label": "Training Evaluation",
+    "type": "fieldset",
+    "fuzzy_keywords": ["training evaluation", "training feedback"]
+  },
+  {
+    "id": "ONBOARDING_FEEDBACK",
+    "label": "Onboarding Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["onboarding feedback", "feedback on onboarding"]
+  },
+  {
+    "id": "EXIT_INTERVIEW",
+    "label": "Exit Interview",
+    "type": "fieldset",
+    "fuzzy_keywords": ["exit interview", "exit survey"]
+  },
+  {
+    "id": "PERFORMANCE_REVIEW",
+    "label": "Performance Review",
+    "type": "fieldset",
+    "fuzzy_keywords": ["performance review", "performance appraisal"]
+  },
+  {
+    "id": "PEER_FEEDBACK",
+    "label": "Peer Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["peer feedback", "360 feedback"]
+  },
+  {
+    "id": "MANAGER_FEEDBACK",
+    "label": "Manager Feedback",
+    "type": "fieldset",
+    "fuzzy_keywords": ["manager feedback", "feedback on manager"]
+  },
+  {
+    "id": "COMPANY_CULTURE_SURVEY",
+    "label": "Company Culture Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["company culture survey", "workplace culture"]
+  },
+  {
+    "id": "BENEFITS_SURVEY",
+    "label": "Benefits Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["benefits survey", "employee benefits"]
+  },
+  {
+    "id": "WORK_ENVIRONMENT_SURVEY",
+    "label": "Work Environment Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["work environment survey", "workplace environment"]
+  },
+  {
+    "id": "IT_SATISFACTION_SURVEY",
+    "label": "IT Satisfaction Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["it satisfaction", "tech support survey"]
+  },
+  {
+    "id": "HEALTH_AND_SAFETY_SURVEY",
+    "label": "Health and Safety Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["health and safety", "workplace safety"]
+  },
+  {
+    "id": "DIVERSITY_AND_INCLUSION_SURVEY",
+    "label": "Diversity and Inclusion Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["diversity and inclusion", "d&i survey"]
+  },
+  {
+    "id": "REMOTE_WORK_SURVEY",
+    "label": "Remote Work Survey",
+    "type": "fieldset",
+    "fuzzy_keywords": ["remote work survey", "work from home survey"]
   }
 ]
