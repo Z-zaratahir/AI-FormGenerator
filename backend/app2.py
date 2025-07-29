@@ -223,24 +223,18 @@ def process_prompt_route():
     if not data or not (prompt := data.get("prompt")):
         return jsonify({"error": "Prompt is empty or invalid request"}), 400
     
-    # ─── Step 0: Basic Prompt Quality Check ────────────────────────────────
+    # ─── Step 0: Lenient and Intelligent Prompt Quality Check ──────────────────
     cleaned = prompt.strip()
-    word_count = len(cleaned.split())
 
-    # Reject if too short, too few words, digits only, or trivial words
-    if (
-        len(cleaned) < 8 or
-        word_count < 2 or
-        cleaned.isdigit() or
-        re.fullmatch(r"[A-Za-z]{1,4}", cleaned)  # e.g. "abc", "dfdb"
-    ):
+    # Reject only if the prompt is empty or consists solely of digits.
+    # We now allow short, single-word prompts like "login" or "survey".
+    if not cleaned or cleaned.isdigit():
         return jsonify({
-            "error": "Prompt too short or vague. Please provide at least 3 words and 10 characters."}), 400
+            "error": "Prompt is empty or invalid. Please provide some text."}), 400
 
-    
-
-
+    # The main logic will now handle prompts that don't match anything.
     generated_fields, template_name = form_gen.process_prompt(prompt)
+    
     if not generated_fields:
         return jsonify({"title": "Could not generate form", "prompt": prompt, "fields": [], "template": "none", "message": "I couldn't understand the type of form you want. Try being more specific, like 'a contact form' or 'an internship application form'."})
         
