@@ -35,6 +35,8 @@ def load_knowledge_base(fields_path, templates_path):
         print(f"FATAL: Could not load or parse knowledge base file. Error: {e}")
         exit(1)
 
+
+
 class FieldDefinition:
     def __init__(self, id, label, type, patterns=None, fuzzy_keywords=None, validation=None, options=None, **kwargs):
         self.id = id
@@ -45,6 +47,16 @@ class FieldDefinition:
         self.fuzzy_keywords = fuzzy_keywords or []
         self.validation = validation or {}
         self.options = options or []
+
+def make_dynamic_def(id_str):
+        return FieldDefinition(
+            id=id_str,
+            label=id_str.replace("_", " ").title(),
+            type="text",
+            validation={},
+            options=[]
+        )
+
 
 # --- The Form Generator Engine ---
 # In app4.py, replace the entire FormGenerator class with this:
@@ -68,6 +80,25 @@ class FormGenerator:
             print(f"FATAL: Could not load Hugging Face model. Error: {e}")
             exit(1)
 
+        # ─── TIER 2: off‑the‑shelf FLAN‑T5‑Large few‑shot fallback ────────────
+        print("Loading base FLAN‑T5‑Large for Tier 2 fallback…")
+        try:
+            self.seq2seq = pipeline(
+            "text2text-generation",
+            model="google/flan-t5-large",
+            tokenizer="google/flan-t5-large",
+            device=-1,              # forces CPU
+            max_new_tokens=64,      # use the newer argument name
+            do_sample=False
+            )
+
+            print("✅ Loaded google/flan-t5-large")
+        except Exception as e:
+            print(f"FATAL: could not load FLAN‑T5‑Large. Error: {e}")
+            exit(1)
+        # ────────────────────────────────────────────────────────────────────
+
+
     def _resolve_template_aliases(self, templates):
         resolved = {}
         for key, value in templates.items():
@@ -79,9 +110,9 @@ class FormGenerator:
                 if "fields" not in value: value["fields"] = []
                 if "seeds" not in value: value["seeds"] = []
         return resolved
-
-    def process_prompt(self, prompt):
-        # --- STEP 1: AI MODEL ANALYSIS ---
+    
+    def tier1(self, prompt: str):
+        # — exactly your old process_prompt logic —
         entities = self.classifier(prompt)
         print(f"Model Entities Found: {entities}")
 
@@ -92,20 +123,17 @@ class FormGenerator:
         # --- STEP 2: AGGREGATE BASE FIELDS ---
         final_fields_map = {}
         detected_template_names = []
-
         for entity in entities:
             if entity.get('entity_group') == 'FORM_TYPE':
                 match = process.extractOne(entity['word'], self.form_templates.keys(), score_cutoff=85)
                 if match:
-                    template_id = match[0]
-                    if template_id not in detected_template_names:
-                        detected_template_names.append(template_id)
-                        template_data = self.form_templates.get(template_id, {})
-                        for item in template_data.get("fields", []):
-                            field_id = item.get('id') if isinstance(item, dict) else item
-                            if self.field_map.get(field_id) and field_id not in final_fields_map:
-                                final_fields_map[field_id] = copy.deepcopy(self.field_map[field_id])
-
+                    tid = match[0]
+                    if tid not in detected_template_names:
+                        detected_template_names.append(tid)
+                        for item in self.form_templates[tid]["fields"]:
+                            fid = item.get('id') if isinstance(item, dict) else item
+                            if fid in self.field_map and fid not in final_fields_map:
+                                final_fields_map[fid] = copy.deepcopy(self.field_map[fid])
         field_entities = sorted([e for e in entities if e.get('entity_group') == 'FIELD_NAME'], key=lambda x: x['start'])
         ordered_field_ids = []
         for field_entity in field_entities:
@@ -116,7 +144,7 @@ class FormGenerator:
                 if field_id not in ordered_field_ids:
                     ordered_field_ids.append(field_id)
 
-
+        # --- rest of your STEP 3–6 exactly as is, ending with: ---
         # --- STEP 3: HANDLE DELETIONS (Directional Logic) ---
         fields_to_remove = set()
         negation_entities = [e for e in entities if e.get('entity_group') == 'NEGATION']
@@ -209,9 +237,66 @@ class FormGenerator:
         final_ordered_fields = sorted(final_fields, key=lambda x: ordered_field_ids.index(x['id']) if x['id'] in ordered_field_ids else len(ordered_field_ids))
 
         final_template = detected_template_names[0] if detected_template_names else "custom"
-        return final_ordered_fields, final_template
+        return [f["id"] for f in final_ordered_fields], final_template
+
 
     
+    def tier2(self, prompt: str):
+        # prompt‑engineering with 2 examples
+        instruction = (
+        "You are an AI form generator. "
+        "For each REQUEST, output ONLY a JSON array (ALL CAPS) of exactly 3–4 field IDs—no commentary.\n\n"
+        )
+
+
+        # two examples
+        examples = [
+            (
+                "Create a newsletter signup form",
+                ["EMAIL", "FIRST_NAME", "INTERESTS", "SUBSCRIPTION_PREF"]
+            ),
+            (
+                "Build a contact us form",
+                ["FULL_NAME", "EMAIL", "PHONE_NUMBER", "MESSAGE"]
+            )
+        ]
+
+        # build the prompt context
+        ctx = ""
+        for req, fields_list in examples:
+            ctx += f"REQUEST: {req}\nFIELDS: {json.dumps(fields_list)}\n\n"
+
+        ask = f"{instruction}{ctx}REQUEST: {prompt}\nFIELDS:"
+
+        # run FLAN‑T5
+        out = self.seq2seq(ask)[0]["generated_text"]
+
+        # 1) Extract the first [...] JSON array
+        m = re.search(r"\[.*\]", out, re.DOTALL)
+        if m:
+            try:
+                fields = json.loads(m.group(0))
+                return fields, "custom"
+            except json.JSONDecodeError:
+                pass
+
+        # 2) Fallback: grab any ALL_CAPS words in quotes
+        fields = re.findall(r'"([A-Z_]+)"', out)
+        # limit to up to 4 fields
+        return fields[:4], "custom"
+
+
+
+
+    def process_prompt(self, prompt: str):
+        # ── TIER 1: rule‑ & NER‑based logic ──
+        fields, template = self.tier1(prompt)
+        # If Tier 1 found nothing, go straight to FLAN‑T5 Tier 2
+        if not fields:
+            return self.tier2(prompt)
+        # Otherwise use Tier 1’s result
+        return fields, template
+
 # --- Main Application Setup ---
 fields_data, templates_data = load_knowledge_base('fields.json', 'templates.json')
 form_gen = FormGenerator(fields_data, templates_data)
@@ -238,7 +323,34 @@ def process_prompt_route():
     if not generated_fields:
         return jsonify({"title": "Could not generate form", "prompt": prompt, "fields": [], "template": "none", "message": "I couldn't understand the type of form you want. Try being more specific, like 'a contact form' or 'an internship application form'."})
         
-    return jsonify({"title": "Generated Form", "prompt": prompt, "template": template_name, "fields": generated_fields})
+    # ─── Handle “unknown” IDs from Tier 2 ────────────────────────────────
+    # ─── Handle “unknown” IDs from Tier 2 ────────────────────────────────
+    defs = []
+    for fid in generated_fields:
+        if fid in form_gen.field_map:
+            defs.append(form_gen.field_map[fid])
+        else:
+            defs.append(make_dynamic_def(fid))
+
+
+    # Build final JSON schema
+    schema = [
+        {
+            "id": f.id,
+            "label": f.label,
+            "type": f.type,
+            "validation": f.validation,
+            "options": f.options
+        }
+        for f in defs
+    ]
+
+    return jsonify({
+        "title": "Generated Form",
+        "prompt": prompt,
+        "template": template_name,
+        "fields": schema
+    })
 
 # ─── SERVER‑SIDE VALIDATION HELPER ─────────────────────────────────────────
 def validate_submission(values: dict, schema: list):
@@ -400,4 +512,4 @@ def submit_route():
     # All validations passed—proceed with your next steps
     return jsonify({"success": True, "message": "Form submitted successfully."})
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)
