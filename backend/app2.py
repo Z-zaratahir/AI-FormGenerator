@@ -240,52 +240,84 @@ class FormGenerator:
         return [f["id"] for f in final_ordered_fields], final_template
 
 
-    
+
     def tier2(self, prompt: str):
-        # prompt‑engineering with 2 examples
+        # ─── Step 1: Instruction block ────────────────────────────────────
         instruction = (
-        "You are an AI form generator. "
-        "For each REQUEST, output ONLY a JSON array (ALL CAPS) of exactly 3–4 field IDs—no commentary.\n\n"
+            "### FORM GENERATOR INSTRUCTIONS:\n"
+            "- You will be given a REQUEST describing the form the user wants.\n"
+            "- OUTPUT: A JSON array of exactly 2–4 field IDs (ALL CAPS, underscore-separated), with no extra text or punctuation.\n"
+            "- IMPORTANT: You must NEVER repeat the same field ID (NEVER). If unsure, leave the list shorter.\n\n"
+            "### EXAMPLES:\n"
         )
 
-
-        # two examples
+        # ─── Step 2: Few‑shot examples ─────────────────────────────────────
         examples = [
-            (
-                "Create a newsletter signup form",
-                ["EMAIL", "FIRST_NAME", "INTERESTS", "SUBSCRIPTION_PREF"]
-            ),
-            (
-                "Build a contact us form",
-                ["FULL_NAME", "EMAIL", "PHONE_NUMBER", "MESSAGE"]
-            )
+            ("Need a form to book a hotel stay", ["CHECKIN_DATE", "CHECKOUT_DATE", "ROOM_TYPE", "GUEST_COUNT"]),
+            ("Let users reach out with their queries", ["FULL_NAME", "EMAIL", "PHONE_NUMBER", "MESSAGE"]),
+            ("Help me collect donations online", ["FULL_NAME", "EMAIL", "AMOUNT", "PAYMENT_METHOD"]),
+            ("I need a form for booking consultations", ["FULL_NAME", "EMAIL", "PREFERRED_DATE", "TOPIC"]),
+            ("People should be able to plan their travel", ["DESTINATION", "DEPARTURE_DATE", "RETURN_DATE", "TRAVELERS"])
         ]
+        for req, fld in examples:
+            instruction += f"REQUEST: {req}\nFIELDS: {json.dumps(fld)}\n\n"
 
-        # build the prompt context
-        ctx = ""
-        for req, fields_list in examples:
-            ctx += f"REQUEST: {req}\nFIELDS: {json.dumps(fields_list)}\n\n"
+        instruction += (
+            "### BAD EXAMPLE:\n"
+            "REQUEST: Write a form so we can know about our community\n"
+            "FIELDS: [\"COMMUNITIES\",\"COMMUNITIES\",\"COMMUNITIES\"]\n\n"
+            "### YOUR TURN:\n"
+            f"REQUEST: {prompt}\n"
+            "FIELDS:"
+        )
 
-        ask = f"{instruction}{ctx}REQUEST: {prompt}\nFIELDS:"
+        # ─── Step 3: Generate with FLAN‑T5 ─────────────────────────────────
+        try:
+            out = self.seq2seq(instruction)[0]["generated_text"]
+        except Exception as e:
+            print(f"Tier 2 model failed: {e}")
+            return [], "custom"
 
-        # run FLAN‑T5
-        out = self.seq2seq(ask)[0]["generated_text"]
-
-        # 1) Extract the first [...] JSON array
-        m = re.search(r"\[.*\]", out, re.DOTALL)
-        if m:
+        # ─── Step 4: Pull JSON array if possible ──────────────────────────
+        match = re.search(r"\[.*?\]", out, re.DOTALL)
+        if match:
             try:
-                fields = json.loads(m.group(0))
-                return fields, "custom"
+                raw_fields = json.loads(match.group(0))
+                if isinstance(raw_fields, list):
+                    # ─── Step 5: Normalize & dedupe semantically ───────────
+                    def normalize(fid):
+                        s = fid.strip().upper()
+                        s = re.sub(r"_\d+$", "", s)            # strip numeric suffix
+                        if s.endswith("IES"):
+                            s = s[:-3] + "Y"                   # plural → singular
+                        elif s.endswith("S") and not s.endswith("SS"):
+                            s = s[:-1]
+                        return s
+
+                    seen = set()
+                    unique = []
+                    for f in raw_fields:
+                        if not isinstance(f, str):
+                            continue
+                        norm = normalize(f)
+                        if norm not in seen:
+                            seen.add(norm)
+                            unique.append(norm)
+
+                    # ─── Step 6: Return whatever unique fields we have ──────
+                    return unique[:4], "custom"
             except json.JSONDecodeError:
                 pass
 
-        # 2) Fallback: grab any ALL_CAPS words in quotes
-        fields = re.findall(r'"([A-Z_]+)"', out)
-        # limit to up to 4 fields
-        return fields[:4], "custom"
-
-
+        # ─── Step 7: Fallback: grab ALL_CAPS in the raw text ─────────────
+        caps = re.findall(r"\b([A-Z_]{2,})\b", out)
+        seen = set(); unique = []
+        for f in caps:
+            norm = re.sub(r"_\d+$", "", f)
+            if norm not in seen:
+                seen.add(norm)
+                unique.append(norm)
+        return unique[:4], "custom"
 
 
     def process_prompt(self, prompt: str):
