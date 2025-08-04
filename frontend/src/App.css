@@ -14,7 +14,7 @@ body {
   background: white;
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 4px A12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* --- Header Section --- */
@@ -86,7 +86,8 @@ body {
 
 /* --- Individual Form Field Styling --- */
 .form-field-container {
-  margin-bottom: 1.5rem;
+  /* This margin is handled by the new wrapper now */
+  /* margin-bottom: 1.5rem; */ 
   padding: 1rem;
   border: 1px solid #ecf0f1;
   border-radius: 6px;
@@ -133,7 +134,6 @@ body {
 }
 
 /* --- Status & Error Messages --- */
-
 .error-message {
   background-color: #ffebe6;
   border: 1px solid #e4b7b7;
@@ -144,11 +144,47 @@ body {
   text-align: center;
 }
 
-/* Style for individual field validation errors */
 .field-error {
   color: #d90429;
   font-size: 0.85em;
   font-weight: bold;
-  margin-top: -2px;
   padding-bottom: 10px;
 }
+
+
+/* --- START: New styles for the delete functionality --- */
+
+/* This wrapper becomes the positioning container for each field + its button */
+.field-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem; /* This provides the space between fields */
+}
+
+/* This positions the button inside the top-right of the wrapper */
+.delete-field-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  
+  background: none;
+  border: none;
+  color: #c0392b; /* A darker red for better visibility */
+  font-size: 1.8rem;
+  font-weight: bold;
+  line-height: 1; /* Aligns the 'X' better */
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 2; /* Ensures the button is on top of the field content */
+}
+
+.delete-field-btn:hover {
+  color: #e74c3c; /* A brighter red on hover */
+}
+
+/* This ensures the validation error message appears below the wrapper */
+.field-wrapper .field-error {
+  margin-top: -1.5rem; /* Adjust to pull it up slightly */
+  padding-left: 1rem; /* Indent it a bit */
+}
+

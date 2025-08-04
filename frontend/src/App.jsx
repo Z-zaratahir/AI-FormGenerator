@@ -6,7 +6,6 @@ function formatValidationRules(validation) {
   if (!validation || Object.keys(validation).length === 0) {
     return null;
   }
-  // Convertng  the validation object into a readable string like "required, minLength: 2"
   const rules = Object.entries(validation)
     .map(([key, value]) => {
       return value === true ? key : `${key}: ${value}`;
@@ -15,12 +14,11 @@ function formatValidationRules(validation) {
   return ` (Validation: ${rules})`;
 }
 
-// --- Reusable FormField Component ---
+// --- Reusable FormField Component (This remains UNCHANGED from your original) ---
 function FormField({ field, index }) {
 
   const isRequired = field.validation?.required || false;
   
-  // Creating  a unique ID for accessibility (linking label to input).
   const inputId = `${field.id || 'field'}-${index}`;
 
   const inputProps = {
@@ -31,35 +29,24 @@ function FormField({ field, index }) {
     placeholder: field.placeholder || '',
   };
 
-  // Add min/max for number types from the validation object
-  if (field.type === 'number' || field.type === 'range') {
+  if (field.type === 'number' || field.type === 'range' || field.type === 'rating') {
     if (field.validation?.min !== undefined) inputProps.min = field.validation.min;
     if (field.validation?.max !== undefined) inputProps.max = field.validation.max;
   }
 
   const renderInput = () => {
-    // The switch statement is the single source of truth for rendering.
     switch (field.type) {
       case 'textarea':
         return <textarea {...inputProps} rows="5" />;
-      
-      // THIS IS THE CORRECTED AND CONSOLIDATED LOGIC
       case 'select':
         return (
           <select {...inputProps}>
             <option value="">-- Please choose an option --</option>
-            {/* 
-              Check if the 'options' array exists on the field.
-              If it does, map over it to create the <option> elements.
-            */}
             {field.options && field.options.map((option, idx) => (
-              <option key={idx} value={option.toLowerCase().replace(/\s/g, '-')}>
-                {option}
-              </option>
+              <option key={idx} value={option.toLowerCase().replace(/\s/g, '-')}>{option}</option>
             ))}
           </select>
         );
-
       case 'radio':
         return (
           <div style={{ marginTop: '8px', display: 'flex', gap: '20px' }}>
@@ -73,18 +60,26 @@ function FormField({ field, index }) {
             </label>
           </div>
         );
-
       case 'file':
         return <input type="file" {...inputProps} style={{...inputProps.style, padding: '4px'}} />;
-      
       case 'checkbox':
         return (
           <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center' }}>
             <input type="checkbox" {...inputProps} style={{width: 'auto', marginRight: '10px'}} />
-            {/* The label is handled outside already */}
           </div>
         );
-        
+      case 'rating':
+        console.log('Rating field:', field.id, 'validation:', field.validation);
+        return (
+          <input
+            type="number"
+            {...inputProps}
+            min={field.validation?.min ?? 1}
+            max={field.validation?.max ?? 5}
+            defaultValue={field.validation?.min ?? 1}
+            step={1}
+          />
+        );
       default:
         return <input type={field.type} {...inputProps} />;
     }
@@ -95,14 +90,12 @@ function FormField({ field, index }) {
       className="form-field-container"
       style={{ backgroundColor: field.confidence > 0.9 ? '#fff' : '#fffbe6' }}
     >
-      {/* For checkboxes, the label should wrap the whole thing or be separate */}
       {field.type !== 'checkbox' ? (
         <label htmlFor={inputId} style={{ fontWeight: 'bold' }}>
           {field.label}
           {isRequired && <span style={{ color: 'red', marginLeft: '4px' }}>*</span>}
         </label>
       ) : (
-        // Special rendering for checkbox labels
         <label htmlFor={inputId} style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
             {renderInput()}
             <span>{field.label}</span>
@@ -115,7 +108,6 @@ function FormField({ field, index }) {
       <div className="debug-info">
         <em>
           Detected via: {field.source} (Confidence: {Math.round(field.confidence * 100)}%)
-          {/* helper function to show all validation rules */}
           {formatValidationRules(field.validation)}
         </em>
       </div>
@@ -126,7 +118,7 @@ function FormField({ field, index }) {
 
 // --- Main App Component ---
 function App() {
-  const [prompt, setPrompt] = useState("I'm hiring for a new career and I need an application form. It should have fields for a name, the applicant's email, and a phone number, but no address field. Also, add two separate fields for references. The email field must be required.");
+  const [prompt, setPrompt] = useState("make a registration form");
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -152,13 +144,24 @@ function App() {
     }
   };
   
+  // This function handles removing a field from the state
+  const handleDeleteField = (fieldIdToDelete) => {
+    if (!formData) return;
+    const updatedFields = formData.fields.filter(
+      (field) => field.id !== fieldIdToDelete
+    );
+    setFormData({
+      ...formData,
+      fields: updatedFields,
+    });
+  };
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
     setSubmissionStatus({ message: '', errors: null, success: false });
 
     const form = event.target;
-    // FormData uses the 'name' attribute of inputs, which we fixed earlier
     const values = Object.fromEntries(new FormData(form).entries());
     
     const payload = {
@@ -169,7 +172,7 @@ function App() {
     try {
       const res = await axios.post('http://127.0.0.1:5000/submit', payload);
       setSubmissionStatus({ message: res.data.message, success: true });
-      form.reset(); // Optionally clear the form on success
+      form.reset();
     } catch (err) {
       const { message = 'Submission failed. Please check the errors below.', errors = {} } = err.response?.data || {};
       setSubmissionStatus({ message, errors, success: false });
@@ -212,17 +215,23 @@ function App() {
           <p className="debug-info"><em>Template matched: {formData.template}</em></p>
           <form onSubmit={handleSubmit}>
             {formData.fields.map((field, idx) => {
-
               const fieldError = submissionStatus.errors?.[field.id];
               return (
-
-                <div key={`${field.id || field.label}-${idx}`}>
+                // This wrapper is the key. It holds both the field and its delete button.
+                <div key={`${field.id || field.label}-${idx}`} className="field-wrapper">
                   <FormField field={field} index={idx} />
+                  <button 
+                    type="button" 
+                    onClick={() => handleDeleteField(field.id)} 
+                    className="delete-field-btn"
+                    aria-label={`Delete ${field.label} field`}
+                  >
+                    ×
+                  </button>
                   {fieldError && <div className="field-error">{fieldError}</div>}
                 </div>
               )
             })}
-
             <button type="submit" className="submit-button" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Submit Form'}
             </button>
