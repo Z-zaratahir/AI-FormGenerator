@@ -1,19 +1,63 @@
 /* FieldTypeSelector.css - Redesigned to match the Figma design */
 
-/* Force browser validation tooltips to have lower z-index when modal is present */
+/* Prevent scrolling when modal is open - multiple approaches for maximum compatibility */
+body:has(.field-selector-overlay),
+body.modal-open {
+  overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+html:has(.field-selector-overlay),
+html:has(body.modal-open) {
+  overflow: hidden !important;
+}
+
+/* Force all validation bubbles and tooltips to be hidden when modal is open */
+body:has(.field-selector-overlay) input:invalid,
+body:has(.field-selector-overlay) textarea:invalid,
+body:has(.field-selector-overlay) select:invalid,
+body.modal-open input:invalid,
+body.modal-open textarea:invalid,
+body.modal-open select:invalid {
+  box-shadow: none !important;
+}
+
 body:has(.field-selector-overlay) input::-webkit-validation-bubble,
 body:has(.field-selector-overlay) input::-webkit-validation-bubble-message,
 body:has(.field-selector-overlay) input::-webkit-validation-bubble-arrow,
 body:has(.field-selector-overlay) input::-webkit-validation-bubble-top-outer-arrow,
-body:has(.field-selector-overlay) input::-webkit-validation-bubble-top-inner-arrow {
-  z-index: 1 !important;
-  opacity: 0.3 !important;
+body:has(.field-selector-overlay) input::-webkit-validation-bubble-top-inner-arrow,
+body:has(.field-selector-overlay) textarea::-webkit-validation-bubble,
+body:has(.field-selector-overlay) select::-webkit-validation-bubble,
+body.modal-open input::-webkit-validation-bubble,
+body.modal-open input::-webkit-validation-bubble-message,
+body.modal-open input::-webkit-validation-bubble-arrow,
+body.modal-open input::-webkit-validation-bubble-top-outer-arrow,
+body.modal-open input::-webkit-validation-bubble-top-inner-arrow,
+body.modal-open textarea::-webkit-validation-bubble,
+body.modal-open select::-webkit-validation-bubble {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
 }
 
-/* Alternative approach - try to force all tooltips behind */
+/* Hide any file picker or other system dialogs */
+body:has(.field-selector-overlay) input[type="file"]::-webkit-file-upload-button,
+body.modal-open input[type="file"]::-webkit-file-upload-button {
+  pointer-events: none !important;
+}
+
+/* Alternative approach - try to force all tooltips and system dialogs behind */
 body:has(.field-selector-overlay) *[title]:hover::after,
-body:has(.field-selector-overlay) *[data-tooltip]:hover::after {
-  z-index: 1 !important;
+body:has(.field-selector-overlay) *[data-tooltip]:hover::after,
+body.modal-open *[title]:hover::after,
+body.modal-open *[data-tooltip]:hover::after {
+  display: none !important;
+  visibility: hidden !important;
+  z-index: -1 !important;
 }
 
 /* Popup overlay - covers the entire screen with a semi-transparent background */

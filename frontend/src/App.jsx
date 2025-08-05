@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import FormField from './components/FormField';
 import AddFieldButton from './components/AddFieldButton';
+import logoForm from './assets/logoForm 1.svg';
 
 function formatValidationRules(validation) {
   if (!validation || Object.keys(validation).length === 0) {
@@ -16,19 +17,16 @@ function formatValidationRules(validation) {
   return ` (Validation: ${rules})`;
 }
 
-// We've moved the FormField component to its own file
-// Now using the imported FormField component instead
-
-
-// --- Main App Component ---
 function App() {
   const [prompt, setPrompt] = useState("make a registration form");
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [activeTab, setActiveTab] = useState('prompt');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState({ message: '', errors: null, success: false });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Listen for popup close event to clear validation errors
   useEffect(() => {
@@ -145,61 +143,226 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <h1>AI Form Generator</h1>
-        <p>Describe the form you want to build. Try being specific!</p>
+      {/* Top Header Bar */}
+      <header className="top-header">
+        <div className="header-left">
+          <img src={logoForm} alt="FORMAVERSE Logo" className="navbar-logo-svg" />
+        </div>
+        <div className="header-right">
+          <button className="action-btn discard-btn" onClick={() => {}} title="Discard">
+            {/* Trash SVG */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            Discard
+          </button>
+          <button className="action-btn save-btn" onClick={() => {}} title="Save">
+            {/* Floppy disk SVG */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Save
+          </button>
+          <button className="action-btn publish-btn" onClick={() => {}} title="Publish">
+            {/* Rocket SVG */}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 16s.5-2 2-4c2-2 6-6 10-6s8 4 8 8-4 8-8 8-8-4-8-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Publish
+          </button>
+        </div>
       </header>
 
-      <div className="prompt-section">
-        <textarea
-          rows="5"
-          placeholder="e.g., A contact form with a required name, email, and a comment section. Also add a rating from 1 to 5."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
-        <button onClick={handleGenerate} disabled={loading}>
-          {loading ? 'Generating...' : 'Generate Form'}
-        </button>
-      </div>
-
-      {error && <div className="error-message">❌ {error}</div>}
-
-      {submissionStatus.message && (
-        <div className={submissionStatus.success ? "success-message" : "error-message"}>
-          {submissionStatus.success ? '✅' : '❌'} {submissionStatus.message}
-        </div>
-      )}
-
-
-       {formData && formData.fields.length > 0 && (
-        <div className="form-preview">
-          <h2>{formData.title}</h2>
-          <p className="debug-info"><em>Template matched: {formData.template}</em></p>
-          <form onSubmit={handleSubmit}>
-            {formData.fields.map((field, idx) => {
-              const fieldError = submissionStatus.errors?.[field.id];
-              return (
-                <div key={`${field.id || field.label}-${idx}`} className="field-wrapper">
-                  <FormField 
-                    field={field} 
-                    index={idx}
-                    onUpdate={handleUpdateField}
-                    onDelete={handleDeleteField}
-                  />
-                  {fieldError && <div className="field-error">{fieldError}</div>}
-                </div>
-              )
-            })}
-            
-            {/* Add Field Button */}
-            <AddFieldButton onAddField={handleAddField} />
-            
-            <button type="submit" className="submit-button" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting...' : 'Submit Form'}
+      <div className="main-content">
+        {/* Left Sidebar */}
+        <aside className="left-sidebar">
+          <nav className="sidebar-nav">
+            <button 
+              className={`nav-item ${activeTab === 'prompt' ? 'active' : ''}`}
+              onClick={() => setActiveTab('prompt')}
+            >
+              <div className="nav-icon">🤖</div>
+              <span>Prompt</span>
             </button>
-          </form>
-        </div>
-      )}
+            
+            <button 
+              className={`nav-item ${activeTab === 'template' ? 'active' : ''}`}
+              onClick={() => setActiveTab('template')}
+            >
+              <div className="nav-icon">📄</div>
+              <span>Template</span>
+            </button>
+            
+            <button 
+              className={`nav-item ${activeTab === 'theme' ? 'active' : ''}`}
+              onClick={() => setActiveTab('theme')}
+            >
+              <div className="nav-icon">🎨</div>
+              <span>Theme</span>
+            </button>
+            
+            <button 
+              className={`nav-item ${activeTab === 'share' ? 'active' : ''}`}
+              onClick={() => setActiveTab('share')}
+            >
+              <div className="nav-icon">📤</div>
+              <span>Share</span>
+            </button>
+          </nav>
+          
+          <div className="sidebar-bottom">
+            <button className="help-btn">
+              <div className="help-icon">?</div>
+            </button>
+          </div>
+        </aside>
+
+        {/* Main Form Area */}
+        <main className="form-main">
+          <div className="form-header">
+            <div className="form-nav">
+              <button className="back-btn">←</button>
+              <span className="form-title">Form 1</span>
+            </div>
+            <div className="form-meta">
+              <span className="made-by">Made by FORMAVERSE</span>
+            </div>
+            <div className="form-actions">
+              <span className="step-indicator">Step {currentPage} of {totalPages}</span>
+              <button className="edit-btn">✏️</button>
+              <button className="preview-btn">👁️</button>
+            </div>
+          </div>
+
+          <div className="form-content">
+            {activeTab === 'prompt' && (
+              <div className="prompt-section">
+                <h2>AI Form Generator</h2>
+                <p>Describe the form you want to build. Try being specific!</p>
+                
+                <textarea
+                  rows="5"
+                  placeholder="e.g., A contact form with a required name, email, and a comment section. Also add a rating from 1 to 5."
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  className="prompt-textarea"
+                />
+                <button onClick={handleGenerate} disabled={loading} className="generate-btn">
+                  {loading ? 'Generating...' : 'Generate Form'}
+                </button>
+              </div>
+            )}
+
+            {error && <div className="error-message">❌ {error}</div>}
+
+            {submissionStatus.message && (
+              <div className={submissionStatus.success ? "success-message" : "error-message"}>
+                {submissionStatus.success ? '✅' : '❌'} {submissionStatus.message}
+              </div>
+            )}
+
+            {formData && formData.fields.length > 0 && (
+              <div className="form-preview">
+                <div className="form-header-section">
+                  <h1 className="form-title-main">Personal Information - Profile Setup</h1>
+                  <p className="form-description">
+                    A friendly and professional onboarding form designed to gather essential user details.
+                  </p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="generated-form">
+                  {formData.fields.map((field, idx) => {
+                    const fieldError = submissionStatus.errors?.[field.id];
+                    return (
+                      <div key={`${field.id || field.label}-${idx}`} className="field-wrapper">
+                        <FormField 
+                          field={field} 
+                          index={idx}
+                          onUpdate={handleUpdateField}
+                          onDelete={handleDeleteField}
+                        />
+                        {fieldError && <div className="field-error">{fieldError}</div>}
+                      </div>
+                    )
+                  })}
+                  
+                  {/* Add Field Button */}
+                  <AddFieldButton onAddField={handleAddField} />
+                  
+                  <div className="form-actions-bottom">
+                    <button type="button" className="cancel-btn">Cancel</button>
+                    <button type="submit" className="next-btn" disabled={isSubmitting}>
+                      {isSubmitting ? 'Submitting...' : 'Next'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Feedback Section */}
+            <div className="feedback-section">
+              <p>Kindly Give us Feedback of the form</p>
+              <div className="rating-stars">
+                <span className="star">⭐</span>
+                <span className="star">⭐</span>
+                <span className="star">⭐</span>
+                <span className="star">⭐</span>
+                <span className="star">⭐</span>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Right Sidebar */}
+        <aside className="right-sidebar">
+          <div className="sidebar-tabs">
+            <button className={`tab-btn ${activeTab === 'pages' ? 'active' : ''}`} onClick={() => setActiveTab('pages')}>
+              Pages
+            </button>
+            <button className={`tab-btn ${activeTab === 'responses' ? 'active' : ''}`} onClick={() => setActiveTab('responses')}>
+              Responses
+            </button>
+          </div>
+          
+          <div className="sidebar-content">
+            {activeTab === 'pages' && (
+              <div className="pages-section">
+                <div className="page-preview">
+                  <div className="page-thumbnail">
+                    <div className="thumbnail-content">
+                      <h4>Personal Information - Profile Setup</h4>
+                      <p>Complete Name *</p>
+                      <p>Date of birth *</p>
+                      <p>Gender</p>
+                    </div>
+                  </div>
+                  <div className="page-info">
+                    <span>Page 1</span>
+                    <button className="page-menu">⋯</button>
+                  </div>
+                </div>
+                
+                <div className="page-preview">
+                  <div className="page-thumbnail">
+                    <div className="thumbnail-content">
+                      <h4>Page 2</h4>
+                    </div>
+                  </div>
+                  <div className="page-info">
+                    <span>Page 2</span>
+                    <button className="page-menu">⋯</button>
+                  </div>
+                </div>
+                
+                <button className="add-page-btn">
+                  <span>+</span>
+                  <span>Add More</span>
+                </button>
+              </div>
+            )}
+            
+            {activeTab === 'responses' && (
+              <div className="responses-section">
+                <p>No responses yet</p>
+              </div>
+            )}
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

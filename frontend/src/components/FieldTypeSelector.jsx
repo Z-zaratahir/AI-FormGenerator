@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import ReactDOM from 'react-dom';
 import '../styles/FieldTypeSelector.css';
 
 // Field type options with their icons/labels
@@ -38,6 +39,8 @@ function FieldTypeSelector({ isOpen, onClose, onSelectFieldType, mode = 'add', c
       setSelectedType(currentField?.type || null);
       // Prevent body scrolling when modal is open
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
       
       // Temporarily add novalidate to the form to prevent browser tooltips
       const forms = document.querySelectorAll('form');
@@ -47,7 +50,9 @@ function FieldTypeSelector({ isOpen, onClose, onSelectFieldType, mode = 'add', c
       });
     } else {
       // Restore body scrolling when modal is closed
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.classList.remove('modal-open');
       
       // Restore form validation
       const forms = document.querySelectorAll('form');
@@ -83,7 +88,9 @@ function FieldTypeSelector({ isOpen, onClose, onSelectFieldType, mode = 'add', c
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       // Ensure we restore scrolling when component unmounts
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      document.body.classList.remove('modal-open');
       
       // Restore form validation on cleanup
       const forms = document.querySelectorAll('form');
@@ -97,16 +104,15 @@ function FieldTypeSelector({ isOpen, onClose, onSelectFieldType, mode = 'add', c
     };
   }, [isOpen, onClose, currentField]);
 
-  // If the modal is not open, don't render anything
-  if (!isOpen) return null;
-
-  const handleSelectType = (type) => {
-    setSelectedType(type);
-    onSelectFieldType(type);
+  const handleSelectType = (typeId) => {
+    setSelectedType(typeId);
+    onSelectFieldType(typeId);
     onClose();
   };
 
-  return (
+  // If the modal is not open, don't render anything
+  if (!isOpen) return null;
+  const modalContent = (
     <div className="field-selector-overlay">
       <div className="field-selector-modal" ref={modalRef}>
         <div className="field-selector-header">
@@ -130,6 +136,7 @@ function FieldTypeSelector({ isOpen, onClose, onSelectFieldType, mode = 'add', c
       </div>
     </div>
   );
+  return ReactDOM.createPortal(modalContent, document.body);
 }
 
 FieldTypeSelector.propTypes = {

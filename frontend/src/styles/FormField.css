@@ -3,10 +3,11 @@
 .form-field-container {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
   transition: all 0.3s;
+  position: relative;
 }
 
 .form-field-container:hover {
@@ -16,14 +17,24 @@
 .field-header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.field-label-section {
+  display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 8px;
+  flex: 1;
 }
 
 .field-label {
   font-weight: 600;
   font-size: 16px;
-  color: #374151;
+  color: #1e293b;
+  margin: 0;
+  display: block;
+  flex: 1;
 }
 
 .field-label-input {
@@ -32,40 +43,58 @@
   padding: 5px;
   border: 1px solid #d1d5db;
   border-radius: 4px;
-  width: 80%;
+  flex: 1;
+  min-width: 200px;
 }
 
 .field-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
+  margin-left: 8px;
 }
 
 .edit-label-button,
+.edit-field-type-button,
 .delete-field-button {
-  background: transparent;
-  border: none;
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(203, 213, 225, 0.5);
   cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
+  padding: 6px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  width: 28px;
+  height: 28px;
+  color: #4a5568;
 }
 
 .edit-label-button:hover,
-.delete-field-button:hover {
+.edit-field-type-button:hover {
   background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  transform: scale(1.05);
 }
 
 .delete-field-button:hover {
   background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #dc2626;
+  transform: scale(1.05);
+}
+
+.edit-label-button svg,
+.edit-field-type-button svg,
+.delete-field-button svg {
+  stroke: currentColor;
 }
 
 /* Field Bottom Controls */
 .field-bottom-controls {
-  margin-top: 8px;
+  margin-top: 12px;
   display: flex;
   justify-content: flex-start;
 }
@@ -74,16 +103,16 @@
 .required-toggle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 
 .required-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
-  padding: 2px 6px;
-  border-radius: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
   transition: all 0.3s ease;
-  min-width: 50px;
+  min-width: 70px;
   text-align: center;
 }
 
@@ -153,18 +182,19 @@ input:checked + .slider:before {
 }
 
 .field-input-container {
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 .field-input-container input,
 .field-input-container textarea,
 .field-input-container select {
   width: 100%;
-  padding: 10px;
+  padding: 12px 16px;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
+  background: #f8fafc;
 }
 
 .field-input-container input:focus,
@@ -173,6 +203,7 @@ input:checked + .slider:before {
   outline: none;
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: white;
 }
 
 .radio-options {
@@ -194,8 +225,9 @@ input:checked + .slider:before {
 }
 
 .required-mark {
-  color: #ef4444;
-  margin-left: 4px;
+  color: #dc2626;
+  margin-left: 2px;
+  font-weight: bold;
 }
 
 .field-validation-info {
@@ -216,4 +248,12 @@ input:checked + .slider:before {
 .validation-badge.required {
   background-color: #fee2e2;
   color: #b91c1c;
+}
+
+.mandatory-popup {
+  z-index: 2000;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

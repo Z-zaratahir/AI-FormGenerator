@@ -1,190 +1,1793 @@
 /* --- Global Styles & Body --- */
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f4f7f9;
+  background-color: #ffffff;
   color: #333;
-  padding: 2rem;
+  overflow-x: hidden;
 }
 
 /* --- Main App Container --- */
 .app-container {
-  max-width: 700px;
-  margin: auto;
-  background: white;
-  padding: 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* min-width: 100VW; */
+}
+
+/* --- Top Header Bar --- */
+.top-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 2.5rem 0.75rem 2rem;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 64px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+.logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+.logo-text {
+  color: #2196f3;
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.3rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid #b0b7c3;
+  background: #fff;
+  color: #232946;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  box-shadow: none;
+}
+.action-btn svg {
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+.action-btn:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+.action-btn:hover {
+  background: #f3f6fa;
+  color: #232946;
+  border-color: #2196f3;
+}
+.discard-btn, .save-btn {
+  background: #fff;
+  color: #232946;
+  border: 1.5px solid #232946;
+  font-weight: 600;
+}
+.discard-btn svg, .save-btn svg {
+  color: #232946;
+  stroke: #232946;
+}
+.discard-btn:hover, .save-btn:hover {
+  background: #f3f6fa;
+  color: #181c24;
+  border-color: #181c24;
+}
+.publish-btn {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+  font-weight: 600;
+}
+.publish-btn:hover {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+.discard-btn {
+  border-color: #e0e6f7;
+  color: #e0e6f7;
+}
+.save-btn {
+  border-color: #e0e6f7;
+  color: #e0e6f7;
+}
+@media (max-width: 900px) {
+  .top-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.75rem 1rem;
+    min-height: 56px;
+  }
+  .header-right {
+    justify-content: flex-end;
+    gap: 0.7rem;
+  }
+  .logo-text {
+    font-size: 1.1rem;
+  }
 }
 
-/* --- Header Section --- */
-.app-header {
-  text-align: center;
-  margin-bottom: 2rem;
+/* --- Main Content Layout --- */
+.main-content {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 80px);
+  width: 100%;
 }
 
-.app-header h1 {
-  color: #2c3e50;
-  margin-top: 0;
+/* --- Left Sidebar --- */
+.left-sidebar {
+  width: 80px;
+  background: #f5f3ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-right: 1px solid #e2e8f0;
+  flex-shrink: 0;
 }
 
-.app-header p {
-  color: #7f8c8d;
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  align-items: center;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 500;
+  width: 60px;
+}
+
+.nav-item:hover {
+  background: #ede9fe;
+  color: #4338ca;
+}
+
+.nav-item.active {
+  background: #6366f1;
+  color: white;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: white;
+  color: #64748b;
+  transition: all 0.2s;
+}
+
+.nav-item.active .nav-icon {
+  background: white;
+  color: #6366f1;
+}
+
+.nav-item:hover .nav-icon {
+  background: white;
+  color: #4338ca;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+
+.help-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.help-icon {
+  width: 2rem;
+  height: 2rem;
+  background: white;
+  color: #64748b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
   font-size: 1rem;
 }
 
-/* --- Prompt Input Section --- */
+/* --- Main Form Area --- */
+.form-main {
+  flex: 1;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.form-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.form-title {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.form-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.made-by {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.step-indicator {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.edit-btn, .preview-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.edit-btn:hover, .preview-btn:hover {
+  background-color: #f1f5f9;
+}
+
+/* --- Form Content --- */
+.form-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* --- Prompt Section --- */
 .prompt-section {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.prompt-section h2 {
+  font-size: 2rem;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.prompt-section p {
+  color: #64748b;
   margin-bottom: 2rem;
 }
 
-.prompt-section textarea {
+.prompt-textarea {
   width: 100%;
-  box-sizing: border-box;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #bdc3c7;
+  min-height: 120px;
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   font-size: 1rem;
   resize: vertical;
-  min-height: 80px;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
 }
 
-.prompt-section button {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  margin-top: 1rem;
-  background-color: #3498db;
+.prompt-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.generate-btn {
+  background: #3b82f6;
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s;
 }
 
-.prompt-section button:hover:not(:disabled) {
-  background-color: #2980b9;
+.generate-btn:hover:not(:disabled) {
+  background: #2563eb;
 }
 
-.prompt-section button:disabled {
-  background-color: #95a5a6;
+.generate-btn:disabled {
+  background: #94a3b8;
   cursor: not-allowed;
 }
 
+/* --- Form Preview --- */
 .form-preview {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-header-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.form-title-main {
+  font-size: 2.5rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.form-description {
+  font-size: 1.125rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.generated-form {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.form-actions-bottom {
+  display: flex;
+  justify-content: space-between;
   margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
 }
 
-.form-preview h2 {
-  border-bottom: 2px solid #ecf0f1;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1.5rem;
-  color: #34495e;
-}
-
-/* --- Individual Form Field Styling --- */
-.form-field-container {
-  /* This margin is handled by the new wrapper now */
-  /* margin-bottom: 1.5rem; */ 
-  padding: 1rem;
-  border: 1px solid #ecf0f1;
-  border-radius: 6px;
-  transition: box-shadow 0.2s ease;
-}
-
-.form-field-container:focus-within {
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-}
-
-.debug-info {
-  font-size: 0.8rem;
-  color: #7f8c8d;
-  margin-top: 8px;
-}
-
-/* --- Form Submission Button --- */
-.submit-button {
-  margin-top: 1rem;
-  padding: 12px 24px;
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  font-weight: bold;
+.cancel-btn {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #64748b;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s;
 }
 
-.submit-button:hover {
-  background-color: #27ae60;
+.cancel-btn:hover {
+  background: #f8fafc;
+}
+
+.next-btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.next-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.next-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* --- Feedback Section --- */
+.feedback-section {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #f5f3ff;
+  border-radius: 12px;
+}
+
+.feedback-section p {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.star {
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+/* --- Right Sidebar --- */
+.right-sidebar {
+  width: 300px;
+  background: white;
+  border-left: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #64748b;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.pages-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.page-preview {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.page-preview:hover {
+  border-color: #3b82f6;
+}
+
+.page-thumbnail {
+  background: #f5f3ff;
+  padding: 1rem;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail-content {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.thumbnail-content h4 {
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.page-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: white;
+  border-top: 1px solid #e2e8f0;
+}
+
+.page-info span {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.page-menu {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.25rem;
+}
+
+.add-page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  background: none;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.add-page-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.responses-section {
+  text-align: center;
+  color: #64748b;
+  padding: 2rem;
+}
+
+/* --- Error and Success Messages --- */
+.error-message, .success-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.error-message {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
 }
 
 .success-message {
-  background-color: #e6ffed;
-  border: 1px solid #b7e4c7;
-  color: #2d6a4f;
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 20px;
-  text-align: center;
-}
-
-/* --- Status & Error Messages --- */
-.error-message {
-  background-color: #ffebe6;
-  border: 1px solid #e4b7b7;
-  color: #8b0000;
-  padding: 15px;
-  border-radius: 5px;
-  margin-top: 20px;
-  text-align: center;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
 }
 
 .field-error {
-  color: #d90429;
-  font-size: 0.85em;
-  font-weight: bold;
-  padding-bottom: 10px;
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 }
 
-
-/* --- START: New styles for the delete functionality --- */
-
-/* This wrapper becomes the positioning container for each field + its button */
+/* --- Field Wrapper --- */
 .field-wrapper {
   position: relative;
-  margin-bottom: 1.5rem; /* This provides the space between fields */
+  margin-bottom: 1.5rem;
 }
 
-/* This positions the button inside the top-right of the wrapper */
-.delete-field-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+/* --- Form Field Container --- */
+.form-field-container {
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.2s;
+  background: white;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.form-field-container:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-field-container:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Responsive Design --- */
+
+/* iPad Pro (1024x1366) - Portrait */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
   
-  background: none;
-  border: none;
-  color: #c0392b; /* A darker red for better visibility */
-  font-size: 1.8rem;
-  font-weight: bold;
-  line-height: 1; /* Aligns the 'X' better */
-  padding: 0;
-  cursor: pointer;
-  transition: color 0.2s ease;
-  z-index: 2; /* Ensures the button is on top of the field content */
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
 }
 
-.delete-field-btn:hover {
-  color: #e74c3c; /* A brighter red on hover */
+/* iPad Pro (1024x1366) - Landscape */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 80px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .right-sidebar {
+    width: 280px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
 }
 
-/* This ensures the validation error message appears below the wrapper */
-.field-wrapper .field-error {
-  margin-top: -1.5rem; /* Adjust to pull it up slightly */
-  padding-left: 1rem; /* Indent it a bit */
+/* iPad Pro (1024x1366) - Portrait */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
+}
+
+/* iPad Pro (1024x1366) - Landscape */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 80px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .right-sidebar {
+    width: 280px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
+}
+
+/* Surface Pro 7 (912x1368) - Portrait */
+@media (min-width: 912px) and (max-width: 1368px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
+}
+
+/* Surface Pro 7 (912x1368) - Landscape */
+@media (min-width: 912px) and (max-width: 1368px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 70px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.7rem;
+  }
+  
+  .nav-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+  }
+  
+  .right-sidebar {
+    width: 220px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
+}
+
+/* Surface Pro 7 (912x1368) - Portrait */
+@media (min-width: 912px) and (max-width: 1368px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
+}
+
+/* Surface Pro 7 (912x1368) - Landscape */
+@media (min-width: 912px) and (max-width: 1368px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 70px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.7rem;
+  }
+  
+  .nav-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+  }
+  
+  .right-sidebar {
+    width: 220px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
+}
+
+/* Medium Tablets (820px and below) */
+@media (max-width: 820px) {
+  .top-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-left, .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .header-center {
+    order: 2;
+    margin: 0;
+  }
+  
+  .logo-text {
+    font-size: 1.25rem;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .left-sidebar {
+    padding: 0.75rem;
+  }
+  
+  .sidebar-nav {
+    gap: 0.25rem;
+  }
+  
+  .nav-item {
+    padding: 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .form-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .form-nav, .form-actions {
+    justify-content: center;
+  }
+  
+  .form-title-main {
+    font-size: 1.5rem;
+  }
+  
+  .generated-form {
+    padding: 0.75rem;
+  }
+  
+  .prompt-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .prompt-textarea {
+    min-height: 100px;
+  }
+  
+  .generate-btn {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .form-actions-bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .cancel-btn, .next-btn {
+    width: 100%;
+  }
+}
+
+/* Small Tablets and Large Phones (768px and below) */
+@media (max-width: 768px) {
+  .top-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-left, .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .header-center {
+    order: 2;
+    margin: 0;
+  }
+  
+  .logo-text {
+    font-size: 1.25rem;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .left-sidebar {
+    padding: 0.75rem;
+  }
+  
+  .sidebar-nav {
+    gap: 0.25rem;
+  }
+  
+  .nav-item {
+    padding: 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .form-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .form-nav, .form-actions {
+    justify-content: center;
+  }
+  
+  .form-title-main {
+    font-size: 1.5rem;
+  }
+  
+  .form-content {
+    padding: 0.75rem;
+  }
+  
+  .generated-form {
+    padding: 0.75rem;
+  }
+  
+  .prompt-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .prompt-textarea {
+    min-height: 100px;
+  }
+  
+  .generate-btn {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .form-actions-bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .cancel-btn, .next-btn {
+    width: 100%;
+  }
+}
+
+/* Asus ZenBook Fold (853x1280) - Portrait */
+@media (min-width: 853px) and (max-width: 1280px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
+}
+
+/* Asus ZenBook Fold (853x1280) - Landscape */
+@media (min-width: 853px) and (max-width: 1280px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 80px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .right-sidebar {
+    width: 250px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
+}
+
+/* Portrait orientation for tablets and foldables */
+@media (max-width: 1024px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+}
+
+/* Landscape orientation for tablets */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 80px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .right-sidebar {
+    width: 250px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2rem;
+  }
+}
+
+/* Asus ZenBook Fold and similar foldable devices */
+@media (min-width: 853px) and (max-width: 1280px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    padding: 1rem;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: space-around;
+  }
+  
+  .right-sidebar {
+    width: 100%;
+    height: auto;
+    border-left: none;
+    border-top: 1px solid #e2e8f0;
+  }
+  
+  .form-content {
+    padding: 2rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.5rem;
+  }
+  
+  .form-description {
+    font-size: 1.125rem;
+  }
+}
+
+/* Surface Pro 7 and similar 2-in-1 devices */
+@media (min-width: 912px) and (max-width: 1368px) {
+  .main-content {
+    flex-direction: row;
+  }
+  
+  .left-sidebar {
+    width: 70px;
+    flex-direction: column;
+    padding: 1rem 0;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: none;
+  }
+  
+  .sidebar-nav {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .nav-item {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.7rem;
+  }
+  
+  .nav-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.1rem;
+  }
+  
+  .right-sidebar {
+    width: 220px;
+    border-left: 1px solid #e2e8f0;
+    border-top: none;
+  }
+  
+  .form-content {
+    padding: 1.5rem;
+  }
+  
+  .form-title-main {
+    font-size: 2.2rem;
+  }
+  
+  .form-description {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  .top-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .header-left, .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .header-center {
+    order: 2;
+    margin: 0;
+  }
+  
+  .logo-text {
+    font-size: 1.25rem;
+  }
+  
+  .header-right {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .action-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .left-sidebar {
+    padding: 0.75rem;
+  }
+  
+  .sidebar-nav {
+    gap: 0.25rem;
+  }
+  
+  .nav-item {
+    padding: 0.25rem;
+    font-size: 0.625rem;
+  }
+  
+  .nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .form-header {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .form-nav, .form-actions {
+    justify-content: center;
+  }
+  
+  .form-title-main {
+    font-size: 1.5rem;
+  }
+  
+  .form-content {
+    padding: 0.75rem;
+  }
+  
+  .generated-form {
+    padding: 0.75rem;
+  }
+  
+  .prompt-section h2 {
+    font-size: 1.5rem;
+  }
+  
+  .prompt-textarea {
+    min-height: 100px;
+  }
+  
+  .generate-btn {
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .form-actions-bottom {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .cancel-btn, .next-btn {
+    width: 100%;
+  }
+}
+
+/* Large screens (1200px and above) */
+@media (min-width: 1200px) {
+  .form-main {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .right-sidebar {
+    width: 350px;
+  }
+  
+  .left-sidebar {
+    width: 100px;
+  }
+}
+
+/* Extra large screens (1600px and above) */
+@media (min-width: 1600px) {
+  .form-main {
+    max-width: 1200px;
+  }
+  
+  .right-sidebar {
+    width: 400px;
+  }
+}
+
+/* TV and Ultra-wide screens (1920px and above) */
+@media (min-width: 1920px) {
+  .app-container {
+    max-width: 1800px;
+    margin: 0 auto;
+  }
+  
+  .form-main {
+    max-width: 1400px;
+  }
+  
+  .right-sidebar {
+    width: 450px;
+  }
+  
+  .left-sidebar {
+    width: 120px;
+  }
+  
+  .top-header {
+    padding: 1.5rem 3rem;
+  }
+  
+  .form-content {
+    padding: 3rem;
+  }
+  
+  .form-header {
+    padding: 2rem 3rem;
+  }
+}
+
+/* 4K and Ultra-wide screens (2560px and above) */
+@media (min-width: 2560px) {
+  .app-container {
+    max-width: 2400px;
+    margin: 0 auto;
+  }
+  
+  .form-main {
+    max-width: 1800px;
+  }
+  
+  .right-sidebar {
+    width: 500px;
+  }
+  
+  .left-sidebar {
+    width: 140px;
+  }
+  
+  .top-header {
+    padding: 2rem 4rem;
+  }
+  
+  .form-content {
+    padding: 4rem;
+  }
+  
+  .form-header {
+    padding: 2.5rem 4rem;
+  }
+  
+  .form-title-main {
+    font-size: 3rem;
+  }
+  
+  .form-description {
+    font-size: 1.25rem;
+  }
+}
+
+
+/* --- Device-Specific Fixes: Place at the END of App.css --- */
+
+/* iPad Pro 12.9" Portrait */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1024px)
+  and (min-device-height: 1366px)
+  and (max-device-height: 1366px)
+  and (orientation: portrait) {
+  .main-content { flex-direction: column !important; }
+  .left-sidebar, .right-sidebar { width: 100% !important; height: auto !important; }
+  .left-sidebar { flex-direction: row !important; border-right: none !important; border-bottom: 1px solid #e2e8f0 !important; }
+  .right-sidebar { border-left: none !important; border-top: 1px solid #e2e8f0 !important; }
+}
+
+/* iPad Pro 12.9" Landscape */
+@media only screen 
+  and (min-device-width: 1024px) 
+  and (max-device-width: 1024px)
+  and (min-device-height: 1366px)
+  and (max-device-height: 1366px)
+  and (orientation: landscape) {
+  .main-content { flex-direction: row !important; }
+  .left-sidebar { width: 80px !important; flex-direction: column !important; border-right: 1px solid #e2e8f0 !important; border-bottom: none !important; }
+  .right-sidebar { width: 280px !important; border-left: 1px solid #e2e8f0 !important; border-top: none !important; }
+}
+
+/* Surface Pro 7 Portrait */
+@media only screen 
+  and (min-device-width: 912px) 
+  and (max-device-width: 912px)
+  and (min-device-height: 1368px)
+  and (max-device-height: 1368px)
+  and (orientation: portrait) {
+  .main-content { flex-direction: column !important; }
+  .left-sidebar, .right-sidebar { width: 100% !important; height: auto !important; }
+  .left-sidebar { flex-direction: row !important; border-right: none !important; border-bottom: 1px solid #e2e8f0 !important; }
+  .right-sidebar { border-left: none !important; border-top: 1px solid #e2e8f0 !important; }
+}
+
+/* Surface Pro 7 Landscape */
+@media only screen 
+  and (min-device-width: 912px) 
+  and (max-device-width: 912px)
+  and (min-device-height: 1368px)
+  and (max-device-height: 1368px)
+  and (orientation: landscape) {
+  .main-content { flex-direction: row !important; }
+  .left-sidebar { width: 70px !important; flex-direction: column !important; border-right: 1px solid #e2e8f0 !important; border-bottom: none !important; }
+  .right-sidebar { width: 220px !important; border-left: 1px solid #e2e8f0 !important; border-top: none !important; }
+}
+
+/* --- General Tablet Portrait: Make sidebar horizontal --- */
+@media (min-width: 768px) and (max-width: 1200px) and (orientation: portrait) {
+  .main-content {
+    flex-direction: column !important;
+  }
+  .left-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row !important;
+    padding: 1rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+  .sidebar-nav {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+    flex: 1 !important;
+    justify-content: space-around !important;
+  }
+}
+
+/* --- Larger Sidebar & Nav Items for Large Tablets in Landscape --- */
+@media (min-width: 912px) and (max-width: 1368px) and (orientation: landscape),
+       (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+  .left-sidebar {
+    width: 120px !important;
+  }
+  .nav-item {
+    font-size: 1rem !important;
+    padding: 1rem 0.5rem !important;
+    width: 90px !important;
+  }
+  .nav-icon {
+    width: 2.2rem !important;
+    height: 2.2rem !important;
+    font-size: 1.5rem !important;
+  }
+}
+
+/* --- Reset sidebar/nav sizes for small screens --- */
+@media (max-width: 820px) {
+  .left-sidebar {
+    width: 70px !important;
+    padding: 0.75rem !important;
+  }
+  .nav-item {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.25rem !important;
+    width: 60px !important;
+  }
+  .nav-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* --- Make sidebar horizontal bar at top for small screens --- */
+@media (max-width: 820px) {
+  .main-content {
+    flex-direction: column !important;
+  }
+  .left-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row !important;
+    padding: 0.5rem 0.25rem !important;
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
+  .sidebar-nav {
+    flex-direction: row !important;
+    gap: 0.25rem !important;
+    flex: 1 !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+  .nav-item {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.25rem !important;
+    width: 60px !important;
+    flex-direction: column !important;
+  }
+  .nav-icon {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 1rem !important;
+  }
+  .sidebar-bottom {
+    margin-top: 0 !important;
+  }
+}
+
+.navbar-logo-svg {
+  height: 38px;
+  width: auto;
+  display: block;
+  margin-right: 1.2rem;
+  margin-left: 0.1rem;
 }
 
