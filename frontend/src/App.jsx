@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import FormField from './components/FormField';
+import AddFieldButton from './components/AddFieldButton';
 
 function formatValidationRules(validation) {
   if (!validation || Object.keys(validation).length === 0) {
@@ -14,106 +16,8 @@ function formatValidationRules(validation) {
   return ` (Validation: ${rules})`;
 }
 
-// --- Reusable FormField Component (This remains UNCHANGED from your original) ---
-function FormField({ field, index }) {
-
-  const isRequired = field.validation?.required || false;
-  
-  const inputId = `${field.id || 'field'}-${index}`;
-
-  const inputProps = {
-    id: inputId,
-    name: field.id,
-    style: { width: '100%', boxSizing: 'border-box', padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #ccc' },
-    required: isRequired,
-    placeholder: field.placeholder || '',
-  };
-
-  if (field.type === 'number' || field.type === 'range' || field.type === 'rating') {
-    if (field.validation?.min !== undefined) inputProps.min = field.validation.min;
-    if (field.validation?.max !== undefined) inputProps.max = field.validation.max;
-  }
-
-  const renderInput = () => {
-    switch (field.type) {
-      case 'textarea':
-        return <textarea {...inputProps} rows="5" />;
-      case 'select':
-        return (
-          <select {...inputProps}>
-            <option value="">-- Please choose an option --</option>
-            {field.options && field.options.map((option, idx) => (
-              <option key={idx} value={option.toLowerCase().replace(/\s/g, '-')}>{option}</option>
-            ))}
-          </select>
-        );
-      case 'radio':
-        return (
-          <div style={{ marginTop: '8px', display: 'flex', gap: '20px' }}>
-            <label>
-              <input type="radio" name={inputProps.name} value="yes" style={{width: 'auto', marginRight: '5px'}} />
-              Yes
-            </label>
-            <label>
-              <input type="radio" name={inputProps.name} value="no" style={{width: 'auto', marginRight: '5px'}} />
-              No
-            </label>
-          </div>
-        );
-      case 'file':
-        return <input type="file" {...inputProps} style={{...inputProps.style, padding: '4px'}} />;
-      case 'checkbox':
-        return (
-          <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center' }}>
-            <input type="checkbox" {...inputProps} style={{width: 'auto', marginRight: '10px'}} />
-          </div>
-        );
-      case 'rating':
-        console.log('Rating field:', field.id, 'validation:', field.validation);
-        return (
-          <input
-            type="number"
-            {...inputProps}
-            min={field.validation?.min ?? 1}
-            max={field.validation?.max ?? 5}
-            defaultValue={field.validation?.min ?? 1}
-            step={1}
-          />
-        );
-      default:
-        return <input type={field.type} {...inputProps} />;
-    }
-  };
-
-  return (
-    <div 
-      className="form-field-container"
-      style={{ backgroundColor: field.confidence > 0.9 ? '#fff' : '#fffbe6' }}
-    >
-      {field.type !== 'checkbox' ? (
-        <label htmlFor={inputId} style={{ fontWeight: 'bold' }}>
-          {field.label}
-          {isRequired && <span style={{ color: 'red', marginLeft: '4px' }}>*</span>}
-        </label>
-      ) : (
-        <label htmlFor={inputId} style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center' }}>
-            {renderInput()}
-            <span>{field.label}</span>
-            {isRequired && <span style={{ color: 'red', marginLeft: '4px' }}>*</span>}
-        </label>
-      )}
-      
-      {field.type !== 'checkbox' && renderInput()}
-      
-      <div className="debug-info">
-        <em>
-          Detected via: {field.source} (Confidence: {Math.round(field.confidence * 100)}%)
-          {formatValidationRules(field.validation)}
-        </em>
-      </div>
-    </div>
-  );
-}
+// We've moved the FormField component to its own file
+// Now using the imported FormField component instead
 
 
 // --- Main App Component ---
@@ -126,6 +30,23 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState({ message: '', errors: null, success: false });
 
+  // Listen for popup close event to clear validation errors
+  useEffect(() => {
+    const handleClearValidationErrors = () => {
+      setSubmissionStatus(prev => ({
+        ...prev,
+        errors: null,
+        message: ''
+      }));
+    };
+
+    window.addEventListener('clearValidationErrors', handleClearValidationErrors);
+    
+    return () => {
+      window.removeEventListener('clearValidationErrors', handleClearValidationErrors);
+    };
+  }, []);
+
   const handleGenerate = async () => {
     if (!prompt) { setError("Please enter a prompt."); return; }
     setError('');
@@ -135,7 +56,18 @@ function App() {
 
     try {
       const res = await axios.post('http://127.0.0.1:5000/process', { prompt });
-      setFormData(res.data);
+      
+      // Add some default metadata for form fields
+      const fieldsWithMeta = res.data.fields.map(field => ({
+        ...field,
+        source: 'AI Detection',
+        confidence: 0.95
+      }));
+      
+      setFormData({
+        ...res.data,
+        fields: fieldsWithMeta
+      });
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.response?.data?.error || 'Failed to connect to the backend.';
       setError(errorMessage);
@@ -144,7 +76,37 @@ function App() {
     }
   };
   
-  // This function handles removing a field from the state
+  // Handle adding a new field
+  const handleAddField = (newField) => {
+    if (!formData) return;
+    setFormData({
+      ...formData,
+      fields: [...formData.fields, {
+        ...newField,
+        source: 'User Added',
+        confidence: 1.0
+      }]
+    });
+  };
+  
+  // Handle updating an existing field
+  const handleUpdateField = (updatedField) => {
+    if (!formData) return;
+    const updatedFields = formData.fields.map(field => 
+      field.id === updatedField.id ? {
+        ...updatedField,
+        source: field.source,
+        confidence: field.confidence
+      } : field
+    );
+    
+    setFormData({
+      ...formData,
+      fields: updatedFields
+    });
+  };
+  
+  // Handle deleting a field
   const handleDeleteField = (fieldIdToDelete) => {
     if (!formData) return;
     const updatedFields = formData.fields.filter(
@@ -217,21 +179,21 @@ function App() {
             {formData.fields.map((field, idx) => {
               const fieldError = submissionStatus.errors?.[field.id];
               return (
-                // This wrapper is the key. It holds both the field and its delete button.
                 <div key={`${field.id || field.label}-${idx}`} className="field-wrapper">
-                  <FormField field={field} index={idx} />
-                  <button 
-                    type="button" 
-                    onClick={() => handleDeleteField(field.id)} 
-                    className="delete-field-btn"
-                    aria-label={`Delete ${field.label} field`}
-                  >
-                    ×
-                  </button>
+                  <FormField 
+                    field={field} 
+                    index={idx}
+                    onUpdate={handleUpdateField}
+                    onDelete={handleDeleteField}
+                  />
                   {fieldError && <div className="field-error">{fieldError}</div>}
                 </div>
               )
             })}
+            
+            {/* Add Field Button */}
+            <AddFieldButton onAddField={handleAddField} />
+            
             <button type="submit" className="submit-button" disabled={isSubmitting}>
               {isSubmitting ? 'Submitting...' : 'Submit Form'}
             </button>

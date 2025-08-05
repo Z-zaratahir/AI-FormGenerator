@@ -1,0 +1,246 @@
+/* FieldTypeSelector.css - Redesigned to match the Figma design */
+
+/* Force browser validation tooltips to have lower z-index when modal is present */
+body:has(.field-selector-overlay) input::-webkit-validation-bubble,
+body:has(.field-selector-overlay) input::-webkit-validation-bubble-message,
+body:has(.field-selector-overlay) input::-webkit-validation-bubble-arrow,
+body:has(.field-selector-overlay) input::-webkit-validation-bubble-top-outer-arrow,
+body:has(.field-selector-overlay) input::-webkit-validation-bubble-top-inner-arrow {
+  z-index: 1 !important;
+  opacity: 0.3 !important;
+}
+
+/* Alternative approach - try to force all tooltips behind */
+body:has(.field-selector-overlay) *[title]:hover::after,
+body:has(.field-selector-overlay) *[data-tooltip]:hover::after {
+  z-index: 1 !important;
+}
+
+/* Popup overlay - covers the entire screen with a semi-transparent background */
+.field-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  animation: overlay-appear 0.3s ease-out;
+}
+
+@keyframes overlay-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* The actual popup container */
+.field-selector-modal {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 580px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow: hidden;
+  padding: 0;
+  animation: popup-appear 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header section with title and close button */
+.field-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.field-selector-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+.close-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  padding: 8px;
+  margin: 0;
+  line-height: 1;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Content section with grid layout */
+.field-selector-content {
+  padding: 24px;
+  background: #fafbfc;
+  overflow-y: auto;
+  max-height: calc(85vh - 80px);
+}
+
+.field-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Individual field type button */
+.field-type-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 2px solid #e5e7eb;
+  background: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  height: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.field-type-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.field-type-button:hover::before {
+  opacity: 0.1;
+}
+
+.field-type-button:hover {
+  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+}
+
+.field-type-button.selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -3px rgba(102, 126, 234, 0.4);
+}
+
+.field-type-button.selected .field-type-icon,
+.field-type-button.selected .field-type-label {
+  color: white;
+  position: relative;
+  z-index: 1;
+}
+
+.field-type-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.field-type-button:hover .field-type-icon {
+  transform: scale(1.1);
+}
+
+.field-type-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.3;
+  position: relative;
+  z-index: 1;
+  color: #4a5568;
+  transition: color 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .field-selector-modal {
+    width: 95vw;
+    margin: 20px;
+  }
+  
+  .field-type-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .field-type-button {
+    height: 90px;
+    padding: 16px 12px;
+  }
+  
+  .field-type-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  .field-type-label {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .field-type-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .field-selector-content {
+    padding: 20px;
+  }
+  
+  .field-selector-header {
+    padding: 16px 20px;
+  }
+  
+  .field-selector-header h3 {
+    font-size: 18px;
+  }
+}
