@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORMAVERSE Layout Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            background: #3b82f6;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            color: #1e293b;
+        }
+
+        .header-center {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 2rem;
+        }
+
+        .prompt-input-container {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 50px;
+            padding: 0.5rem;
+            transition: border-color 0.2s;
+        }
+
+        .prompt-input-container:focus-within {
+            border-color: #3b82f6;
+        }
+
+        .prompt-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        .mic-button, .send-button {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .mic-button:hover, .send-button:hover {
+            background-color: #f1f5f9;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #f8fafc;
+        }
+
+        .publish-btn {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+
+        .publish-btn:hover {
+            background: #2563eb;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 80px);
+        }
+
+        .left-sidebar {
+            width: 80px;
+            background: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            border-right: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            padding: 1rem 0.5rem;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s;
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .nav-item.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .help-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .help-icon {
+            width: 2rem;
+            height: 2rem;
+            background: #64748b;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .form-main {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .form-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .form-title {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .form-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .made-by {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-indicator {
+            font-size: 0.875rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .edit-btn, .preview-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .edit-btn:hover, .preview-btn:hover {
+            background-color: #f1f5f9;
+        }
+
+        .form-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .form-header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-title-main {
+            font-size: 2.5rem;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .form-description {
+            font-size: 1.125rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .generated-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-field {
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .field-label {
+            font-weight: 600;
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .field-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f8fafc;
+        }
+
+        .form-actions-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cancel-btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: white;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background: #f8fafc;
+        }
+
+        .next-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            background: #3b82f6;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .next-btn:hover {
+            background: #2563eb;
+        }
+
+        .feedback-section {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .feedback-section p {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .star:hover {
+            transform: scale(1.2);
+        }
+
+        .right-sidebar {
+            width: 300px;
+            background: white;
+            border-left: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .page-preview {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .page-thumbnail {
+            background: #f8fafc;
+            padding: 1rem;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .add-page-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background: none;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .add-page-btn:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .left-sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                padding: 1rem;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+            }
+            
+            .sidebar-nav {
+                flex-direction: row;
+                gap: 0.5rem;
+                flex: 1;
+                justify-content: space-around;
+            }
+            
+            .right-sidebar {
+                width: 100%;
+                height: auto;
+                border-left: none;
+                border-top: 1px solid #e2e8f0;
+            }
+            
+            .form-content {
+                padding: 1rem;
+            }
+            
+            .generated-form {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-header {
+                padding: 0.75rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .header-center {
+                order: 2;
+                margin: 0;
+            }
+            
+            .form-header {
+                padding: 0.75rem;
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .form-title-main {
+                font-size: 1.5rem;
+            }
+            
+            .form-content {
+                padding: 0.75rem;
+            }
+            
+            .generated-form {
+                padding: 0.75rem;
+            }
+            
+            .form-actions-bottom {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .cancel-btn, .next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top Header Bar -->
+        <header class="top-header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="logo-icon">F</span>
+                    <span class="logo-text">FORMAVERSE</span>
+                </div>
+            </div>
+            
+            <div class="header-center">
+                <div class="prompt-input-container">
+                    <input 
+                        type="text" 
+                        placeholder="Enter your Prompt here"
+                        class="prompt-input"
+                    />
+                    <button class="mic-button">🎤</button>
+                    <button class="send-button">✈️</button>
+                </div>
+            </div>
+            
+            <div class="header-right">
+                <button class="action-btn discard-btn">Discard</button>
+                <button class="action-btn save-btn">Save</button>
+                <button class="action-btn publish-btn">Publish</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Sidebar -->
+            <aside class="left-sidebar">
+                <nav class="sidebar-nav">
+                    <button class="nav-item active">
+                        <div class="nav-icon">🤖</div>
+                        <span>Prompt</span>
+                    </button>
+                    
+                    <button class="nav-item">
+                        <div class="nav-icon">📄</div>
+                        <span>Template</span>
+                    </button>
+                    
+                    <button class="nav-item">
+                        <div class="nav-icon">🎨</div>
+                        <span>Theme</span>
+                    </button>
+                    
+                    <button class="nav-item">
+                        <div class="nav-icon">📤</div>
+                        <span>Share</span>
+                    </button>
+                </nav>
+                
+                <div class="sidebar-bottom">
+                    <button class="help-btn">
+                        <div class="help-icon">?</div>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Form Area -->
+            <main class="form-main">
+                <div class="form-header">
+                    <div class="form-nav">
+                        <button class="back-btn">←</button>
+                        <span class="form-title">Form 1</span>
+                    </div>
+                    <div class="form-meta">
+                        <span class="made-by">Made by FORMAVERSE</span>
+                    </div>
+                    <div class="form-actions">
+                        <span class="step-indicator">Step 1 of 2</span>
+                        <button class="edit-btn">✏️</button>
+                        <button class="preview-btn">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-content">
+                    <div class="form-header-section">
+                        <h1 class="form-title-main">Personal Information - Profile Setup</h1>
+                        <p class="form-description">
+                            A friendly and professional onboarding form designed to gather essential user details.
+                        </p>
+                    </div>
+                    
+                    <div class="generated-form">
+                        <div class="form-field">
+                            <label class="field-label">Complete Name *</label>
+                            <input type="text" class="field-input" placeholder="Ex : John Doe" />
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Date of birth *</label>
+                            <input type="text" class="field-input" placeholder="DD / MM / YYYY" />
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Gender</label>
+                            <select class="field-input">
+                                <option>Gender</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Phone number *</label>
+                            <input type="tel" class="field-input" placeholder="(____) ____-____" />
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Website</label>
+                            <input type="url" class="field-input" placeholder="https:// www.yourwebsite.com" />
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Currency</label>
+                            <div style="display: flex; gap: 1rem;">
+                                <button style="padding: 0.5rem 1rem; background: #e2e8f0; border: none; border-radius: 6px;">CAD</button>
+                                <button style="padding: 0.5rem 1rem; background: white; border: 1px solid #e2e8f0; border-radius: 6px;">USD</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="field-label">Language</label>
+                            <select class="field-input">
+                                <option>French</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions-bottom">
+                            <button class="cancel-btn">Cancel</button>
+                            <button class="next-btn">Next</button>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Section -->
+                    <div class="feedback-section">
+                        <p>Kindly Give us Feedback of the form</p>
+                        <div class="rating-stars">
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                            <span class="star">⭐</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="right-sidebar">
+                <div class="sidebar-tabs">
+                    <button class="tab-btn active">Pages</button>
+                    <button class="tab-btn">Responses</button>
+                </div>
+                
+                <div class="sidebar-content">
+                    <div class="page-preview">
+                        <div class="page-thumbnail">
+                            <div style="text-align: center; color: #64748b; font-size: 0.875rem;">
+                                <h4 style="color: #1e293b; margin-bottom: 0.5rem;">Personal Information - Profile Setup</h4>
+                                <p>Complete Name *</p>
+                                <p>Date of birth *</p>
+                                <p>Gender</p>
+                            </div>
+                        </div>
+                        <div class="page-info">
+                            <span>Page 1</span>
+                            <button style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: #64748b;">⋯</button>
+                        </div>
+                    </div>
+                    
+                    <div class="page-preview">
+                        <div class="page-thumbnail">
+                            <div style="text-align: center; color: #64748b; font-size: 0.875rem;">
+                                <h4 style="color: #1e293b;">Page 2</h4>
+                            </div>
+                        </div>
+                        <div class="page-info">
+                            <span>Page 2</span>
+                            <button style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: #64748b;">⋯</button>
+                        </div>
+                    </div>
+                    
+                    <button class="add-page-btn">
+                        <span>+</span>
+                        <span>Add More</span>
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </div>
+</body>
+</html> 
