@@ -61,7 +61,7 @@ def make_dynamic_def(id_str):
 
 
 # --- The Form Generator Engine ---
-# In app4.py, replace the entire FormGenerator class with this:
+
 
 class FormGenerator:
     def __init__(self, fields_data, templates_data):
@@ -130,7 +130,7 @@ class FormGenerator:
         final_fields_map = {}
         detected_template_names = []
         
-        rating_min, rating_max = 1, 5
+        rating_min, rating_max = 1, 7
         rating_range_found = False
         rating_match = re.search(r"(?:rating|rate|score)\s*(?:\(|from|\:)?\s*(\d+)\s*(?:to|-)\s*(\d+)", corrected_prompt, re.IGNORECASE)
         if not rating_match and len(corrected_prompt.split()) < 10:
@@ -396,7 +396,7 @@ def validate_submission(values: dict, schema: list):
         
         if field.get("type") == "rating" and val:
             try:
-                r, mn, mx = int(val), rules.get("min",1), rules.get("max",5)
+                r, mn, mx = int(val), rules.get("min",1), rules.get("max",7)
                 if r < mn or r > mx: errors[fid] = f"Rating must be between {mn} and {mx}."
             except ValueError: errors[fid] = "Rating must be a number."
 
