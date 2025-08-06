@@ -179,7 +179,7 @@
       [{"LEMMA": "comment"}],
       [{"LEMMA": "remark"}]
     ],
-    "fuzzy_keywords": ["comment", "comments", "feedback", "remarks", "additional information", "notes", "additional comments", "any other feedback", "your thoughts"],
+    "fuzzy_keywords": ["comment", "comments", "remarks", "additional information", "notes", "additional comments", "your thoughts"],
     "validation": {}
   },
   {
@@ -4350,5 +4350,918 @@
     "label": "Remote Work Survey",
     "type": "fieldset",
     "fuzzy_keywords": ["remote work survey", "work from home survey"]
+  },
+  {
+  "id": "AGE",
+  "label": "Age",
+  "type": "number",
+  "patterns": [
+    [{"LOWER": "age"}],
+    [{"LOWER": "your"}, {"LOWER": "age"}],
+    [{"LOWER": "current"}, {"LOWER": "age"}]
+  ],
+  "fuzzy_keywords": ["age", "years", "your age", "current age", "how old", "age in years"],
+  "validation": {
+    "required": true,
+    "min": 0,
+    "max": 120
+  }
+},
+{
+  "id": "MIDDLE_NAME",
+  "label": "Middle Name",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "middle"}, {"LOWER": "name"}]
+  ],
+  "fuzzy_keywords": ["middle name", "middle"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "CURRENT_EMPLOYER",
+  "label": "Current Employer",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "current"}, {"LOWER": "employer"}]
+  ],
+  "fuzzy_keywords": ["current employer", "employed at", "working at", "company"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "EMERGENCY_PHONE",
+  "label": "Emergency Contact Number",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "emergency"}, {"LOWER": "contact"}, {"LOWER": "number"}]
+  ],
+  "fuzzy_keywords": ["emergency phone", "emergency", "emergency number"],
+  "validation": {
+    "required": false,
+    "rule": "phone_number"
+  }
+},
+{
+  "id": "GUARDIAN_NAME",
+  "label": "Guardian Name",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "guardian"}, {"LOWER": "name"}]
+  ],
+  "fuzzy_keywords": ["guardian", "parent name", "guardian's name", "parents"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "INCOME",
+  "label": "Income",
+  "type": "number",
+  "patterns": [
+    [{"LOWER": "income"}]
+  ],
+  "fuzzy_keywords": ["income", "salary", "earnings"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "AMOUNT",
+  "label": "Amount",
+  "type": "number",
+  "patterns": [
+    [{"LOWER": "amount"}]
+  ],
+  "fuzzy_keywords": ["amount", "value", "price", "total"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "CARD_NUMBER",
+  "label": "Card Number",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "card"}, {"LOWER": "number"}]
+  ],
+  "fuzzy_keywords": ["card number", "credit card", "debit card"],
+  "validation": {
+    "required": false,
+    "rule": "credit_card_format"
+  }
+},
+{
+  "id": "EXPIRY_DATE",
+  "label": "Card Expiry Date",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "expiry"}, {"LOWER": "date"}]
+  ],
+  "fuzzy_keywords": ["expiry", "expiration date", "card expiry"],
+  "validation": {
+    "required": false,
+    "rule": "expiry_format"
+  }
+},
+{
+  "id": "FEEDBACK",
+  "label": "Feedback",
+  "type": "textarea",
+  "patterns": [
+    [{"LOWER": "feedback"}]
+  ],
+  "fuzzy_keywords": ["feedback", "any other feedback"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "ALLERGIES",
+  "label": "Allergies",
+  "type": "textarea",
+  "patterns": [
+    [{"LOWER": "allergies"}]
+  ],
+  "fuzzy_keywords": ["allergy", "allergies", "sensitive to"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "TRAVELERS",
+  "label": "Travelers",
+  "type": "number",
+  "patterns": [
+    [{"LOWER": "travelers"}]
+  ],
+  "fuzzy_keywords": ["travelers", "number of people", "guests", "passengers"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "DESTINATION",
+  "label": "Destination",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "destination"}]
+  ],
+  "fuzzy_keywords": ["destination", "place", "location", "where"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "DEPARTURE_DATE",
+  "label": "Departure Date",
+  "type": "date",
+  "patterns": [
+    [{"LOWER": "departure"}, {"LOWER": "date"}]
+  ],
+  "fuzzy_keywords": ["departure date", "leaving"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "RETURN_DATE",
+  "label": "Return Date",
+  "type": "date",
+  "patterns": [
+    [{"LOWER": "return"}, {"LOWER": "date"}]
+  ],
+  "fuzzy_keywords": ["return date", "coming back", "end date"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "PREFERRED_DATE",
+  "label": "Preferred Date",
+  "type": "date",
+  "patterns": [
+    [{"LOWER": "preferred"}, {"LOWER": "date"}]
+  ],
+  "fuzzy_keywords": ["preferred date", "desired date", "choose a date"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "TOPIC",
+  "label": "Topic",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "topic"}]
+  ],
+  "fuzzy_keywords": ["topic", "subject", "discussion", "matter"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "QUESTION",
+  "label": "Question",
+  "type": "textarea",
+  "patterns": [
+    [{"LOWER": "question"}]
+  ],
+  "fuzzy_keywords": ["question", "ask", "query"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "ANSWER",
+  "label": "Answer",
+  "type": "textarea",
+  "patterns": [
+    [{"LOWER": "answer"}]
+  ],
+  "fuzzy_keywords": ["answer", "response", "reply", "solution"],
+  "validation": {
+    "required": false
+  }
+},
+{
+  "id": "INSTITUTION_NAME",
+  "label": "Institution Name",
+  "type": "text",
+  "patterns": [
+    [{"LOWER": "institution"}, {"LOWER": "name"}]
+  ],
+  "fuzzy_keywords": ["institution name", "college name", "school name", "university name"],
+  "validation": {
+    "required": false
+  }
+},
+  {
+    "id": "INTERESTS",
+    "label": "Interests",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "interests"}], [{"LOWER": "your"}, {"LOWER": "interests"}]],
+    "fuzzy_keywords": ["interests", "activities you enjoy", "what do you like to do"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "FAVORITE_FOOD",
+    "label": "Favorite Food",
+    "type": "text",
+    "patterns": [[{"LOWER": "favorite"}, {"LOWER": "food"}]],
+    "fuzzy_keywords": ["favorite food", "preferred cuisine", "food you like"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "FAVORITE_MOVIE",
+    "label": "Favorite Movie",
+    "type": "text",
+    "patterns": [[{"LOWER": "favorite"}, {"LOWER": "movie"}]],
+    "fuzzy_keywords": ["favorite movie", "top movie", "movie you like"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "FAVORITE_BOOK",
+    "label": "Favorite Book",
+    "type": "text",
+    "patterns": [[{"LOWER": "favorite"}, {"LOWER": "book"}]],
+    "fuzzy_keywords": ["favorite book", "top book", "book you like"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "FITNESS_LEVEL",
+    "label": "Fitness Level",
+    "type": "select",
+    "options": ["Beginner", "Intermediate", "Advanced"],
+    "patterns": [[{"LOWER": "fitness"}, {"LOWER": "level"}]],
+    "fuzzy_keywords": ["fitness level", "exercise level", "how fit are you"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "DIET_TYPE",
+    "label": "Diet Type",
+    "type": "select",
+    "options": ["Vegetarian", "Vegan", "Keto", "Paleo", "Omnivore"],
+    "patterns": [[{"LOWER": "diet"}, {"LOWER": "type"}]],
+    "fuzzy_keywords": ["diet", "diet type", "eating style", "nutrition type"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "SMOKING_STATUS",
+    "label": "Smoking Status",
+    "type": "select",
+    "options": ["Smoker", "Non-Smoker", "Occasional"],
+    "patterns": [[{"LOWER": "smoking"}, {"LOWER": "status"}]],
+    "fuzzy_keywords": ["smoking status", "do you smoke", "tobacco use"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "DRINKING_HABITS",
+    "label": "Drinking Habits",
+    "type": "select",
+    "options": ["Regular", "Occasional", "Never"],
+    "patterns": [[{"LOWER": "drinking"}, {"LOWER": "habits"}]],
+    "fuzzy_keywords": ["drinking habits", "alcohol use", "do you drink"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "SLEEP_PATTERN",
+    "label": "Sleep Pattern",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "sleep"}, {"LOWER": "pattern"}]],
+    "fuzzy_keywords": ["sleep cycle", "sleep pattern", "sleep habits", "sleep routine", "how you sleep"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "STRESS_LEVEL",
+    "label": "Stress Level",
+    "type": "rating",
+    "validation": {"min": 1, "max": 10, "required": false},
+    "patterns": [[{"LOWER": "stress"}, {"LOWER": "level"}]],
+    "fuzzy_keywords": ["stress level", "how stressed", "rate your stress"]
+  },
+  {
+    "id": "SOCIAL_MEDIA_USAGE",
+    "label": "Social Media Usage",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "social"}, {"LOWER": "media"}, {"LOWER": "usage"}]],
+    "fuzzy_keywords": ["social media use", "time on social media", "social media habits"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "FASHION_STYLE",
+    "label": "Fashion Style",
+    "type": "text",
+    "patterns": [[{"LOWER": "fashion"}, {"LOWER": "style"}]],
+    "fuzzy_keywords": ["fashion style", "clothing style", "personal style", "dress style"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "PERSONALITY_TYPE",
+    "label": "Personality Type",
+    "type": "select",
+    "options": ["Introvert", "Extrovert", "Ambivert"],
+    "patterns": [[{"LOWER": "personality"}, {"LOWER": "type"}]],
+    "fuzzy_keywords": ["personality type", "your personality", "mbti"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "TRAVEL_FREQUENCY",
+    "label": "Travel Frequency",
+    "type": "select",
+    "options": ["Never", "Occasionally", "Frequently"],
+    "patterns": [[{"LOWER": "travel"}, {"LOWER": "frequency"}]],
+    "fuzzy_keywords": ["travel frequency", "how often you travel", "travel habits"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "PREFERRED_ACTIVITIES",
+    "label": "Preferred Activities",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "preferred"}, {"LOWER": "activities"}]],
+    "fuzzy_keywords": ["preferred activities", "favorite activities", "things you like to do"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "WEEKEND_PLANS",
+    "label": "Weekend Plans",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "weekend"}, {"LOWER": "plans"}]],
+    "fuzzy_keywords": ["weekend plans", "weekend schedule", "what do you do on weekends"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "CELEBRITY_PREFERENCE",
+    "label": "Celebrity Preference",
+    "type": "text",
+    "patterns": [[{"LOWER": "celebrity"}, {"LOWER": "preference"}]],
+    "fuzzy_keywords": ["favorite celebrity", "celebrity you like", "preferred celebrity"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "NEWS_SUBSCRIPTION",
+    "label": "News Subscription",
+    "type": "select",
+    "options": ["None", "Daily", "Weekly", "Monthly"],
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "subscription"}]],
+    "fuzzy_keywords": ["news subscription", "subscribe to news"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "CONTENT_PREFERENCES",
+    "label": "Content Preferences",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "content"}, {"LOWER": "preferences"}]],
+    "fuzzy_keywords": ["content preferences", "what content you like", "favorite content types"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "WELLNESS_GOALS",
+    "label": "Wellness Goals",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "wellness"}, {"LOWER": "goals"}]],
+    "fuzzy_keywords": ["wellness goals", "health goals", "fitness goals"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "SKINCARE_ROUTINE",
+    "label": "Skincare Routine",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "skincare"}, {"LOWER": "routine"}]],
+    "fuzzy_keywords": ["skincare routine", "skin care habits", "beauty routine"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "SHOPPING_FREQUENCY",
+    "label": "Shopping Frequency",
+    "type": "select",
+    "options": ["Daily", "Weekly", "Monthly", "Occasionally"],
+    "patterns": [[{"LOWER": "shopping"}, {"LOWER": "frequency"}]],
+    "fuzzy_keywords": ["shopping frequency", "how often do you shop", "shopping", "shopping pattern"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "GADGET_USAGE",
+    "label": "Gadget Usage",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "gadget"}, {"LOWER": "usage"}]],
+    "fuzzy_keywords": ["gadget use", "technology use", "device usage"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "DEVICE_PREFERENCE",
+    "label": "Device Preference",
+    "type": "select",
+    "options": ["Mobile", "Laptop", "Tablet", "Desktop"],
+    "patterns": [[{"LOWER": "device"}, {"LOWER": "preference"}]],
+    "fuzzy_keywords": ["device preference", "preferred device", "what device you use most"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "STREAMING_SERVICES",
+    "label": "Streaming Services",
+    "type": "textarea",
+    "patterns": [[{"LOWER": "streaming"}, {"LOWER": "services"}]],
+    "fuzzy_keywords": ["streaming services", "OTT platforms", "what do you stream"],
+    "validation": {"required": false}
+  },
+  {
+    "id": "LIFESTYLE_RATING",
+    "label": "Lifestyle Rating",
+    "type": "rating",
+    "validation": {"min": 1, "max": 10, "required": false},
+    "patterns": [[{"LOWER": "lifestyle"}, {"LOWER": "rating"}]],
+    "fuzzy_keywords": ["lifestyle rating", "how's your lifestyle", "rate your lifestyle"]
+  },
+  {
+    "id": "WORK_LIFE_BALANCE",
+    "label": "Work-Life Balance",
+    "type": "rating",
+    "validation": {"min": 1, "max": 10, "required": false},
+    "patterns": [[{"LOWER": "work"}, {"LOWER": "life"}, {"LOWER": "balance"}]],
+    "fuzzy_keywords": ["work life balance", "balance between work and personal life", "job and life balance"]
+  },
+  {
+  "id": "SOCIAL_MEDIA_PLATFORMS",
+  "label": "Social Media Platforms",
+  "type": "checkbox",
+  "options": ["Facebook", "Instagram", "Twitter", "LinkedIn", "Snapchat", "TikTok", "YouTube", "Reddit", "Pinterest", "Other"],
+  "patterns": [
+    [{"LOWER": "social"}, {"LOWER": "media"}],
+    [{"LOWER": "what"}, {"LOWER": "social"}, {"LOWER": "media"}, {"LOWER": "do"}, {"LOWER": "you"}, {"LOWER": "use"}],
+    [{"LOWER": "which"}, {"LOWER": "social"}, {"LOWER": "media"}, {"LOWER": "platforms"}]
+  ],
+  "fuzzy_keywords": [
+    "social media apps",
+    "what social media you use",
+    "social media platforms",
+    "which apps you use",
+    "favorite social apps",
+    "social apps"
+  ],
+  "validation": {
+    "required": false,
+    "minSelections": 1
+  }
+},
+  {
+    "id": "PLAYER_POSITION",
+    "label": "Player Position",
+    "type": "select",
+    "options": ["Goalkeeper", "Defender", "Midfielder", "Forward"],
+    "patterns": [
+      [{"LOWER": "player"}, {"LOWER": "position"}],
+      [{"LOWER": "position"}],
+      [{"LOWER": "field"}, {"LOWER": "position"}]
+    ],
+    "fuzzy_keywords": ["position", "player role", "field position", "football position"],
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "id": "TECHNIQUE_RATING",
+    "label": "Technique Rating",
+    "type": "rating",
+    "validation": {
+      "required": true,
+      "min": 1,
+      "max": 10
+    },
+    "patterns": [
+      [{"LOWER": "technique"}],
+      [{"LOWER": "player"}, {"LOWER": "technique"}]
+    ],
+    "fuzzy_keywords": ["technique", "technical skill", "skills", "football technique", "player technique"]
+  },
+  {
+    "id": "MATCHES_PLAYED",
+    "label": "Matches Played",
+    "type": "number",
+    "validation": {
+      "required": true,
+      "min": 0
+    },
+    "patterns": [
+      [{"LOWER": "matches"}, {"LOWER": "played"}],
+      [{"LOWER": "games"}, {"LOWER": "played"}]
+    ],
+    "fuzzy_keywords": ["matches played", "games played", "number of games", "played matches"]
+  },
+  {
+    "id": "SPORT_TYPE",
+    "label": "Sport Type",
+    "type": "select",
+    "options": ["Football", "Basketball", "Tennis", "Cricket", "Hockey", "Baseball", "Volleyball", "Other"],
+    "patterns": [
+      [{"LOWER": "sport"}],
+      [{"LOWER": "sport"}, {"LOWER": "type"}]
+    ],
+    "fuzzy_keywords": ["sport", "game", "sports category", "type of sport", "sport type"],
+    "validation": {
+      "required": true
+    }
+  },
+  {
+    "id": "WAKE_UP_TIME",
+    "label": "Wake-up Time",
+    "type": "time",
+    "patterns": [[{"LOWER": "wake"}], [{"LOWER": "get"}, {"LOWER": "up"}], [{"LOWER": "alarm"}, {"LOWER": "time"}]],
+    "fuzzy_keywords": ["wake up", "get up time", "alarm time"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "SLEEP_TIME",
+    "label": "Sleep Time",
+    "type": "time",
+    "patterns": [[{"LOWER": "sleep"}], [{"LOWER": "bed"}, {"LOWER": "time"}], [{"LOWER": "go"}, {"LOWER": "to"}, {"LOWER": "bed"}]],
+    "fuzzy_keywords": ["sleep time", "bed time", "go to bed"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "SLEEP_QUALITY",
+    "label": "Sleep Quality",
+    "type": "select",
+    "patterns": [[{"LOWER": "sleep"}], [{"LOWER": "rested"}], [{"LOWER": "how"}, {"LOWER": "well"}, {"LOWER": "sleep"}]],
+    "fuzzy_keywords": ["sleep quality", "rested", "how well sleep"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "NAP_DURATION",
+    "label": "Nap Duration",
+    "type": "number",
+    "patterns": [[{"LOWER": "nap"}], [{"LOWER": "nap"}, {"LOWER": "duration"}], [{"LOWER": "afternoon"}, {"LOWER": "sleep"}]],
+    "fuzzy_keywords": ["nap time", "nap duration", "afternoon sleep"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "BEDTIME_ROUTINE",
+    "label": "Bedtime Routine",
+    "type": "text",
+    "patterns": [[{"LOWER": "bedtime"}], [{"LOWER": "night"}, {"LOWER": "routine"}], [{"LOWER": "pre"}, {"LOWER": "sleep"}]],
+    "fuzzy_keywords": ["bedtime routine", "night routine", "pre-sleep activities"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "MEAL_PREFERENCES",
+    "label": "Meal Preferences",
+    "type": "select",
+    "patterns": [[{"LOWER": "meal"}], [{"LOWER": "diet"}], [{"LOWER": "eating"}, {"LOWER": "preference"}]],
+    "fuzzy_keywords": ["meal type", "diet", "eating preference"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "DAILY_WATER_INTAKE",
+    "label": "Daily Water Intake (liters)",
+    "type": "number",
+    "patterns": [[{"LOWER": "water"}], [{"LOWER": "water"}, {"LOWER": "intake"}], [{"LOWER": "water"}, {"LOWER": "consumption"}]],
+    "fuzzy_keywords": ["water intake", "water consumption"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "FAVORITE_CUISINE",
+    "label": "Favorite Cuisine",
+    "type": "text",
+    "patterns": [[{"LOWER": "favorite"}, {"LOWER": "cuisine"}], [{"LOWER": "preferred"}, {"LOWER": "cuisine"}], [{"LOWER": "cuisine"}, {"LOWER": "type"}]],
+    "fuzzy_keywords": ["favorite cuisine", "preferred cuisine", "cuisine type"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "SNACKING_HABITS",
+    "label": "Snacking Habits",
+    "type": "text",
+    "patterns": [[{"LOWER": "snacking"}], [{"LOWER": "snacks"}], [{"LOWER": "junk"}, {"LOWER": "food"}]],
+    "fuzzy_keywords": ["snacking habits", "snacks", "junk food"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "CAFFEINE_CONSUMPTION",
+    "label": "Caffeine Consumption",
+    "type": "select",
+    "patterns": [[{"LOWER": "caffeine"}], [{"LOWER": "coffee"}, {"LOWER": "intake"}], [{"LOWER": "tea"}, {"LOWER": "habit"}]],
+    "fuzzy_keywords": ["caffeine", "coffee intake", "tea habit"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "EXERCISE_FREQUENCY",
+    "label": "Exercise Frequency",
+    "type": "select",
+    "patterns": [[{"LOWER": "exercise"}], [{"LOWER": "workout"}, {"LOWER": "times"}], [{"LOWER": "how"}, {"LOWER": "often"}, {"LOWER": "exercise"}]],
+    "fuzzy_keywords": ["exercise frequency", "workout times", "how often exercise"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "EXERCISE_TYPE",
+    "label": "Exercise Type",
+    "type": "text",
+    "patterns": [[{"LOWER": "exercise"}, {"LOWER": "type"}], [{"LOWER": "workout"}, {"LOWER": "type"}], [{"LOWER": "gym"}, {"LOWER": "activities"}]],
+    "fuzzy_keywords": ["exercise type", "workout type", "gym activities"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "DAILY_STEP_COUNT",
+    "label": "Daily Step Count",
+    "type": "number",
+    "patterns": [[{"LOWER": "step"}, {"LOWER": "count"}], [{"LOWER": "steps"}, {"LOWER": "per"}, {"LOWER": "day"}], [{"LOWER": "daily"}, {"LOWER": "steps"}]],
+    "fuzzy_keywords": ["step count", "steps per day", "daily steps"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "STRESS_LEVEL",
+    "label": "Stress Level",
+    "type": "select",
+    "patterns": [[{"LOWER": "stress"}, {"LOWER": "level"}], [{"LOWER": "how"}, {"LOWER": "stressed"}], [{"LOWER": "mental"}, {"LOWER": "pressure"}]],
+    "fuzzy_keywords": ["stress level", "how stressed", "mental pressure"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "MEDITATION_PRACTICE",
+    "label": "Meditation Practice",
+    "type": "boolean",
+    "patterns": [[{"LOWER": "meditation"}], [{"LOWER": "meditate"}], [{"LOWER": "mindfulness"}]],
+    "fuzzy_keywords": ["meditation", "meditate", "mindfulness"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "SCREEN_TIME",
+    "label": "Daily Screen Time (hours)",
+    "type": "number",
+    "patterns": [[{"LOWER": "screen"}, {"LOWER": "time"}], [{"LOWER": "device"}, {"LOWER": "use"}], [{"LOWER": "daily"}, {"LOWER": "screen"}]],
+    "fuzzy_keywords": ["screen time", "device use", "daily screen"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "DEVICE_DEPENDENCY_LEVEL",
+    "label": "Device Dependency Level",
+    "type": "select",
+    "patterns": [[{"LOWER": "device"}, {"LOWER": "dependency"}], [{"LOWER": "phone"}, {"LOWER": "usage"}, {"LOWER": "level"}], [{"LOWER": "device"}, {"LOWER": "addiction"}]],
+    "fuzzy_keywords": ["device addiction", "phone usage level", "device dependency"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "SOCIAL_MEDIA_USAGE_TIME",
+    "label": "Social Media Usage Time",
+    "type": "number",
+    "patterns": [[{"LOWER": "social"}, {"LOWER": "media"}], [{"LOWER": "social"}, {"LOWER": "media"}, {"LOWER": "time"}], [{"LOWER": "facebook"}, {"LOWER": "usage"}]],
+    "fuzzy_keywords": ["social media time", "facebook time", "instagram usage"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "APP_USAGE_PATTERN",
+    "label": "App Usage Pattern",
+    "type": "text",
+    "patterns": [[{"LOWER": "app"}, {"LOWER": "usage"}], [{"LOWER": "apps"}, {"LOWER": "used"}], [{"LOWER": "application"}, {"LOWER": "usage"}]],
+    "fuzzy_keywords": ["apps used", "app habits", "application usage"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "HOUSE_CLEANING_FREQUENCY",
+    "label": "House Cleaning Frequency",
+    "type": "select",
+    "patterns": [[{"LOWER": "house"}, {"LOWER": "cleaning"}], [{"LOWER": "home"}, {"LOWER": "cleaning"}], [{"LOWER": "cleaning"}, {"LOWER": "schedule"}]],
+    "fuzzy_keywords": ["house cleaning", "home cleaning schedule", "cleaning frequency"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "COOKING_FREQUENCY",
+    "label": "Cooking Frequency",
+    "type": "select",
+    "patterns": [[{"LOWER": "cooking"}, {"LOWER": "times"}], [{"LOWER": "cook"}, {"LOWER": "schedule"}], [{"LOWER": "how"}, {"LOWER": "often"}, {"LOWER": "cook"}]],
+    "fuzzy_keywords": ["cooking times", "cook schedule", "how often cook"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "LAUNDRY_ROUTINE",
+    "label": "Laundry Routine",
+    "type": "text",
+    "patterns": [[{"LOWER": "laundry"}], [{"LOWER": "laundry"}, {"LOWER": "routine"}], [{"LOWER": "clothes"}, {"LOWER": "washing"}]],
+    "fuzzy_keywords": ["laundry habits", "clothes washing", "laundry schedule"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "PREFERRED_HOUSEHOLD_PRODUCTS",
+    "label": "Preferred Household Products",
+    "type": "text",
+    "patterns": [[{"LOWER": "household"}, {"LOWER": "products"}], [{"LOWER": "cleaning"}, {"LOWER": "items"}], [{"LOWER": "preferred"}, {"LOWER": "products"}]],
+    "fuzzy_keywords": ["household products", "cleaning items", "preferred products"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "MOOD_TRACKER",
+    "label": "Mood Tracker",
+    "type": "text",
+    "patterns": [[{"LOWER": "mood"}], [{"LOWER": "emotion"}, {"LOWER": "log"}], [{"LOWER": "how"}, {"LOWER": "you"}, {"LOWER": "feel"}]],
+    "fuzzy_keywords": ["mood", "emotion log", "how you feel"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "EMOTIONAL_TRIGGERS",
+    "label": "Emotional Triggers",
+    "type": "text",
+    "patterns": [[{"LOWER": "emotional"}, {"LOWER": "triggers"}], [{"LOWER": "what"}, {"LOWER": "stresses"}, {"LOWER": "you"}], [{"LOWER": "things"}, {"LOWER": "that"}, {"LOWER": "upset"}]],
+    "fuzzy_keywords": ["emotional triggers", "things that upset", "what stresses you"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "JOURNALING_HABIT",
+    "label": "Journaling Habit",
+    "type": "boolean",
+    "patterns": [[{"LOWER": "journal"}], [{"LOWER": "write"}, {"LOWER": "daily"}], [{"LOWER": "diary"}, {"LOWER": "writing"}]],
+    "fuzzy_keywords": ["journal", "write daily", "diary writing"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "SUPPORT_SYSTEM",
+    "label": "Support System",
+    "type": "text",
+    "patterns": [[{"LOWER": "support"}, {"LOWER": "system"}], [{"LOWER": "help"}, {"LOWER": "network"}], [{"LOWER": "emotional"}, {"LOWER": "support"}]],
+    "fuzzy_keywords": ["support system", "help network", "emotional support"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "WORK_START_TIME",
+    "label": "Work Start Time",
+    "type": "time",
+    "patterns": [[{"LOWER": "work"}, {"LOWER": "start"}], [{"LOWER": "start"}, {"LOWER": "job"}], [{"LOWER": "start"}, {"LOWER": "office"}]],
+    "fuzzy_keywords": ["work start", "start job", "start office"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "WORK_BREAKS_FREQUENCY",
+    "label": "Work Breaks Frequency",
+    "type": "select",
+    "patterns": [[{"LOWER": "work"}, {"LOWER": "breaks"}], [{"LOWER": "office"}, {"LOWER": "breaks"}], [{"LOWER": "pause"}, {"LOWER": "work"}]],
+    "fuzzy_keywords": ["work breaks", "office breaks", "pause work"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "DAILY_TASK_PLANNER_USAGE",
+    "label": "Daily Task Planner Usage",
+    "type": "boolean",
+    "patterns": [[{"LOWER": "task"}, {"LOWER": "planner"}], [{"LOWER": "to"}, {"LOWER": "do"}, {"LOWER": "list"}], [{"LOWER": "daily"}, {"LOWER": "planning"}]],
+    "fuzzy_keywords": ["task planner", "to-do list", "daily planning"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "FOCUS_DURATION",
+    "label": "Focus Duration (minutes)",
+    "type": "number",
+    "patterns": [[{"LOWER": "focus"}, {"LOWER": "span"}], [{"LOWER": "attention"}, {"LOWER": "time"}], [{"LOWER": "productive"}, {"LOWER": "time"}]],
+    "fuzzy_keywords": ["focus span", "attention time", "productive time"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "TIME_MANAGEMENT_STYLE",
+    "label": "Time Management Style",
+    "type": "text",
+    "patterns": [[{"LOWER": "time"}, {"LOWER": "management"}], [{"LOWER": "time"}, {"LOWER": "handling"}], [{"LOWER": "daily"}, {"LOWER": "routine"}]],
+    "fuzzy_keywords": ["time management", "time handling", "daily routine"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "VOTING_ELIGIBILITY",
+    "label": "Are You Eligible to Vote?",
+    "type": "boolean",
+    "patterns": [[{"LOWER": "voting"}, {"LOWER": "eligibility"}], [{"LOWER": "can"}, {"LOWER": "you"}, {"LOWER": "vote"}], [{"LOWER": "eligible"}, {"LOWER": "to"}, {"LOWER": "vote"}]],
+    "fuzzy_keywords": ["voting eligibility", "can you vote", "eligible to vote"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "POLITICAL_AFFILIATION",
+    "label": "Political Affiliation",
+    "type": "select",
+    "patterns": [[{"LOWER": "political"}, {"LOWER": "party"}], [{"LOWER": "party"}, {"LOWER": "support"}], [{"LOWER": "political"}, {"LOWER": "affiliation"}]],
+    "fuzzy_keywords": ["political party", "party support", "political affiliation"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "VOTING_HISTORY",
+    "label": "Voting History",
+    "type": "text",
+    "patterns": [[{"LOWER": "voting"}, {"LOWER": "history"}], [{"LOWER": "past"}, {"LOWER": "votes"}], [{"LOWER": "voted"}, {"LOWER": "before"}]],
+    "fuzzy_keywords": ["voting history", "past votes", "voted before"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "CIVIC_PARTICIPATION",
+    "label": "Civic Participation",
+    "type": "text",
+    "patterns": [[{"LOWER": "civic"}, {"LOWER": "participation"}], [{"LOWER": "social"}, {"LOWER": "activism"}], [{"LOWER": "community"}, {"LOWER": "involvement"}]],
+    "fuzzy_keywords": ["civic participation", "social activism", "community involvement"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "POLITICAL_INTEREST_LEVEL",
+    "label": "Political Interest Level",
+    "type": "select",
+    "patterns": [[{"LOWER": "political"}, {"LOWER": "interest"}], [{"LOWER": "interest"}, {"LOWER": "in"}, {"LOWER": "politics"}], [{"LOWER": "how"}, {"LOWER": "politically"}, {"LOWER": "active"}]],
+    "fuzzy_keywords": ["political interest", "interest in politics", "politically active"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "TRUST_IN_POLITICIANS",
+    "label": "Trust in Politicians",
+    "type": "select",
+    "patterns": [[{"LOWER": "trust"}, {"LOWER": "politicians"}], [{"LOWER": "faith"}, {"LOWER": "in"}, {"LOWER": "leaders"}], [{"LOWER": "political"}, {"LOWER": "trust"}]],
+    "fuzzy_keywords": ["trust politicians", "faith in leaders", "political trust"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "NEWS_SOURCE_PREFERENCE",
+    "label": "Preferred Political News Source",
+    "type": "text",
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "source"}], [{"LOWER": "media"}, {"LOWER": "outlet"}], [{"LOWER": "political"}, {"LOWER": "news"}, {"LOWER": "channel"}]],
+    "fuzzy_keywords": ["news source", "media outlet name", "political news channel"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "NEWS_CONSUMPTION_FREQUENCY",
+    "label": "News Consumption Frequency",
+    "type": "select",
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "frequency"}], [{"LOWER": "how"}, {"LOWER": "often"}, {"LOWER": "read"}, {"LOWER": "news"}], [{"LOWER": "news"}, {"LOWER": "habit"}]],
+    "fuzzy_keywords": ["news frequency", "how often read news", "news habit"],
+    "validation": { "required": true }
+  },
+  {
+    "id": "FAVORITE_NEWS_TOPICS",
+    "label": "Favorite News Topics",
+    "type": "text",
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "topics"}], [{"LOWER": "preferred"}, {"LOWER": "news"}, {"LOWER": "topics"}], [{"LOWER": "what"}, {"LOWER": "news"}, {"LOWER": "you"}, {"LOWER": "follow"}]],
+    "fuzzy_keywords": ["news topics", "preferred news", "topics of interest of news"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "PREFERRED_NEWS_FORMAT",
+    "label": "Preferred News Format",
+    "type": "select",
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "format"}], [{"LOWER": "read"}, {"LOWER": "or"}, {"LOWER": "watch"}], [{"LOWER": "news"}, {"LOWER": "type"}]],
+    "fuzzy_keywords": ["news format", "read or watch news", "news type"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "NEWS_SOURCE_TRUST",
+    "label": "Trust in News Sources",
+    "type": "select",
+    "patterns": [[{"LOWER": "trust"}, {"LOWER": "news"}], [{"LOWER": "reliable"}, {"LOWER": "news"}, {"LOWER": "source"}], [{"LOWER": "fake"}, {"LOWER": "news"}, {"LOWER": "concern"}]],
+    "fuzzy_keywords": ["trust in news", "reliable news source", "fake news concern"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "PREFERRED_NEWS_PLATFORMS",
+    "label": "Preferred News Platforms",
+    "type": "text",
+    "patterns": [[{"LOWER": "news"}, {"LOWER": "platform"}], [{"LOWER": "online"}, {"LOWER": "news"}, {"LOWER": "apps"}], [{"LOWER": "print"}, {"LOWER": "or"}, {"LOWER": "digital"}]],
+    "fuzzy_keywords": ["news platform", "news app", "print or digital"],
+    "validation": { "required": false }
+  },
+  {
+    "id": "BREAKING_NEWS_ALERTS",
+    "label": "Receive Breaking News Alerts?",
+    "type": "boolean",
+    "patterns": [[{"LOWER": "breaking"}, {"LOWER": "news"}], [{"LOWER": "news"}, {"LOWER": "alerts"}], [{"LOWER": "push"}, {"LOWER": "notifications"}]],
+    "fuzzy_keywords": ["breaking news", "news alerts", "push notifications"],
+    "validation": { "required": false }
   }
 ]
