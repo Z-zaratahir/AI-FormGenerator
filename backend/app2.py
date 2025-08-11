@@ -15,6 +15,8 @@ import json
 import pytz
 from transformers import pipeline
 from textblob import TextBlob
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -23,6 +25,28 @@ limiter = Limiter(get_remote_address, app=app, default_limits=["100 per hour"])
 print("Loading spaCy model...")
 nlp = spacy.load("en_core_web_sm")
 print("Model loaded.")
+
+DATA_FOLDER = "data"
+os.makedirs(DATA_FOLDER, exist_ok=True)   # <-- move this up here
+FORMS_FILE = os.path.join(DATA_FOLDER, "forms.json")
+SUBMISSIONS_FILE = os.path.join(DATA_FOLDER, "submissions.json")
+
+
+
+# Helper to read/write JSON safely
+def read_json(file_path):
+    if not os.path.exists(file_path):
+        return []
+    with open(file_path, "r", encoding="utf-8") as f:
+        try:
+            return json.load(f)
+        except json.JSONDecodeError:
+            return []
+
+def write_json(file_path, data):
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
 
 # --- Data Loading Function ---
 def load_knowledge_base(fields_path, templates_path):
@@ -403,16 +427,60 @@ def validate_submission(values: dict, schema: list):
         if re.search(r"<[^>]+>", val): errors[fid] = "HTML tags are not allowed."
     return errors
 
+# Save generated form
+@app.route("/save_form", methods=["POST"])
+def save_form():
+    form_schema = request.get_json(force=True)
+
+    # Append to forms.json
+    append_json(FORMS_FILE, {
+        "created_at": datetime.utcnow().isoformat(),
+        "schema": form_schema
+    })
+
+    return jsonify({"success": True, "message": "Form schema saved."})
+
+
+
+def append_json(file_path, new_entry):
+    """Append an entry to a JSON array file, creating it if it doesn't exist."""
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                data = []
+    else:
+        data = []
+    
+    data.append(new_entry)
+    
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
 @app.route("/submit", methods=["POST"])
 @limiter.limit("5 per minute")
 def submit_route():
     payload = request.get_json(force=True)
-    values, schema  = payload.get("values", {}), payload.get("schema", [])
+    values, schema = payload.get("values", {}), payload.get("schema", [])
+    
     print(">>> /submit values:", values)
     print(">>> /submit schema:", [f['id'] + ":" + str(f.get('validation')) for f in schema])
+    
     errs = validate_submission(values, schema)
-    if errs: return jsonify({"success": False, "errors": errs}), 400
+    if errs:
+        return jsonify({"success": False, "errors": errs}), 400
+    
+    # Save submission
+    submission_entry = {
+        "timestamp": datetime.utcnow().isoformat(),
+        "values": values,
+        "schema": schema
+    }
+    append_json(SUBMISSIONS_FILE, submission_entry)
+    
     return jsonify({"success": True, "message": "Form submitted successfully."})
 
 if __name__ == "__main__":
+    os.makedirs("data", exist_ok=True)
     app.run(debug=True, use_reloader=False)
