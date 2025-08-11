@@ -10,3 +10,4 @@ nltk
 sentence-transformers
 numpy
 pytz
+textblob

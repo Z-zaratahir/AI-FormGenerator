@@ -4340,6 +4340,12 @@
     "fuzzy_keywords": ["health and safety", "workplace safety"]
   },
   {
+  "id": "DREAM_JOURNAL",
+  "label": "Dream Description",
+  "type": "textarea",
+  "fuzzy_keywords": ["dream", "dreams", "dream journal", "dream description", "story", "nightmare"]
+  },
+  {
     "id": "DIVERSITY_AND_INCLUSION_SURVEY",
     "label": "Diversity and Inclusion Survey",
     "type": "fieldset",
