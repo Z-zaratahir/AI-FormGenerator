@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
@@ -229,23 +230,39 @@ function App() {
           </div>
 
           <div className="form-content">
-            {activeTab === 'prompt' && (
-              <div className="prompt-section">
-                <h2>AI Form Generator</h2>
-                <p>Describe the form you want to build. Try being specific!</p>
-                
+            {/* Always visible prompt section */}
+            <div className="prompt-section">
+              <h2>✨ Create Your Perfect Form</h2>
+              <p>Describe what kind of form you need and watch the magic happen</p>
+              
+              <div className="prompt-input-container">
                 <textarea
-                  rows="5"
-                  placeholder="e.g., A contact form with a required name, email, and a comment section. Also add a rating from 1 to 5."
+                  placeholder="Enter your Prompt here"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   className="prompt-textarea"
+                  maxLength="500"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleGenerate();
+                    }
+                  }}
                 />
-                <button onClick={handleGenerate} disabled={loading} className="generate-btn">
-                  {loading ? 'Generating...' : 'Generate Form'}
+                <button 
+                  onClick={handleGenerate} 
+                  disabled={loading || !prompt.trim()} 
+                  className="prompt-send-btn"
+                  title="Generate Form"
+                >
+                  {loading ? (
+                    <span className="send-icon">⏳</span>
+                  ) : (
+                    <span className="send-icon">➤</span>
+                  )}
                 </button>
               </div>
-            )}
+            </div>
 
             {error && <div className="error-message">❌ {error}</div>}
 
@@ -258,9 +275,9 @@ function App() {
             {formData && formData.fields.length > 0 && (
               <div className="form-preview">
                 <div className="form-header-section">
-                  <h1 className="form-title-main">Personal Information - Profile Setup</h1>
+                  <h1 className="form-title-main">Form Preview</h1>
                   <p className="form-description">
-                    A friendly and professional onboarding form designed to gather essential user details.
+                    Review and edit your generated form
                   </p>
                 </div>
                 
@@ -293,16 +310,33 @@ function App() {
               </div>
             )}
 
-            {/* Feedback Section */}
-            <div className="feedback-section">
-              <p>Kindly Give us Feedback of the form</p>
-              <div className="rating-stars">
-                <span className="star">⭐</span>
-                <span className="star">⭐</span>
-                <span className="star">⭐</span>
-                <span className="star">⭐</span>
-                <span className="star">⭐</span>
+            {/* Show Add Field Button when no fields exist */}
+            {formData && formData.fields.length === 0 && (
+              <div className="form-preview">
+                <div className="form-header-section">
+                  <h1 className="form-title-main">Create Your Form</h1>
+                  <p className="form-description">
+                    Start building your form by adding questions and fields.
+                  </p>
+                </div>
+                
+                <div className="generated-form">
+                  {/* Add Field Button for empty form */}
+                  <AddFieldButton onAddField={handleAddField} />
+                </div>
               </div>
+            )}
+          </div>
+
+          {/* Fixed Feedback Section */}
+          <div className="feedback-section">
+            <p>Kindly Give us Feedback of the form</p>
+            <div className="rating-stars">
+              <span className="star">⭐</span>
+              <span className="star">⭐</span>
+              <span className="star">⭐</span>
+              <span className="star">⭐</span>
+              <span className="star">⭐</span>
             </div>
           </div>
         </main>
@@ -366,5 +400,4 @@ function App() {
     </div>
   );
 }
-
 export default App;

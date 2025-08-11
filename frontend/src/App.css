@@ -1,3 +1,4 @@
+
 /* --- Global Styles & Body --- */
 * {
   margin: 0;
@@ -5,19 +6,29 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100vh;
+  overflow: hidden;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  background-color: #ffffff;
+  background-color: #EAF0FF;
   color: #333;
-  overflow-x: hidden;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* --- Main App Container --- */
 .app-container {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  /* min-width: 100VW; */
+  background-color: #EAF0FF;
+  overflow: hidden;
 }
 
 /* --- Top Header Bar --- */
@@ -26,13 +37,12 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 2.5rem 0.75rem 2rem;
-  background: #fff;
+  background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 0;
   z-index: 100;
-  min-height: 64px;
+  height: 64px;
+  flex-shrink: 0;
 }
 .logo {
   display: flex;
@@ -140,28 +150,37 @@ body {
 .main-content {
   display: flex;
   flex: 1;
-  min-height: calc(100vh - 80px);
+  height: calc(100vh - 64px);
   width: 100%;
+  overflow: hidden;
+  background-color: #EAF0FF;
+  gap: 0;
 }
 
 /* --- Left Sidebar --- */
 .left-sidebar {
   width: 80px;
-  background: #f5f3ff;
+  background: #ffffff;
+  border-right: none;
+  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: center;
-  padding: 1.5rem 0;
-  border-right: 1px solid #e2e8f0;
-  flex-shrink: 0;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem;
+  margin-right: 0.5rem;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   flex: 1;
   align-items: center;
+  width: 100%;
+  padding: 0;
 }
 
 .nav-item {
@@ -171,47 +190,65 @@ body {
   gap: 0.5rem;
   background: none;
   border: none;
-  padding: 0.75rem 0.5rem;
+  padding: 0.75rem;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 12px;
   transition: all 0.2s;
   color: #64748b;
   font-size: 0.75rem;
   font-weight: 500;
-  width: 60px;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
 }
 
 .nav-item:hover {
-  background: #ede9fe;
-  color: #4338ca;
+  background: #f1f5f9;
+  color: #3b82f6;
 }
 
 .nav-item.active {
-  background: #6366f1;
+  background: #3b82f6;
   color: white;
 }
 
 .nav-icon {
-  font-size: 1.25rem;
-  width: 2rem;
-  height: 2rem;
+  font-size: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background: white;
+  border-radius: 12px;
+  background: transparent;
   color: #64748b;
   transition: all 0.2s;
+  flex-shrink: 0;
 }
 
 .nav-item.active .nav-icon {
-  background: white;
-  color: #6366f1;
+  background: transparent;
+  color: white;
 }
 
 .nav-item:hover .nav-icon {
-  background: white;
-  color: #4338ca;
+  background: transparent;
+  color: #3b82f6;
+}
+
+.nav-item span {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+.nav-item:hover span {
+  color: #3b82f6;
+}
+
+.nav-item.active span {
+  color: white;
 }
 
 .sidebar-bottom {
@@ -228,7 +265,7 @@ body {
 .help-icon {
   width: 2rem;
   height: 2rem;
-  background: white;
+  background: transparent;
   color: #64748b;
   border-radius: 50%;
   display: flex;
@@ -241,10 +278,12 @@ body {
 /* --- Main Form Area --- */
 .form-main {
   flex: 1;
-  background: white;
+  background: #EAF0FF;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+  margin: 0;
 }
 
 .form-header {
@@ -252,8 +291,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e5e7eb;
   background: #ffffff;
+  flex-shrink: 0;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 1px;
 }
 
 .form-nav {
@@ -317,62 +359,264 @@ body {
   flex: 1;
   padding: 2rem;
   overflow-y: auto;
+  height: calc(100% - 80px - 100px); /* Subtract header height and feedback section height */
+  background: #ffffff;
+  border-radius: 0 0 0 0;
+}
+
+/* Custom Scrollbar for Form Content */
+.form-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.form-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.form-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.form-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 /* --- Prompt Section --- */
 .prompt-section {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
+  max-width: 500px;
+  margin: 0 auto 1.5rem auto;
+  padding: 1.5rem;
+  background: #EAF0FF;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.prompt-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+  pointer-events: none;
+}
+
+.prompt-input-container {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 32px;
+  padding: 0.5rem 1rem 0.5rem 1.25rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.prompt-input-container:focus-within {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .prompt-section h2 {
-  font-size: 2rem;
-  color: #1e293b;
+  font-size: 1.5rem;
+  color: #4A5568;
   margin-bottom: 0.5rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
 .prompt-section p {
-  color: #64748b;
-  margin-bottom: 2rem;
+  color: #718096;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  text-align: center;
 }
 
 .prompt-textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 1rem;
-  resize: vertical;
-  margin-bottom: 1rem;
-  transition: border-color 0.2s;
+  flex: 1;
+  min-height: 20px;
+  max-height: 80px;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: none;
+  background: transparent;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  outline: none;
+  overflow-y: auto;
+}
+
+.prompt-textarea::placeholder {
+  color: #9CA3AF;
+  font-style: normal;
 }
 
 .prompt-textarea:focus {
   outline: none;
-  border-color: #3b82f6;
+}
+
+.prompt-send-btn {
+  background: #EAF0FF;
+  color: #4A5568;
+  border: 1px solid #D6E3FF;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(234, 240, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.prompt-send-btn:hover:not(:disabled) {
+  background: #D6E3FF;
+  transform: scale(1.02);
+  box-shadow: 0 3px 10px rgba(234, 240, 255, 0.5);
+}
+
+.prompt-send-btn:active {
+  transform: scale(0.98);
+}
+
+.prompt-send-btn:disabled {
+  background: linear-gradient(135deg, #D1D5DB 0%, #9CA3AF 100%);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.send-icon {
+  font-size: 0.9rem;
+  margin-left: 1px;
+  transition: transform 0.2s ease;
+}
+
+.prompt-send-btn:hover:not(:disabled) .send-icon {
+  transform: translateX(0.5px);
+}
+
+.prompt-actions {
+  display: none;
+}
+
+.prompt-counter {
+  display: none;
 }
 
 .generate-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
+  display: none;
+}
+
+.generate-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.generate-btn:hover::before {
+  left: 100%;
 }
 
 .generate-btn:hover:not(:disabled) {
-  background: #2563eb;
+  background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
 }
 
 .generate-btn:disabled {
-  background: #94a3b8;
+  background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.generate-btn {
+  display: none;
+}
+
+/* --- Enhanced Mobile Responsiveness --- */
+@media (max-width: 768px) {
+  .prompt-section {
+    margin: 0.75rem;
+    padding: 1.25rem 1rem;
+    border-radius: 14px;
+  }
+  
+  .prompt-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .prompt-section p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
+  .prompt-input-container {
+    padding: 0.4rem 0.75rem 0.4rem 1rem;
+    min-height: 40px;
+    border-radius: 28px;
+  }
+  
+  .prompt-textarea {
+    font-size: 0.85rem;
+  }
+  
+  .prompt-send-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .send-icon {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .prompt-section {
+    margin: 0.5rem;
+    padding: 1rem 0.75rem;
+    border-radius: 12px;
+  }
+  
+  .prompt-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  .prompt-input-container {
+    padding: 0.35rem 0.6rem 0.35rem 0.9rem;
+    min-height: 36px;
+    border-radius: 24px;
+  }
+  
+  .prompt-send-btn {
+    width: 26px;
+    height: 26px;
+  }
 }
 
 /* --- Form Preview --- */
@@ -383,20 +627,20 @@ body {
 
 .form-header-section {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .form-title-main {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   color: #1e293b;
-  margin-bottom: 1rem;
-  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
 }
 
 .form-description {
-  font-size: 1.125rem;
+  font-size: 0.95rem;
   color: #64748b;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .generated-form {
@@ -452,10 +696,16 @@ body {
 /* --- Feedback Section --- */
 .feedback-section {
   text-align: center;
-  margin-top: 3rem;
-  padding: 2rem;
-  background: #f5f3ff;
-  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  background: #EAF0FF;
+  border-top: none;
+  border-radius: 0;
+  flex-shrink: 0;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
 }
 
 .feedback-section p {
@@ -481,17 +731,19 @@ body {
 
 /* --- Right Sidebar --- */
 .right-sidebar {
-  width: 300px;
-  background: white;
-  border-left: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
+  width: 240px;
+  background: #ffffff;
+  border-left: 1px solid hwb(271 75% 9%);
+  padding: 2rem;
+  border-radius: 16px 0 0 16px;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-tabs {
   display: flex;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e5e7eb;
+  flex-shrink: 0;
+  background: #ffffff;
 }
 
 .tab-btn {
@@ -515,6 +767,27 @@ body {
   flex: 1;
   padding: 1.5rem;
   overflow-y: auto;
+  height: calc(100% - 60px);
+  background: #ffffff;
+}
+
+/* Custom Scrollbar for Right Sidebar */
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 .pages-section {
@@ -532,10 +805,11 @@ body {
 
 .page-preview:hover {
   border-color: #3b82f6;
+  box-shadow: 0 1px 3px rgba(59, 130, 246, 0.1);
 }
 
 .page-thumbnail {
-  background: #f5f3ff;
+  background: #f8fafc;
   padding: 1rem;
   min-height: 120px;
   display: flex;
@@ -560,8 +834,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: white;
-  border-top: 1px solid #e2e8f0;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
 }
 
 .page-info span {
@@ -640,10 +914,10 @@ body {
 /* --- Form Field Container --- */
 .form-field-container {
   padding: 20px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #e5e7eb;
   border-radius: 12px;
   transition: all 0.2s;
-  background: white;
+  background: #ffffff;
   margin-bottom: 16px;
   position: relative;
 }
@@ -1790,4 +2064,3 @@ body {
   margin-right: 1.2rem;
   margin-left: 0.1rem;
 }
-
