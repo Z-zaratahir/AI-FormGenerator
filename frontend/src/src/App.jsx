@@ -1,7 +1,8 @@
-
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
+import Home from './Home';
 import FormField from './components/FormField';
 import AddFieldButton from './components/AddFieldButton';
 import logoForm from './assets/logoForm 1.svg';
@@ -18,8 +19,11 @@ function formatValidationRules(validation) {
   return ` (Validation: ${rules})`;
 }
 
-function App() {
-  const [prompt, setPrompt] = useState("make a registration form");
+function FormBuilder() {
+  const [searchParams] = useSearchParams();
+  const urlPrompt = searchParams.get('prompt');
+  
+  const [prompt, setPrompt] = useState(urlPrompt || "make a registration form");
   const [formData, setFormData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,24 +33,10 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // Listen for popup close event to clear validation errors
-  useEffect(() => {
-    const handleClearValidationErrors = () => {
-      setSubmissionStatus(prev => ({
-        ...prev,
-        errors: null,
-        message: ''
-      }));
-    };
-
-    window.addEventListener('clearValidationErrors', handleClearValidationErrors);
-    
-    return () => {
-      window.removeEventListener('clearValidationErrors', handleClearValidationErrors);
-    };
-  }, []);
+  console.log('FormBuilder mounted, urlPrompt:', urlPrompt);
 
   const handleGenerate = async () => {
+    console.log('handleGenerate called with prompt:', prompt);
     if (!prompt) { setError("Please enter a prompt."); return; }
     setError('');
     setFormData(null);
@@ -74,6 +64,31 @@ function App() {
       setLoading(false);
     }
   };
+
+  // Auto-generate when coming from home page with prompt
+  useEffect(() => {
+    if (urlPrompt && urlPrompt.trim()) {
+      console.log('Auto-generating form for prompt:', urlPrompt);
+      handleGenerate();
+    }
+  }, [urlPrompt]);
+
+  // Listen for popup close event to clear validation errors
+  useEffect(() => {
+    const handleClearValidationErrors = () => {
+      setSubmissionStatus(prev => ({
+        ...prev,
+        errors: null,
+        message: ''
+      }));
+    };
+
+    window.addEventListener('clearValidationErrors', handleClearValidationErrors);
+    
+    return () => {
+      window.removeEventListener('clearValidationErrors', handleClearValidationErrors);
+    };
+  }, []);
   
   // Handle adding a new field
   const handleAddField = (newField) => {
@@ -303,7 +318,7 @@ function App() {
                   <div className="form-actions-bottom">
                     <button type="button" className="cancel-btn">Cancel</button>
                     <button type="submit" className="next-btn" disabled={isSubmitting}>
-                      {isSubmitting ? 'Submitting...' : 'Next'}
+                      {isSubmitting ? 'Submitting...' : 'Submit'}
                     </button>
                   </div>
                 </form>
@@ -400,4 +415,16 @@ function App() {
     </div>
   );
 }
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/form-builder" element={<FormBuilder />} />
+      </Routes>
+    </Router>
+  );
+}
+
 export default App;
